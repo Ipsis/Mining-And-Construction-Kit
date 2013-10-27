@@ -87,14 +87,13 @@ public class BlockWaterFiller extends BlockContainer {
 	
 	@Override
 	public boolean canPlaceBlockAt(World world, int x, int y, int z) {
-		return super.canPlaceBlockAt(world, x, y, z);
-		/*
+		
 		int id = world.getBlockId(x, y, z);
 		if (id == Block.waterMoving.blockID || id == Block.waterStill.blockID) {
 			return true;
 		}
 		
-		return false; */
+		return false;
 	}
 	
 	@Override
