@@ -1,0 +1,11 @@
+# Item localization
+item.mackitCasing.name=MacKit Casing
+item.mackitPortableCasing.name=MacKit Portable Casing
+item.fixerFoamGun.name=Fixer Foam Gun
+item.fixerFoamPellet.name=Fixer Foam Pellet
+
+tile.dyeTransposer.name=Dye Transposer
+
+# Itemblocks
+fixedSand.name=Fixed Sand
+fixedGravel.name=Fixed Gravel
