@@ -1,17 +1,21 @@
 package ipsis.mackit.block;
 
+import ipsis.mackit.MacKit;
 import ipsis.mackit.lib.Reference;
 import ipsis.mackit.lib.Strings;
+import ipsis.mackit.tileentity.TileDyeTransposer;
+import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.item.ItemStack;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Icon;
 import net.minecraft.world.World;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
-public class BlockDyeTransposer extends BlockMK {
+public class BlockDyeTransposer extends BlockContainer {
 	
 	/**
 	 *  metadata will store
@@ -21,6 +25,7 @@ public class BlockDyeTransposer extends BlockMK {
 	public BlockDyeTransposer(int id) {
 
 		super(id, Material.rock);
+		super.setCreativeTab(MacKit.tabsMacKit);
 		this.setUnlocalizedName(Strings.BLOCK_DYE_TRANSPOSER);
 	}
 	
@@ -55,5 +60,10 @@ public class BlockDyeTransposer extends BlockMK {
 		super.onBlockPlacedBy(world, i, j, k, entityliving, stack);
 		
 		
+	}
+
+	@Override
+	public TileEntity createNewTileEntity(World world) {
+		return new TileDyeTransposer();
 	}
 }

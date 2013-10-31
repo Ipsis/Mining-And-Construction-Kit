@@ -1,5 +1,6 @@
 package ipsis.mackit.block;
 
+import ipsis.mackit.MacKit;
 import ipsis.mackit.lib.Reference;
 import ipsis.mackit.lib.Strings;
 import ipsis.mackit.tileentity.TileWaterFiller;
@@ -7,63 +8,73 @@ import net.minecraft.block.Block;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IconRegister;
-import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Icon;
+import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
+import net.minecraftforge.common.ForgeDirection;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
-
-
 
 public class BlockWaterFiller extends BlockContainer {
 	
 	public BlockWaterFiller(int id) {
 		super(id, Material.iron);
-		super.setCreativeTab(CreativeTabs.tabMisc);
-		super.setUnlocalizedName(Strings.TE_WATER_FILLER);
+		setCreativeTab(MacKit.tabsMacKit);
+		setUnlocalizedName(Strings.BLOCK_WATER_FILLER);
 	}
 	
-	public enum WaterFillerModes {
-		DISABLED, CIRCLE, PYRAMID, COL7, COL11
-	}
+	/**
+	 * metadata will hold
+	 * top 2 bits will be the mode
+	 * bottom 2 bits will be the facing direction
+	 * 
+	 * facing direction is offset by 2 as we dont care about up/down
+	 */
+	
+	public final static int MODE_MASK = 0xC;
+	public final static int MODE_SHIFT = 2;
+	public final static int FACING_MASK = 0x3;
+	
+
 	
 	@SideOnly(Side.CLIENT)
 	private Icon sideIcon;
 	@SideOnly(Side.CLIENT)
-	private Icon botIcon;
+	private Icon topIcon;
 	@SideOnly(Side.CLIENT)
-	private Icon[] topIcons;
+	private Icon modeIcons[];
+
 	
 	@Override
 	@SideOnly(Side.CLIENT)
 	public void registerIcons(IconRegister register) {
-		sideIcon = register.registerIcon(Reference.MOD_ID + ":" + Strings.BLOCK_WATER_FILLER);
-		botIcon = register.registerIcon(Reference.MOD_ID + ":" + Strings.BLOCK_WATER_FILLER_BOT);
+		sideIcon = register.registerIcon(Reference.MOD_ID + ":" + Strings.BLOCK_WATER_FILLER + "_side");
+		topIcon = register.registerIcon(Reference.MOD_ID + ":" + Strings.BLOCK_WATER_FILLER);
 		
-		topIcons = new Icon[Strings.BLOCK_WATER_FILLER_NAMES.length];
-		for (int i = 0; i < topIcons.length; i++) {
-			topIcons[i] = register.registerIcon(Reference.MOD_ID + ":" + Strings.BLOCK_WATER_FILLER_NAMES[i]);
+		modeIcons = new Icon[Strings.BLOCK_WATER_FILLER_MODES.length];
+		for (int i = 0; i < modeIcons.length; i++) {
+			modeIcons[i] = register.registerIcon(Reference.MOD_ID + ":" + Strings.BLOCK_WATER_FILLER_MODES[i]);
 		}
+
 	}
 	
 	@Override
 	@SideOnly(Side.CLIENT)
 	public Icon getIcon(int side, int meta) {
-		if (side == 0) {
-			return botIcon;
-		} else if (side == 1) {
-			if (meta >= WaterFillerModes.DISABLED.ordinal() && meta <= WaterFillerModes.COL11.ordinal()) {
-				return topIcons[meta];
-			} else {
-				return topIcons[0];
-			}
-		} else {
-			return sideIcon;
+		
+		/* top or bottom */
+		if (side == 0 || side == 1) {
+			return topIcon;
 		}
+		
+		int mode = (meta & MODE_MASK) >> MODE_SHIFT;
+		int facing = (meta & FACING_MASK) + 2;
+		
+		return (side == facing ? modeIcons[mode] : sideIcon);
 	}
 	
 	@Override
@@ -71,20 +82,7 @@ public class BlockWaterFiller extends BlockContainer {
 		return new TileWaterFiller();
 	}
 	
-	private int nextMode(int meta) {
-		
-		meta++;
-		if (meta > WaterFillerModes.COL11.ordinal()) {
-			meta = WaterFillerModes.DISABLED.ordinal();
-		}
-		
-		return meta;
-	}
-	
-	private boolean isDisabled(int meta) {
-		return meta == WaterFillerModes.DISABLED.ordinal();
-	}
-	
+
 	@Override
 	public boolean canPlaceBlockAt(World world, int x, int y, int z) {
 		
@@ -96,25 +94,69 @@ public class BlockWaterFiller extends BlockContainer {
 		return false;
 	}
 	
+	private ForgeDirection getForgeDir(int x)
+	{
+		if (x == 0) {
+			return ForgeDirection.SOUTH;
+		} else if (x == 1) {
+			return ForgeDirection.WEST;
+		} else if (x == 2) {
+			return ForgeDirection.NORTH;
+		} else if (x == 3) {
+			return ForgeDirection.EAST;
+		} else {
+			return ForgeDirection.SOUTH;
+		}			
+	}
+	
+	
+	@Override
+	public void onBlockPlacedBy(World world, int x, int y, int z, EntityLivingBase entityliving, ItemStack itemStack) {
+		
+		super.onBlockPlacedBy(world, x, y, z, entityliving, itemStack);
+		
+		/* init to facing player with circle mode */
+		if (!world.isRemote) {
+		
+			/* this calculates the minecraft world direction N/S/E/W */
+			int l = MathHelper.floor_double((double)(entityliving.rotationYaw * 4.0F / 360.0F) + 0.5D) & 3;
+			
+			ForgeDirection orientation = getForgeDir(l);
+			orientation = orientation.getOpposite();
+			
+			int newMeta = 0;
+			newMeta = (orientation.ordinal() - 2) & FACING_MASK;
+			world.setBlockMetadataWithNotify(x, y, z, newMeta, 3);
+		}
+			
+	} 
+	
+	private int setNextMode(int meta) {
+		
+		int mode = (meta & MODE_MASK) >> MODE_SHIFT;
+		meta &= ~MODE_MASK;
+		meta |= (++mode & 0x03) << MODE_SHIFT;
+		return meta;
+	}
+	
+	
 	@Override
 	public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer player, int side, float hitX, float hitY, float hitZ) {
 		
-		/* no mode change while it is running */
-		TileEntity te = world.getBlockTileEntity(x, y, z);
-		if (te != null && te instanceof TileWaterFiller) {	
-			
-			if (((TileWaterFiller)te).getRunning()) {
-				return true;
-			}
-		}
-
-		
-		/* cycle through the different modes */
-		int meta = world.getBlockMetadata(x,  y,  z);
-		meta = nextMode(meta);		
-
 		if (!world.isRemote) {
-			world.setBlockMetadataWithNotify(x, y, z, meta, 3);
+			/* no mode change while it is running */
+			TileEntity te = world.getBlockTileEntity(x, y, z);
+			if (!(te instanceof TileWaterFiller)) {
+				return false;
+			}
+	
+			if (((TileWaterFiller)te).getRunning())
+				return true;
+			
+			int newMeta = world.getBlockMetadata(x, y, z);
+			newMeta = setNextMode(newMeta);
+			
+			world.setBlockMetadataWithNotify(x, y, z, newMeta, 3);		
 		}
 		
 		return true;
@@ -122,13 +164,8 @@ public class BlockWaterFiller extends BlockContainer {
 	
 	@Override
 	public void onNeighborBlockChange(World world, int x, int y, int z, int id) {
-		int meta = world.getBlockMetadata(x, y, z);
-		
-		if (isDisabled(meta)) {
-			return;
-		}
-		
-		if (!world.isRemote && world.isBlockIndirectlyGettingPowered(x, y, z) && !isDisabled(meta)) {
+	
+		if (!world.isRemote && world.isBlockIndirectlyGettingPowered(x, y, z)) {
 			TileEntity te = world.getBlockTileEntity(x, y, z);
 			if (te != null && te instanceof TileWaterFiller) {				
 				TileWaterFiller wf = (TileWaterFiller)te;		

@@ -1,6 +1,6 @@
 package ipsis.mackit.tileentity;
 
-import ipsis.mackit.core.util.LogHelper;
+import ipsis.mackit.block.BlockWaterFiller;
 import net.minecraft.block.Block;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
@@ -10,15 +10,10 @@ public class TileWaterFiller extends TileEntity {
 	private int step;
 	private boolean running = false;
 	private int mode;
-	private int depth;
 	private int tcount = 0;
 	
-	private static int STEPS_CIRC = 7;
-	private static int STEPS_PYRAMID = 3;
-	private static int STEPS_COL7 = 15;
-	private static int STEPS_COL11 = 11;
-	
-	private static int UPDATE_FREQ = 20;
+	private static int steps[] = { 7, 3, 15, 11 };
+	private static int UPDATE_FREQ = 10;
 
 	
 	public TileWaterFiller() {
@@ -96,7 +91,7 @@ public class TileWaterFiller extends TileEntity {
 	
 	private boolean isFinished() {
 
-		if (mode == 0 || step > depth) {
+		if (running && step > steps[mode]) {
 			return true;
 		}
 		
@@ -113,7 +108,7 @@ public class TileWaterFiller extends TileEntity {
 			tcount = 0;
 		}
 		
-		if (!running || mode == 0) {
+		if (!running) {
 			return;
 		}
 			
@@ -124,16 +119,16 @@ public class TileWaterFiller extends TileEntity {
 				worldObj.setBlock(xCoord, yCoord, zCoord, Block.dirt.blockID);
 			} else {
 				switch (mode) {
-				case 1:
+				case 0:
 					runCircle();
 					break;
-				case 2:
+				case 1:
 					runPyramid();
 					break;
-				case 3:
+				case 2:
 					runColumn(7);
 					break;
-				case 4:
+				case 3:
 					runColumn(11);
 					break;
 				}
@@ -149,28 +144,8 @@ public class TileWaterFiller extends TileEntity {
 			running = true;
 			step = 1;
 			tcount = 0;
-			mode = worldObj.getBlockMetadata(xCoord, yCoord, zCoord);
-			
-			switch (mode) {
-			case 0:
-					running = false;
-					break;
-			case 1:
-					depth = STEPS_CIRC;
-					break;
-			case 2:
-					depth = STEPS_PYRAMID;
-					break;
-			case 3:
-					depth = STEPS_COL7;
-					break;
-			case 4:
-					depth = STEPS_COL11;
-					break;
-			default:
-					running = false;
-					break;
-			}
+			int meta = worldObj.getBlockMetadata(xCoord, yCoord, zCoord);
+			mode = (meta & BlockWaterFiller.MODE_MASK) >> BlockWaterFiller.MODE_SHIFT;			
 		}
 	}
 	
@@ -186,7 +161,6 @@ public class TileWaterFiller extends TileEntity {
 		compound.setByte("Mode", (byte)mode);
 		compound.setByte("Step", (byte)step);
 		compound.setBoolean("Running", running);
-		compound.setByte("Depth",  (byte)depth);
 	}
 
 	@Override
@@ -196,6 +170,5 @@ public class TileWaterFiller extends TileEntity {
 		mode = compound.getByte("Mode");
 		step = compound.getByte("Step");
 		running = compound.getBoolean("Running");
-		depth = compound.getByte("Depth");
 	}
 }
