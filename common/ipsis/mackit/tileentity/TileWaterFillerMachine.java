@@ -25,23 +25,50 @@ public class TileWaterFillerMachine extends TileEntity implements IInventory, IS
 	
 	private static final int REDSTONE_SLOT = 4;
 	private static final int OUTPUT_SLOT = 5;
+	private static final int CREATE_TICKS = 100;
+	private static final int MJ_PER_TICK = 1;
+	private static final int MJ_STORED_MAX = 500;
 	
-	private static final int CREATE_TIME = 200;
-	private int createTime;
+	private int createTickCount;
+	
 	private PowerHandler powerHandler;
 	
 	private ItemStack[] items;
 	
 	public TileWaterFillerMachine() {
 		items = new ItemStack[6];
-		createTime = 0;
+		createTickCount = -1;
 		powerHandler = new PowerHandler(this, Type.MACHINE);
 		initPowerProvider();
 	}
 	
 	private void initPowerProvider() {
-		powerHandler.configure(1, 15, 10, 100);
+		powerHandler.configure(1, 15, MJ_PER_TICK, MJ_STORED_MAX);
 		powerHandler.configurePowerPerdition(1, 100);
+	}
+	
+	public float getEnergyStored() {
+		return powerHandler.getEnergyStored();
+	}
+	
+	public void setEnergyStored(int v) {
+		powerHandler.setEnergy(v);
+	}
+	
+	public float getMaxEnergyStored() {
+		return powerHandler.getMaxEnergyStored();
+	}
+	
+	public int getCreateTickCount() {
+		return createTickCount;
+	}
+	
+	public void setCreateTickCount(int v) {
+		createTickCount = v;
+	}
+	
+	public int getCreateTicksMax() {
+		return CREATE_TICKS;
 	}
 	
 	/* IInventory */
@@ -152,8 +179,11 @@ public class TileWaterFillerMachine extends TileEntity implements IInventory, IS
 			}
 		}
 		
-		compound.setTag("Items", items);
-	}
+		compound.setTag("Items", items);		
+		compound.setByte("CreateTick", (byte)createTickCount);
+		powerHandler.writeToNBT(compound);
+		
+		}
 	
 	@Override
 	public void readFromNBT(NBTTagCompound compound) {
@@ -169,38 +199,66 @@ public class TileWaterFillerMachine extends TileEntity implements IInventory, IS
 				setInventorySlotContents(slot, ItemStack.loadItemStackFromNBT(item));
 			}
 		}
+		
+		createTickCount = compound.getByte("CreateTick");
+		powerHandler.readFromNBT(compound);
+	}
+	
+	private boolean isCrafting() {
+		return createTickCount >= 0;
+	}
+	
+	/* need 128 dirt and 1 redstone, output slot must not be full */
+	private boolean canCraft() {
+		
+		if (items[REDSTONE_SLOT] == null || items[REDSTONE_SLOT].stackSize < 1)
+			return false;
+				
+		if (items[OUTPUT_SLOT] != null && items[OUTPUT_SLOT].stackSize >= getInventoryStackLimit())
+			return false;
+		
+		int dirtCount = 0;
+		for (int i = 0; i < 4; i++) {
+			if (items[i] != null) {
+				dirtCount += items[i].stackSize;
+			}
+		}
+		
+		if (dirtCount < 128)
+			return false;
+		
+		return true;
 	}
 	
 	@Override
 	public void updateEntity() {
-
-		boolean update = false;
 		
-		if (powerHandler.useEnergy(10, 10, true) == 10) {
-			LogHelper.severe("updateEntity gave 10 power");
+		boolean updated = false;
+		
+		if (!isCrafting() && canCraft()) {
+			/* not doing anything so start */
+			createTickCount = 0;
 		}
 		
-		if (!this.worldObj.isRemote) {
-			
-			if (canCraft()) {
-				createTime++;
-				
-				if (createTime == CREATE_TIME) {
-					createTime = 0;
-					/* create the actual item */
-					createOutput();
-					update = true;
-				}
-			} else {
-				createTime = 0;
+		if (canCraft()) {
+			if (powerHandler.useEnergy(MJ_PER_TICK, MJ_PER_TICK, true) == MJ_PER_TICK) {
+				createTickCount++;
 			}
+			
+			if (createTickCount == CREATE_TICKS) {
+				createTickCount = -1;
+				createOutput();
+				updated = true;
+			}
+		} else {
+			createTickCount = -1;
 		}
 		
-		if (update) {
+		if (updated)
 			this.onInventoryChanged();
-		}
 	}
 	
+
 	private void createOutput() {
 		
 		if (canCraft()) {
@@ -230,27 +288,7 @@ public class TileWaterFillerMachine extends TileEntity implements IInventory, IS
 		}
 	}
 	
-	/* need 128 dirt and 1 redstone, output slot must not be full */
-	private boolean canCraft() {
-		
-		if (items[REDSTONE_SLOT] == null || items[REDSTONE_SLOT].stackSize < 1)
-			return false;
-				
-		if (items[OUTPUT_SLOT] != null && items[OUTPUT_SLOT].stackSize >= getInventoryStackLimit())
-			return false;
-		
-		int dirtCount = 0;
-		for (int i = 0; i < 4; i++) {
-			if (items[i] != null) {
-				dirtCount += items[i].stackSize;
-			}
-		}
-		
-		if (dirtCount < 128)
-			return false;
-		
-		return true;
-	}
+
 
 	/* ISidedInventory */
 	
