@@ -5,6 +5,11 @@ item.fixerFoamGun.name=Fixer Foam Gun
 item.fixerFoamPellet.name=Fixer Foam Pellet
 
 tile.dyeTransposer.name=Dye Transposer
+tile.waterFiller.name=Water Filler
+tile.waterFillerMachine.name=Water Filler Builder
+
+tile.redDye.name=Liquid Red Dye
+tile.yellowDye.name=Liquid Yellow Dye
 
 # Itemblocks
 fixedSand.name=Fixed Sand

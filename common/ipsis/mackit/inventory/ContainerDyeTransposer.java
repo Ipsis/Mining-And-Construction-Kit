@@ -1,6 +1,7 @@
 package ipsis.mackit.inventory;
 
-import ipsis.mackit.tileentity.TileWaterFillerMachine;
+import ipsis.mackit.core.util.LogHelper;
+import ipsis.mackit.tileentity.TileDyeTransposer;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Container;
@@ -10,11 +11,12 @@ import net.minecraft.item.ItemStack;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
-public class ContainerWaterFillerMachine extends Container {
+public class ContainerDyeTransposer extends Container {
 
-	private TileWaterFillerMachine machine;
+	private TileDyeTransposer machine;
 	
-	public ContainerWaterFillerMachine(InventoryPlayer invPlayer, TileWaterFillerMachine machine) {
+	public ContainerDyeTransposer(InventoryPlayer invPlayer, TileDyeTransposer machine) {
+		
 		this.machine = machine;
 		
 		/* hotbar */
@@ -28,21 +30,16 @@ public class ContainerWaterFillerMachine extends Container {
 				addSlotToContainer(new Slot(invPlayer, x + y * 9 + 9, 6 + 18 * x, 95 + 18 * y));
 			}
 		}
-	
-		/* Our Slots */
-		for (int x = 0; x < 4; x++) {
-			addSlotToContainer(new SlotDirt(machine, x, 6 + 18 * x, 29));
-		}
 		
-		addSlotToContainer(new SlotRedstone(machine, 4, 33, 58));
-		addSlotToContainer(new Slot(machine, 5, 132, 45));
+		/* Our slots */
+		addSlotToContainer(new SlotDyeBaseItem(machine, 0, 76, 35));
 	}
-	
+
 	@Override
 	public boolean canInteractWith(EntityPlayer entityplayer) {
 		return machine.isUseableByPlayer(entityplayer);
 	}
-
+	
 	@Override
 	public ItemStack transferStackInSlot(EntityPlayer player, int i) {
 	
@@ -80,12 +77,14 @@ public class ContainerWaterFillerMachine extends Container {
 	public void addCraftingToCrafters(ICrafting player) {
 		super.addCraftingToCrafters(player);
 		
-		player.sendProgressBarUpdate(this,  0,  (int)machine.getEnergyStored());
-		player.sendProgressBarUpdate(this,  1, machine.getCreateTickCount() );
+		player.sendProgressBarUpdate(this,  0,  machine.getEnergyStored());
+		player.sendProgressBarUpdate(this,  1, machine.getCreateTickCount());
+		player.sendProgressBarUpdate(this,  2,  machine.getLiquidStored());
 	}
 	
 	private int oldStoredEnergy;
 	private int oldCreateTickCount;
+	private int oldLiquidStored;
 	
 	@Override
 	public void detectAndSendChanges() {
@@ -101,6 +100,11 @@ public class ContainerWaterFillerMachine extends Container {
 				oldCreateTickCount = machine.getCreateTickCount();
 				((ICrafting)player).sendProgressBarUpdate(this,  1,  oldCreateTickCount);
 			}
+			
+			if (oldLiquidStored != machine.getLiquidStored()) {
+				oldLiquidStored = machine.getLiquidStored();
+				((ICrafting)player).sendProgressBarUpdate(this,  1,  oldLiquidStored);
+			}
 		}
 		
 	}
@@ -108,10 +112,12 @@ public class ContainerWaterFillerMachine extends Container {
 	@SideOnly(Side.CLIENT)
 	@Override
 	public void updateProgressBar(int id, int data) {
+		
 		if (id == 0)
 			machine.setEnergyStored(data);
-		if (id == 1)
+		else if (id == 1)
 			machine.setCreateTickCount(data);
+		else if (id == 2)
+			machine.setLiquidStored(data);
 	}
-	
 }

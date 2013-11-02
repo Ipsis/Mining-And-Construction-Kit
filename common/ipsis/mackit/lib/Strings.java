@@ -18,6 +18,7 @@ public class Strings {
 	public static final String TE_WATER_FILLER = "tileWaterFiller";
 	public static final String BLOCK_WATER_FILLER_MACHINE = "waterFillerMachine";
 	public static final String TE_WATER_FILLER_MACHINE = "tileWaterFillerMachine";
+	public static final String TE_DYE_TRANSPOSER = "tileDyeTransposer";
 	
 	public static final String BLOCK_LIQUID_RED_DYE = "redDye";
 	public static final String BLOCK_LIQUID_YELLOW_DYE = "yellowDye";

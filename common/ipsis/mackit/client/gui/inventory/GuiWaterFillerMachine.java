@@ -40,7 +40,7 @@ public class GuiWaterFillerMachine extends GuiContainer {
 		Minecraft.getMinecraft().renderEngine.bindTexture(texture);
 		drawTexturedModalRect(guiLeft, guiTop, 0, 0, xSize, ySize);
 		
-		float filled = machine.getEnergyStored() / machine.getMaxEnergyStored();
+		float filled = (float)machine.getEnergyStored() / machine.getMaxEnergyStored();
 		int barHeight = (int)(filled * 77);
 		if (barHeight > 0) {
 			int srcX = xSize;
