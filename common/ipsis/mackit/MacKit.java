@@ -2,6 +2,7 @@ package ipsis.mackit;
 
 import ipsis.mackit.block.ModBlocks;
 import ipsis.mackit.configuration.ConfigurationHandler;
+import ipsis.mackit.core.handlers.TextureStitchHandler;
 import ipsis.mackit.core.util.LogHelper;
 import ipsis.mackit.creativetab.CreativeTabMacKit;
 import ipsis.mackit.fluid.ModFluids;
@@ -13,6 +14,7 @@ import ipsis.mackit.proxy.CommonProxy;
 import java.io.File;
 
 import net.minecraft.creativetab.CreativeTabs;
+import net.minecraftforge.common.MinecraftForge;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.Mod.EventHandler;
 import cpw.mods.fml.common.Mod.Instance;
@@ -52,6 +54,8 @@ public class MacKit {
 		
 		NetworkRegistry.instance().registerGuiHandler(instance, proxy);
 		proxy.registerTileEntities();
+		
+		MinecraftForge.EVENT_BUS.register(new TextureStitchHandler());
 	}
 	
 	@EventHandler

@@ -4,12 +4,21 @@ item.mackitPortableCasing.name=MacKit Portable Casing
 item.fixerFoamGun.name=Fixer Foam Gun
 item.fixerFoamPellet.name=Fixer Foam Pellet
 
+# Machines
+tile.machineExtractor.name=Dye Extractor
+tile.machineMixer.name=Dye Mixer
+tile.machineStamper.name=Dye Stamper
+tile.machineApplicator.name=Dye Applicator
+tile.machineWaterFiller.name=Water Filler Constructor
+
 tile.dyeTransposer.name=Dye Transposer
 tile.waterFiller.name=Water Filler
 tile.waterFillerMachine.name=Water Filler Builder
 
 tile.redDye.name=Liquid Red Dye
 tile.yellowDye.name=Liquid Yellow Dye
+tile.blueDye.name=Liquid Blue Dye
+tile.pureDye.name=Liquid Pure Dye
 
 # Itemblocks
 fixedSand.name=Fixed Sand

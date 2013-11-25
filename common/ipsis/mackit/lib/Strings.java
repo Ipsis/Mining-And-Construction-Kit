@@ -6,6 +6,21 @@ public class Strings {
 	public static final String BLOCK_FIXED_EARTH = "fixedEarth";
 	public static final String BLOCK_FIXED_NAMES[] = { "fixedSand", "fixedGravel" };
 	
+	public static final String BLOCK_MACHINE_SIDE = "machine_side";
+	public static final String BLOCK_MACHINE_TOP = "machine_top";
+	public static final String BLOCK_MACHINE_EXTRACTOR = "machineExtractor";
+	public static final String BLOCK_MACHINE_MIXER = "machineMixer";
+	public static final String BLOCK_MACHINE_STAMPER = "machineStamper";
+	public static final String BLOCK_MACHINE_APPLICATOR = "machineApplicator";
+	public static final String BLOCK_MACHINE_WATER_FILLER = "machineWaterFiller";
+	
+	public static final String TE_MACHINE_EXTRACTOR = "tileMachineExtractor";
+	public static final String TE_MACHINE_MIXER = "tileMachineMixer";
+	public static final String TE_MACHINE_STAMPER = "tileMachineStamper";
+	public static final String TE_MACHINE_APPLICATOR = "tileMachineApplicator";
+	public static final String TE_MACHINE_WATER_FILLER = "tileMachineWaterFiller";
+	
+	
 	
 	public static final String BLOCK_DYE_TANK = "dyeTank";
 	public static final String BLOCK_DYE_PIPES = "dyePipes";
@@ -22,11 +37,9 @@ public class Strings {
 	
 	public static final String BLOCK_LIQUID_RED_DYE = "redDye";
 	public static final String BLOCK_LIQUID_YELLOW_DYE = "yellowDye";
-	public static final String BLOCK_LIQUID_GREEN_DYE = "greenDye";
 	public static final String BLOCK_LIQUID_BLUE_DYE = "blueDye";
 	public static final String BLOCK_LIQUID_WHITE_DYE = "whiteDye";
-	public static final String BLOCK_LIQUID_BLACK_DYE = "blackDye";
-	public static final String BLOCK_LIQUID_BROWN_DYE = "brownDye";
+	public static final String BLOCK_LIQUID_PURE_DYE = "pureDye";
 	
 	/* Item constants */
 	public static final String MACKIT_CASING_NAME = "mackitCasing";
@@ -38,9 +51,7 @@ public class Strings {
 	/* Fluid constants */
 	public static final String LIQUID_RED_DYE = "liquidRedDye";
 	public static final String LIQUID_YELLOW_DYE = "liquidYellowDye";
-	public static final String LIQUID_GREEN_DYE = "liquidGreenDye";
 	public static final String LIQUID_BLUE_DYE = "liquidBlueDye";
 	public static final String LIQUID_WHITE_DYE = "liquidWhiteDye";
-	public static final String LIQUID_BLACK_DYE = "liquidBlackDye";
-	public static final String LIQUID_BROWN_DYE = "liquidBrownDye";
+	public static final String LIQUID_PURE_DYE = "liquidPureDye";
 }

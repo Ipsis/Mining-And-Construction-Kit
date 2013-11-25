@@ -1,6 +1,7 @@
 package ipsis.mackit.item;
 
 import ipsis.mackit.lib.ItemIds;
+import ipsis.mackit.lib.Strings;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -20,6 +21,11 @@ public class ModItems {
 		mackitPortableCasing = new ItemMacKitPortableCasing(ItemIds.MACKIT_PORTABLE_CASING);
 		fixerFoamGun = new ItemFixerFoamGun(ItemIds.FIXER_FOAM_GUN);
 		fixerFoamPellet = new ItemFixerFoamPellet(ItemIds.FIXER_FOAM_PELLET);
+		
+		GameRegistry.registerItem(mackitCasing, Strings.MACKIT_CASING_NAME);
+		GameRegistry.registerItem(mackitPortableCasing, Strings.MACKIT_PORTABLE_CASING_NAME);
+		GameRegistry.registerItem(fixerFoamGun, Strings.FIXER_FOAM_GUN_NAME);
+		GameRegistry.registerItem(fixerFoamPellet, Strings.FIXER_FOAM_PELLET_NAME);
 		
 		GameRegistry.addRecipe(new ItemStack(mackitCasing), new Object[] { 
 			"iii", 

@@ -1,13 +1,18 @@
 package ipsis.mackit.proxy;
 
 import ipsis.mackit.client.gui.inventory.GuiDyeTransposer;
+import ipsis.mackit.client.gui.inventory.GuiMachineExtractor;
+import ipsis.mackit.client.gui.inventory.GuiMachineStamper;
 import ipsis.mackit.client.gui.inventory.GuiWaterFillerMachine;
-import ipsis.mackit.core.util.LogHelper;
 import ipsis.mackit.inventory.ContainerDyeTransposer;
+import ipsis.mackit.inventory.ContainerMachineExtractor;
+import ipsis.mackit.inventory.ContainerMachineStamper;
 import ipsis.mackit.inventory.ContainerWaterFillerMachine;
 import ipsis.mackit.lib.GuiIds;
 import ipsis.mackit.lib.Strings;
 import ipsis.mackit.tileentity.TileDyeTransposer;
+import ipsis.mackit.tileentity.TileMachineExtractor;
+import ipsis.mackit.tileentity.TileMachineStamper;
 import ipsis.mackit.tileentity.TileWaterFiller;
 import ipsis.mackit.tileentity.TileWaterFillerMachine;
 import net.minecraft.entity.player.EntityPlayer;
@@ -23,6 +28,9 @@ public class CommonProxy implements IGuiHandler {
 		GameRegistry.registerTileEntity(TileWaterFiller.class, Strings.TE_WATER_FILLER);
 		GameRegistry.registerTileEntity(TileWaterFillerMachine.class, Strings.TE_WATER_FILLER_MACHINE);
 		GameRegistry.registerTileEntity(TileDyeTransposer.class, Strings.TE_DYE_TRANSPOSER);
+		
+		GameRegistry.registerTileEntity(TileMachineExtractor.class, Strings.TE_MACHINE_EXTRACTOR);
+		GameRegistry.registerTileEntity(TileMachineStamper.class, Strings.TE_MACHINE_STAMPER);
 	}
 
 	@Override
@@ -37,6 +45,31 @@ public class CommonProxy implements IGuiHandler {
 			if (te != null && te instanceof TileDyeTransposer) {
 				return new ContainerDyeTransposer(player.inventory, (TileDyeTransposer)te);
 			}
+		}
+		
+		else {
+			TileEntity te;
+			switch (ID) {
+				case GuiIds.GUI_MACHINE_EXTRACTOR:
+					te = world.getBlockTileEntity(x,  y,  z);
+					if (te != null && te instanceof TileMachineExtractor) {
+						return new ContainerMachineExtractor(player.inventory, (TileMachineExtractor)te);
+					}
+				break;
+				case  GuiIds.GUI_MACHINE_MIXER:
+				break;
+				case GuiIds.GUI_MACHINE_STAMPER:
+					te = world.getBlockTileEntity(x,  y,  z);
+					if (te != null && te instanceof TileMachineStamper) {
+						return new ContainerMachineStamper(player.inventory, (TileMachineStamper)te);
+					}
+				break;
+				case GuiIds.GUI_MACHINE_APPLICATOR:
+				break;
+				case GuiIds.GUI_MACHINE_WATER_FILLER:
+				default:
+				break;
+				}
 		}
 		
 		return null;
@@ -55,7 +88,33 @@ public class CommonProxy implements IGuiHandler {
 				return new GuiDyeTransposer(player.inventory, (TileDyeTransposer)te);
 			}
 		}
+		else {
+			TileEntity te;
+			switch (ID) {
+				case GuiIds.GUI_MACHINE_EXTRACTOR:
+					te = world.getBlockTileEntity(x,  y,  z);
+					if (te != null && te instanceof TileMachineExtractor) {
+						return new GuiMachineExtractor(player.inventory, (TileMachineExtractor)te);
+					}
+				break;
+				case  GuiIds.GUI_MACHINE_MIXER:
+				break;
+				case GuiIds.GUI_MACHINE_STAMPER:
+					te = world.getBlockTileEntity(x,  y,  z);
+					if (te != null && te instanceof TileMachineStamper) {
+						return new GuiMachineStamper(player.inventory, (TileMachineStamper)te);
+					}
+				break;
+				case GuiIds.GUI_MACHINE_APPLICATOR:
+				break;
+				case GuiIds.GUI_MACHINE_WATER_FILLER:
+				default:
+				break;
+				}
+		}
 		
 		return null;
 	}
+	
+
 }
