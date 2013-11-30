@@ -15,6 +15,7 @@ public abstract class TileMachine extends TileEntity implements IPowerReceptor {
 	
 	private PowerHandler powerHandler;
 	private int consumedEnergy;
+	protected int recipeEnergy;
 	private RunStates currState;
 	
 
@@ -24,6 +25,13 @@ public abstract class TileMachine extends TileEntity implements IPowerReceptor {
 		powerHandler.configurePowerPerdition(1, 200);
 		
 		currState = RunStates.INIT;
+	}
+	
+	public int getScaledProgress(int scale) {
+		if (recipeEnergy == 0)
+			return 0;
+		
+		return (Math.round(((float)consumedEnergy / recipeEnergy) * scale));
 	}
 	
 	
@@ -66,12 +74,6 @@ public abstract class TileMachine extends TileEntity implements IPowerReceptor {
 	 * @return
 	 */
 	public abstract boolean isMachineReady();
-	
-	/**
-	 * How much energy does the current recipe need
-	 * @return
-	 */
-	public abstract int getRecipeEnergy();
 	
 	/**
 	 * How much energy to use per tick
@@ -123,10 +125,10 @@ public abstract class TileMachine extends TileEntity implements IPowerReceptor {
 			if (hasSourceChanged()) {
 				currState = RunStates.STOPPED;
 				LogHelper.severe("RUNNING->STOPPED");
-			} else	if (consumedEnergy > getRecipeEnergy()) {
+			} else	if (consumedEnergy > recipeEnergy) {
 				currState = RunStates.PRODUCE;
 				LogHelper.severe("CONSUME->PRODUCE");
-			} else if (consumedEnergy < getRecipeEnergy() && powerHandler.getEnergyStored() > getMachineTickEnergy()) {
+			} else if (consumedEnergy < recipeEnergy && powerHandler.getEnergyStored() > getMachineTickEnergy()) {
 				currState = RunStates.CONSUME;
 				LogHelper.severe("RUNNING->CONSUME");
 			}

@@ -2,6 +2,7 @@ package ipsis.mackit.tileentity;
 
 import ipsis.mackit.core.util.LogHelper;
 import ipsis.mackit.fluid.ModFluids;
+import ipsis.mackit.item.crafting.StamperManager;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.Item;
@@ -18,14 +19,22 @@ public class TileMachineStamper extends TileMachine implements IInventory, IFlui
 
 	private FluidTank tank;
 	private ItemStack[] items;
+	private final static int OUTPUT_SLOT = 0;
 	
-	final static int OUTPUT_SLOT = 0;
+	static final int RECIPE_PURE_DYE_STACKSIZE = FluidContainerRegistry.BUCKET_VOLUME;
+	static final int RECIPE_ENERGY = 100;
+	static final int RECIPE_OUTPUT_STACKSIZE = 1;
+	
+	private final static FluidStack PURE_DYE_STACK = new FluidStack(ModFluids.fluidPureDye, 1);
+	
+	private StamperManager.EnumStamperColours selectedColour;
 	
 	public TileMachineStamper() {
 		super();
 		
 		tank = new FluidTank(FluidContainerRegistry.BUCKET_VOLUME * 10);		
 		items = new ItemStack[1];
+		selectedColour = StamperManager.EnumStamperColours.BLACK;
 	}
 	
 	public FluidTank getTank() {
@@ -108,20 +117,39 @@ public class TileMachineStamper extends TileMachine implements IInventory, IFlui
 	public boolean isItemValidForSlot(int i, ItemStack itemstack) {
 		return false;
 	}
+	
+	private boolean isInputReady() {
+		if (!PURE_DYE_STACK.isFluidEqual(tank.getFluid()))
+			return false;
+		
+		FluidStack t = tank.drain(RECIPE_PURE_DYE_STACKSIZE, false);
+		if (t == null)
+			return false;
+		
+		if (t.amount != RECIPE_PURE_DYE_STACKSIZE)
+			return false;
+		
+		return true;
+	}
 
 	
 	/* TileEntityMachine */
 	@Override
 	public boolean isMachineReady() {
-		if (tank.getFluid() != null && tank.getFluid().fluidID == ModFluids.fluidWhiteDye.getID() && tank.getFluidAmount() >= FluidContainerRegistry.BUCKET_VOLUME)
+		
+		if (!isInputReady())
+			return false;
+		
+		if (items[OUTPUT_SLOT] == null)
 			return true;
 		
-		return false;
-	}
-
-	@Override
-	public int getRecipeEnergy() {
-		return 200;
+		if (!items[OUTPUT_SLOT].isItemEqual(StamperManager.getInstance().getOutput(selectedColour)))
+			return false;
+		
+		if (items[OUTPUT_SLOT].stackSize + RECIPE_OUTPUT_STACKSIZE > items[OUTPUT_SLOT].getMaxStackSize())
+			return false;
+		
+		return true;
 	}
 
 	@Override
@@ -132,19 +160,24 @@ public class TileMachineStamper extends TileMachine implements IInventory, IFlui
 	@Override
 	public void createOutput() {
 		if (items[OUTPUT_SLOT] == null) {
-			items[OUTPUT_SLOT] = new ItemStack(Item.bone, 1);
-		} else {
-			items[OUTPUT_SLOT].stackSize++;
+			items[OUTPUT_SLOT] = StamperManager.getInstance().getOutput(selectedColour).copy();			
+			items[OUTPUT_SLOT].stackSize = RECIPE_OUTPUT_STACKSIZE;
+		} else if (items[OUTPUT_SLOT].isItemEqual(StamperManager.getInstance().getOutput(selectedColour))) {
+			if (items[OUTPUT_SLOT].stackSize + RECIPE_OUTPUT_STACKSIZE <= items[OUTPUT_SLOT].getMaxStackSize())
+				items[OUTPUT_SLOT].stackSize += RECIPE_OUTPUT_STACKSIZE;
 		}
+		
+		tank.drain(RECIPE_PURE_DYE_STACKSIZE, true);
 	}
 
 	@Override
 	public void setRecipeSource() {
-		LogHelper.severe("Calculate Recipe");
+		recipeEnergy = RECIPE_ENERGY;
 	}
 
 	@Override
 	public boolean hasSourceChanged() {
+		/* Different button selected */
 		return false;
 	}
 
