@@ -32,7 +32,7 @@ public class ContainerDyeTransposer extends Container {
 		}
 		
 		/* Our slots */
-		addSlotToContainer(new SlotDyeBaseItem(machine, 0, 76, 35));
+		addSlotToContainer(new SlotDyeSource(machine, 0, 76, 35));
 	}
 
 	@Override

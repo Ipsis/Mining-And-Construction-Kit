@@ -45,8 +45,7 @@ public class TileDyeTransposer extends TileEntity implements IPowerReceptor, IIn
 	};
 	
 	private int[] outputFluidId = {
-			ModFluids.fluidRedDye.getID(), ModFluids.fluidYellowDye.getID(), ModFluids.fluidGreenDye.getID(), ModFluids.fluidBlueDye.getID(),
-			ModFluids.fluidWhiteDye.getID(), ModFluids.fluidBlackDye.getID(), ModFluids.fluidBrownDye.getID()
+			ModFluids.fluidRedDye.getID(), ModFluids.fluidYellowDye.getID(),  ModFluids.fluidBlueDye.getID(),
 	};
 	
 	private boolean isValidDyeItem(ItemStack item) {
