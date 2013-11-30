@@ -37,7 +37,7 @@ public class ContainerMachineExtractor extends Container {
 		}
 		
 		/* Custom Slots slots */
-		addSlotToContainer(new SlotDyeSource(machine, 0, 76, 35));
+		addSlotToContainer(new Slot(machine, 0, 76, 35));
 	}
 
 	@Override

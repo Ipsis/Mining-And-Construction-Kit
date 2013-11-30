@@ -1,6 +1,5 @@
 package ipsis.mackit.tileentity;
 
-import ipsis.mackit.item.crafting.DyeCraftingManager;
 import ipsis.mackit.item.crafting.ExtractorManager;
 import ipsis.mackit.item.crafting.ExtractorRecipe;
 import net.minecraft.entity.player.EntityPlayer;
@@ -351,7 +350,8 @@ public class TileMachineExtractor extends TileEntity implements IPowerReceptor, 
 
 	@Override
 	public boolean isItemValidForSlot(int i, ItemStack itemstack) {
-		return (i == DYE_ITEM_SLOT && DyeCraftingManager.getInstance().isDyeSource(itemstack));
+		return true;
+		//return (i == DYE_ITEM_SLOT && DyeCraftingManager.getInstance().isDyeSource(itemstack));
 	}
 	
 	
