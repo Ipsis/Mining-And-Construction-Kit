@@ -24,7 +24,7 @@ public class ConfigurationHandler {
 			BlockIds.MACHINE_MIXER = configuration.getBlock(Strings.BLOCK_MACHINE_MIXER, BlockIds.MACHINE_MIXER_DEFAULT).getInt(BlockIds.MACHINE_MIXER);
 			BlockIds.MACHINE_STAMPER = configuration.getBlock(Strings.BLOCK_MACHINE_STAMPER, BlockIds.MACHINE_EXTRACTOR_DEFAULT).getInt(BlockIds.MACHINE_STAMPER);
 			BlockIds.MACHINE_APPLICATOR = configuration.getBlock(Strings.BLOCK_MACHINE_APPLICATOR, BlockIds.MACHINE_APPLICATOR_DEFAULT).getInt(BlockIds.MACHINE_APPLICATOR);
-			BlockIds.MACHINE_WATER_FILLER = configuration.getBlock(Strings.BLOCK_MACHINE_WATER_FILLER, BlockIds.MACHINE_WATER_FILLER_DEFAULT).getInt(BlockIds.MACHINE_WATER_FILLER);
+			BlockIds.MACHINE_BBBUILDER = configuration.getBlock(Strings.BLOCK_MACHINE_BBBUILDER, BlockIds.MACHINE_BBBUILDER_DEFAULT).getInt(BlockIds.MACHINE_BBBUILDER);
 			
 			
 			BlockIds.DYE_MACHINE = configuration.getBlock(Strings.BLOCK_DYE_MACHINE, BlockIds.DYE_MACHINE_DEFAULT).getInt(BlockIds.DYE_MACHINE_DEFAULT);

@@ -1,7 +1,6 @@
 package ipsis.mackit.tileentity;
 
 import ipsis.mackit.block.ModBlocks;
-import ipsis.mackit.core.util.LogHelper;
 import ipsis.mackit.lib.BlockIds;
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
@@ -19,7 +18,7 @@ import buildcraft.api.power.PowerHandler;
 import buildcraft.api.power.PowerHandler.PowerReceiver;
 import buildcraft.api.power.PowerHandler.Type;
 
-public class TileWaterFillerMachine extends TileEntity implements IInventory, ISidedInventory, IPowerReceptor {
+public class TileMachineWaterFiller extends TileEntity implements IInventory, ISidedInventory, IPowerReceptor {
 
 	private static final int[] accessSlots = new int[] {0, 1, 2, 3, 4, 5};
 	
@@ -35,7 +34,7 @@ public class TileWaterFillerMachine extends TileEntity implements IInventory, IS
 	
 	private ItemStack[] items;
 	
-	public TileWaterFillerMachine() {
+	public TileMachineWaterFiller() {
 		items = new ItemStack[6];
 		createTickCount = -1;
 		powerHandler = new PowerHandler(this, Type.MACHINE);

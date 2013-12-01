@@ -1,6 +1,6 @@
 package ipsis.mackit.inventory;
 
-import ipsis.mackit.tileentity.TileWaterFillerMachine;
+import ipsis.mackit.tileentity.TileMachineWaterFiller;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Container;
@@ -12,9 +12,9 @@ import cpw.mods.fml.relauncher.SideOnly;
 
 public class ContainerWaterFillerMachine extends Container {
 
-	private TileWaterFillerMachine machine;
+	private TileMachineWaterFiller machine;
 	
-	public ContainerWaterFillerMachine(InventoryPlayer invPlayer, TileWaterFillerMachine machine) {
+	public ContainerWaterFillerMachine(InventoryPlayer invPlayer, TileMachineWaterFiller machine) {
 		this.machine = machine;
 		
 		/* hotbar */

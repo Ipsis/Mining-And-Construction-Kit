@@ -15,7 +15,7 @@ public class BlockIds {
 	public static int MACHINE_MIXER_DEFAULT = 3015;
 	public static int MACHINE_STAMPER_DEFAULT = 3016;
 	public static int MACHINE_APPLICATOR_DEFAULT = 3017;
-	public static int MACHINE_WATER_FILLER_DEFAULT = 3018;
+	public static int MACHINE_BBBUILDER_DEFAULT = 3018;	
 	
 	public static int LIQUID_DYE_RED_DEFAULT = 3006;
 	public static int LIQUID_DYE_YELLOW_DEFAULT = 3007;
@@ -32,7 +32,7 @@ public class BlockIds {
 	public static int MACHINE_MIXER;
 	public static int MACHINE_STAMPER;
 	public static int MACHINE_APPLICATOR;
-	public static int MACHINE_WATER_FILLER;
+	public static int MACHINE_BBBUILDER;
 	
 	public static int DYE_TANK;
 	public static int DYE_PIPES;

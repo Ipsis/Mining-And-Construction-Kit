@@ -4,7 +4,7 @@ import ipsis.mackit.MacKit;
 import ipsis.mackit.lib.GuiIds;
 import ipsis.mackit.lib.Reference;
 import ipsis.mackit.lib.Strings;
-import ipsis.mackit.tileentity.TileWaterFillerMachine;
+import ipsis.mackit.tileentity.TileMachineWaterFiller;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IconRegister;
@@ -59,7 +59,7 @@ public class BlockWaterFillerMachine extends BlockContainer {
 
 	@Override
 	public TileEntity createNewTileEntity(World world) {
-		return new TileWaterFillerMachine();
+		return new TileMachineWaterFiller();
 	}
 	
 	@Override
@@ -67,7 +67,7 @@ public class BlockWaterFillerMachine extends BlockContainer {
 		if (!world.isRemote) {
 			
 				TileEntity te = world.getBlockTileEntity(x, y, z);
-				if (te != null && te instanceof TileWaterFillerMachine) {
+				if (te != null && te instanceof TileMachineWaterFiller) {
 					player.openGui(MacKit.instance, GuiIds.WATER_FILLER_MACHINE, world, x, y, z);
 				}
 		}

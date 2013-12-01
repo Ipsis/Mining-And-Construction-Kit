@@ -9,5 +9,5 @@ public class GuiIds {
 	public static final int GUI_MACHINE_MIXER = 3;
 	public static final int GUI_MACHINE_STAMPER = 4;
 	public static final int GUI_MACHINE_APPLICATOR = 5;
-	public static final int GUI_MACHINE_WATER_FILLER = 6;
+	public static final int GUI_MAHCINE_BBBUILDER = 6;
 }

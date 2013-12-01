@@ -4,27 +4,31 @@ import ipsis.mackit.block.ModBlocks;
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
+import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 
-public class TileMachineBBBuilder extends TileMachine implements IInventory {
+public class TileMachineBBBuilder extends TileMachine implements IInventory, ISidedInventory {
 	
 	/* 
-	 * 4 dirt input, 1 redstone input
+	 * 6 dirt input, 1 redstone input
 	 * 1 output
 	 */
 	private ItemStack[] items;
 	private static final int FIRST_DIRT_SLOT = 0;
-	private static final int LAST_DIRT_SLOT = 3;
-	private static final int REDSTONE_SLOT = 4;
-	private static final int OUTPUT_SLOT = 5;
+	private static final int LAST_DIRT_SLOT = 5;
+	private static final int REDSTONE_SLOT = 6;
+	private static final int OUTPUT_SLOT = 7;
+	
+	private static final int[] accessSlots = new int[] {0, 1, 2, 3, 4, 5, 6, 7};
 
-	static final int RECIPE_DIRT_STACKSIZE = 128;
-	static final int RECIPE_REDSTONE_STACKSIZE = 1;
-	static final int RECIPE_ENERGY = 100;
-	static final int RECIPE_OUTPUT_STACKSIZE = 1;
+	private static final int RECIPE_DIRT_STACKSIZE = 128;
+	private static final int RECIPE_REDSTONE_STACKSIZE = 1;
+	private static final int RECIPE_ENERGY = 100;
+	private static final int RECIPE_OUTPUT_STACKSIZE = 1;
 	
 	private int invDirtAmount = 0;
+	private boolean machineReady = false;
 	
 	private static final ItemStack DIRT = new ItemStack(Block.dirt);
 	private static final ItemStack REDSTONE = new ItemStack(Item.redstone);
@@ -34,13 +38,13 @@ public class TileMachineBBBuilder extends TileMachine implements IInventory {
 	public TileMachineBBBuilder() {
 		super();
 		
-		items = new ItemStack[6];
+		items = new ItemStack[8];
 	}
 	
 	private int getInvDirtAmount() {
 		if (invDirtAmount == -1) {
 			invDirtAmount = 0;
-			for (int i = 0; i < 4; i++) {
+			for (int i = FIRST_DIRT_SLOT; i <= LAST_DIRT_SLOT; i++) {
 				if (items[i] != null && items[i].isItemEqual(DIRT))
 					invDirtAmount += items[i].stackSize;
 			}
@@ -53,7 +57,7 @@ public class TileMachineBBBuilder extends TileMachine implements IInventory {
 		if (items[REDSTONE_SLOT] == null)
 			return false;
 		
-		if (items[REDSTONE_SLOT].stackSize < 1)
+		if (items[REDSTONE_SLOT].stackSize < RECIPE_REDSTONE_STACKSIZE)
 			return false;
 		
 		if (!items[REDSTONE_SLOT].isItemEqual(REDSTONE))
@@ -64,10 +68,8 @@ public class TileMachineBBBuilder extends TileMachine implements IInventory {
 		
 		return true;
 	}
-
-	@Override
-	public boolean isMachineReady() {
-		
+	
+	private boolean checkInputAndOutput() {
 		if (!isInputReady())
 			return false;
 		
@@ -82,6 +84,12 @@ public class TileMachineBBBuilder extends TileMachine implements IInventory {
 			return false;
 
 		return true;
+	}
+
+	@Override
+	public boolean isMachineReady() {
+		machineReady = checkInputAndOutput();
+		return machineReady;
 	}
 
 	@Override
@@ -120,7 +128,17 @@ public class TileMachineBBBuilder extends TileMachine implements IInventory {
 
 	@Override
 	public boolean hasSourceChanged() {
-		return isInputReady();
+		boolean t = isInputReady();
+		
+		/* this can be true->false or false->true
+		 * doesn't really matter
+		 */
+		if (machineReady != t) {
+			machineReady = t;			
+			return true;
+		}
+		
+		return false; /* not changed */
 	}
 	
 	/* IInventory */
@@ -212,6 +230,28 @@ public class TileMachineBBBuilder extends TileMachine implements IInventory {
 		}
 		
 		return false;
+	}
+
+	/* ISidedInventory */
+	@Override
+	public int[] getAccessibleSlotsFromSide(int side) {
+		return accessSlots;
+	}
+
+	@Override
+	public boolean canInsertItem(int slot, ItemStack itemstack, int side) {
+		return isItemValidForSlot(slot, itemstack);
+	}
+
+	@Override
+	public boolean canExtractItem(int slot, ItemStack itemstack, int side) {
+		if (!itemstack.isItemEqual(BEAVER_BLOCK))
+			return false;
+		
+		if (slot != OUTPUT_SLOT)
+			return false;
+		
+		return true;
 	}
 
 }
