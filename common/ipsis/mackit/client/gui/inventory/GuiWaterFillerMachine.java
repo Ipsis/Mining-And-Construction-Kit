@@ -3,7 +3,7 @@ package ipsis.mackit.client.gui.inventory;
 import ipsis.mackit.core.util.LogHelper;
 import ipsis.mackit.inventory.ContainerWaterFillerMachine;
 import ipsis.mackit.lib.Reference;
-import ipsis.mackit.tileentity.TileWaterFillerMachine;
+import ipsis.mackit.tileentity.TileMachineWaterFiller;
 
 import java.util.Arrays;
 
@@ -20,9 +20,9 @@ import cpw.mods.fml.relauncher.SideOnly;
 @SideOnly(Side.CLIENT)
 public class GuiWaterFillerMachine extends GuiContainer {
 
-	private TileWaterFillerMachine machine;
+	private TileMachineWaterFiller machine;
 	
-	public GuiWaterFillerMachine(InventoryPlayer invPlayer, TileWaterFillerMachine machine) {
+	public GuiWaterFillerMachine(InventoryPlayer invPlayer, TileMachineWaterFiller machine) {
 		super(new ContainerWaterFillerMachine(invPlayer, machine));
 		
 		this.machine = machine;

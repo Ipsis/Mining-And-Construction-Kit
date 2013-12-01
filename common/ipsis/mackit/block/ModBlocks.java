@@ -18,7 +18,7 @@ public class ModBlocks {
 	public static Block machineDyeMixer;
 	public static Block machineDyeStamper;
 	public static Block machineDyeApplicator;
-	public static Block machineWaterFiller;
+	public static Block machineBBBuilder;
 	
 	public static Block dyeTransposer;
 	public static Block waterFillerMachine;
@@ -43,7 +43,7 @@ public class ModBlocks {
 		machineDyeMixer = new BlockMachineMixer(BlockIds.MACHINE_MIXER);
 		machineDyeStamper = new BlockMachineStamper(BlockIds.MACHINE_STAMPER);
 		machineDyeApplicator = new BlockMachineApplicator(BlockIds.MACHINE_APPLICATOR);
-		machineWaterFiller = new BlockMachineWaterFiller(BlockIds.MACHINE_WATER_FILLER);
+		machineBBBuilder = new BlockMachineBBBuilder(BlockIds.MACHINE_BBBUILDER);
 
 		
 		
@@ -61,7 +61,7 @@ public class ModBlocks {
 		GameRegistry.registerBlock(machineDyeMixer, Strings.BLOCK_MACHINE_MIXER);
 		GameRegistry.registerBlock(machineDyeStamper, Strings.BLOCK_MACHINE_STAMPER);
 		GameRegistry.registerBlock(machineDyeApplicator, Strings.BLOCK_MACHINE_APPLICATOR);
-		GameRegistry.registerBlock(machineWaterFiller, Strings.BLOCK_MACHINE_WATER_FILLER);
+		GameRegistry.registerBlock(machineBBBuilder, Strings.BLOCK_MACHINE_BBBUILDER);
 		
 		/**
 		 * Fluids blocks and containers

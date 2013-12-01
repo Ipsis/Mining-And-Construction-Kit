@@ -12,13 +12,13 @@ public class Strings {
 	public static final String BLOCK_MACHINE_MIXER = "machineMixer";
 	public static final String BLOCK_MACHINE_STAMPER = "machineStamper";
 	public static final String BLOCK_MACHINE_APPLICATOR = "machineApplicator";
-	public static final String BLOCK_MACHINE_WATER_FILLER = "machineWaterFiller";
+	public static final String BLOCK_MACHINE_BBBUILDER = "machineBBBuilder";
 	
 	public static final String TE_MACHINE_EXTRACTOR = "tileMachineExtractor";
 	public static final String TE_MACHINE_MIXER = "tileMachineMixer";
 	public static final String TE_MACHINE_STAMPER = "tileMachineStamper";
 	public static final String TE_MACHINE_APPLICATOR = "tileMachineApplicator";
-	public static final String TE_MACHINE_WATER_FILLER = "tileMachineWaterFiller";
+	public static final String TE_MACHINE_BBBUILDER = "tileMachineBBBuilder";
 	
 	
 	

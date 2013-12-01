@@ -122,10 +122,11 @@ public abstract class TileMachine extends TileEntity implements IPowerReceptor {
 			}
 			break;
 		case RUNNING:
+			LogHelper.severe(consumedEnergy + " " + recipeEnergy);
 			if (hasSourceChanged()) {
 				currState = RunStates.STOPPED;
 				LogHelper.severe("RUNNING->STOPPED");
-			} else	if (consumedEnergy > recipeEnergy) {
+			} else	if (consumedEnergy >= recipeEnergy) {
 				currState = RunStates.PRODUCE;
 				LogHelper.severe("CONSUME->PRODUCE");
 			} else if (consumedEnergy < recipeEnergy && powerHandler.getEnergyStored() > getMachineTickEnergy()) {
@@ -164,6 +165,7 @@ public abstract class TileMachine extends TileEntity implements IPowerReceptor {
 			case PRODUCE:
 				createOutput();
 				currState = RunStates.STOPPED;
+				LogHelper.severe("PRODUCE->STOPPED");
 				break;
 			case RUNNING:
 				break;
