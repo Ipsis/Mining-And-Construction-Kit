@@ -4,9 +4,12 @@ import ipsis.mackit.tileentity.TileMachineBBBuilder;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Container;
+import net.minecraft.inventory.ICrafting;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
 import cofh.gui.slot.SlotOutput;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 public class ContainerMachineBBBuilder extends Container {
 
@@ -42,7 +45,7 @@ public class ContainerMachineBBBuilder extends Container {
 			addSlotToContainer(new Slot(machine, 3 + x, 31 + 18 * x, 35));
 		
 		addSlotToContainer(new Slot(machine, 6, 49, 56));
-		addSlotToContainer(new SlotOutput(machine, 7, 114, 35));
+		addSlotToContainer(new SlotOutput(machine, 7, 140, 34));
 	}
 	
 	@Override
@@ -53,5 +56,20 @@ public class ContainerMachineBBBuilder extends Container {
 	@Override
 	public ItemStack transferStackInSlot(EntityPlayer player, int i) {
 		return null;
+	}
+	
+	@Override
+	public void detectAndSendChanges() {
+		super.detectAndSendChanges();
+		
+		for (int i = 0; i < crafters.size(); i++) {
+			machine.sendGUINetworkData(this, (ICrafting) crafters.get(i));
+		}
+	}
+	
+	@SideOnly(Side.CLIENT)
+	@Override
+	public void updateProgressBar(int id, int data) {		
+		machine.getGUINetworkData(id, data);
 	}
 }

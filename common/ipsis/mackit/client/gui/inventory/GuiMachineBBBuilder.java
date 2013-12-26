@@ -32,11 +32,12 @@ public class GuiMachineBBBuilder extends GuiBase {
 		super.initGui();
 		
 		/* progress bar */
-		progress = new ElementDualScaled(this, 103, 34);
+		progress = new ElementDualScaled(this, 90, 34);
 		progress.setMode(1);
 		progress.setBackground(true);
+		//progress.setTexture(Reference.MOD_ID + ":textures/gui/guiProgress.png", 44, 15);
 		progress.setTexture(Reference.MOD_ID + ":textures/gui/guiProgress.png", 64, 64);
-		progress.setSize(18, 17);
+		progress.setSize(22, 15);
 		addElement(progress);
 		
 		/* Need to change to RF energy to use CofhLIB energy element */
@@ -49,7 +50,8 @@ public class GuiMachineBBBuilder extends GuiBase {
 	
 	@Override
 	protected void updateElements() {
-		this.progress.setQuantity(machine.getScaledProgress(18));
+		this.progress.setQuantity(machine.getScaledProgress(22));
+		this.energy.setQuantity(machine.getScaledEnergy(40));
 		
 	}
 }

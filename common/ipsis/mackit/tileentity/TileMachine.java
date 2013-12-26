@@ -1,6 +1,9 @@
 package ipsis.mackit.tileentity;
 
 import ipsis.mackit.core.util.LogHelper;
+import net.minecraft.inventory.Container;
+import net.minecraft.inventory.ICrafting;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
@@ -12,26 +15,33 @@ import buildcraft.api.power.PowerHandler.Type;
 public abstract class TileMachine extends TileEntity implements IPowerReceptor {
 
 	private static enum RunStates { INIT, STOPPED, READY, RUNNING, CONSUME, PRODUCE };
+	private static boolean isActive[] = new boolean[]{ false, false, false, true, true, true }; 
+	
+	private static final int DEF_MIN_RX_ENERGY = 1;
+	private static final int DEF_MAX_RX_ENERGY = 500;
+	private static final int DEF_DOWORK_ENERGY = 1600; /* dont use ?? */
+	private static final int DEF_STORED_ENERGY = 1500;
+	private static final int DEF_TICK_ENERGY = 2;
 	
 	private PowerHandler powerHandler;
 	private int consumedEnergy;
-	protected int recipeEnergy;
+	private int recipeEnergy;
+	private int tickEnergy;
 	private RunStates currState;
+	private boolean isInventoryOk;
 	
+	public TileMachine(int tickEnergy) {
+		powerHandler = new PowerHandler(this, Type.MACHINE);
+		powerHandler.configure(DEF_MIN_RX_ENERGY, DEF_MAX_RX_ENERGY, DEF_DOWORK_ENERGY, DEF_STORED_ENERGY);
+		powerHandler.configurePowerPerdition(1, 200);
+		currState = RunStates.INIT;
+		isInventoryOk = false;
+		
+		this.tickEnergy = tickEnergy;
+	}
 
 	public TileMachine() {
-		powerHandler = new PowerHandler(this, Type.MACHINE);
-		powerHandler.configure(1, 15, 100, 32000);
-		powerHandler.configurePowerPerdition(1, 200);
-		
-		currState = RunStates.INIT;
-	}
-	
-	public int getScaledProgress(int scale) {
-		if (recipeEnergy == 0)
-			return 0;
-		
-		return (Math.round(((float)consumedEnergy / recipeEnergy) * scale));
+		this(DEF_TICK_ENERGY);
 	}
 	
 	
@@ -49,6 +59,10 @@ public abstract class TileMachine extends TileEntity implements IPowerReceptor {
 	@Override
 	public World getWorld() {
 		return worldObj;
+	}
+	
+	public void setIsInventoryOk(boolean v) {
+		isInventoryOk = v;
 	}
 	
 	/*
@@ -73,20 +87,13 @@ public abstract class TileMachine extends TileEntity implements IPowerReceptor {
 	 * Is there space in the output
 	 * @return
 	 */
-	public abstract boolean isMachineReady();
+	public abstract boolean canMachineStart();
 	
-	/**
-	 * How much energy to use per tick
-	 * @return
-	 */
-	public int getMachineTickEnergy() {
-		return 1;
-	}
-	
+
 	/**
 	 * Clear the current recipe
 	 */
-	public abstract void clearSavedRecipeSource();
+	public abstract void clearSavedRecipe();
 	
 	/**
 	 * Convert the source items into the output
@@ -96,13 +103,12 @@ public abstract class TileMachine extends TileEntity implements IPowerReceptor {
 	/**
 	 * Calculate the recipe for the source items
 	 */
-	public abstract void setRecipeSource();
+	public abstract void setRecipe();
 	
 	/**
-	 * Have the source items been changed
-	 * @return
+	 * Get the energy for the recipe
 	 */
-	public abstract boolean hasSourceChanged();
+	public abstract int getRecipeEnergy();
 
 	
 	private void runStateMachine() {
@@ -113,25 +119,21 @@ public abstract class TileMachine extends TileEntity implements IPowerReceptor {
 		switch (currState) {
 		case INIT:
 			currState = RunStates.STOPPED;
-			LogHelper.severe("INIT->STOPPED");
 			break;
 		case STOPPED:
-			if (!isRsDisabled() && isMachineReady()) {
+			if (!isRsDisabled() && canMachineStart()) {
 				currState = RunStates.READY;
-				LogHelper.severe("STOPPED->READY");
+				isInventoryOk = true;
 			}
 			break;
 		case RUNNING:
-			LogHelper.severe(consumedEnergy + " " + recipeEnergy);
-			if (hasSourceChanged()) {
-				currState = RunStates.STOPPED;
-				LogHelper.severe("RUNNING->STOPPED");
+			if (!isInventoryOk) {
+				currState = RunStates.INIT;
+				LogHelper.severe("RUNNING->INIT");
 			} else	if (consumedEnergy >= recipeEnergy) {
 				currState = RunStates.PRODUCE;
-				LogHelper.severe("CONSUME->PRODUCE");
-			} else if (consumedEnergy < recipeEnergy && powerHandler.getEnergyStored() > getMachineTickEnergy()) {
+			} else if (consumedEnergy < recipeEnergy && powerHandler.getEnergyStored() > tickEnergy) {
 				currState = RunStates.CONSUME;
-				LogHelper.severe("RUNNING->CONSUME");
 			}
 			break;
 		case CONSUME:
@@ -148,34 +150,114 @@ public abstract class TileMachine extends TileEntity implements IPowerReceptor {
 			switch (currState) {
 			case STOPPED:
 				consumedEnergy = 0;
-				clearSavedRecipeSource();
+				clearSavedRecipe();
 				break;
 			case READY:
-				setRecipeSource();
+				setRecipe();
+				recipeEnergy = getRecipeEnergy();
 				consumedEnergy = 0;
 				currState = RunStates.RUNNING;
-				LogHelper.severe("READY->RUNNING");
 				break;
 			case CONSUME:
-				powerHandler.useEnergy(10, 10, true);
-				consumedEnergy += 10;
+				powerHandler.useEnergy(tickEnergy, tickEnergy, true);
+				consumedEnergy += tickEnergy;
 				currState = RunStates.RUNNING;
-				LogHelper.severe("CONSUME->RUNNING");
 				break;
 			case PRODUCE:
 				createOutput();
-				currState = RunStates.STOPPED;
-				LogHelper.severe("PRODUCE->STOPPED");
+				currState = RunStates.INIT;
 				break;
 			case RUNNING:
 				break;
 			default:
-				break;
-			
+				break;			
 			}
+			
+			int meta = worldObj.getBlockMetadata(xCoord, yCoord, zCoord);
+			if (isActive[currState.ordinal()])
+				meta |= 0x8;
+			else
+				meta &= ~0x8;
+			worldObj.setBlockMetadataWithNotify(xCoord, yCoord, zCoord, meta, 3);
+			
 		}
+	}
+	
+	@Override
+	public void writeToNBT(NBTTagCompound compound) {
+		super.writeToNBT(compound);
 		
+		powerHandler.writeToNBT(compound);
+		
+		NBTTagCompound nbt = new NBTTagCompound();
+		nbt.setByte("currentState", (byte)currState.ordinal());
+		nbt.setInteger("consumed", consumedEnergy);
+		nbt.setInteger("recipeEnergy", recipeEnergy);
+		nbt.setInteger("tickEnergy", tickEnergy);
+		compound.setCompoundTag("baseMachine", nbt);			
+	}
+	
+	@Override
+	public void readFromNBT(NBTTagCompound compound) {
+		super.readFromNBT(compound);
+		
+		powerHandler.readFromNBT(compound);
+		NBTTagCompound nbt = compound.getCompoundTag("baseMachine");
+		
+		byte t = nbt.getByte("currentState");
+		if (t >= 0 && t < RunStates.values().length)
+			currState = RunStates.values()[t];
+		else
+			currState = RunStates.INIT;
 
+		consumedEnergy = nbt.getInteger("consumedEnergy");
+		recipeEnergy = nbt.getInteger("recipeEnergy");
+		tickEnergy = nbt.getInteger("tickEnergy");
+		
+	}
+	
+	private float lastEnergy;
+	
+	/* Gui */
+	public int getScaledEnergy(int scale) {
+		return (Math.round((powerHandler.getEnergyStored() / powerHandler.getMaxEnergyStored()) * scale));			
+	}
+	
+	public int getScaledProgress(int scale) {
+		if (recipeEnergy == 0)
+			return 0;
+		
+		return (Math.round(((float)consumedEnergy / recipeEnergy) * scale));
+	}
+	
+	public void sendGUINetworkData(Container container, ICrafting iCrafting) {
+		
+		/* energy has to be split into 2 * 16bit values - like Buildcraft does */
+		float currEnergy = powerHandler.getEnergyStored();
+		
+		if (lastEnergy != currEnergy) {
+			iCrafting.sendProgressBarUpdate(container, 0, Math.round(currEnergy * 10) & 0xffff);
+			iCrafting.sendProgressBarUpdate(container, 1, (Math.round(currEnergy * 10) & 0xffff0000) >> 16);
+			
+			lastEnergy = currEnergy;
+		}
+	}
+	
+	/* update from the received info */
+	public void getGUINetworkData(int id, int data) {
+		
+		switch (id) {
+		case 0:
+			int iEnergy = Math.round(powerHandler.getEnergyStored() * 10);
+			iEnergy = (iEnergy & 0xffff0000) | (data & 0xffff);
+			powerHandler.setEnergy(iEnergy / 10);
+			break;
+		case 1:
+			iEnergy = Math.round(powerHandler.getEnergyStored() * 10);
+			iEnergy = (iEnergy & 0xffff) | ((data & 0xffff) << 16);
+			powerHandler.setEnergy(iEnergy / 10);
+			break;
+		}
 	}
 
 }

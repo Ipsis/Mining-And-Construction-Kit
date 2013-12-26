@@ -135,7 +135,7 @@ public class TileMachineStamper extends TileMachine implements IInventory, IFlui
 	
 	/* TileEntityMachine */
 	@Override
-	public boolean isMachineReady() {
+	public boolean canMachineStart() {
 		
 		if (!isInputReady())
 			return false;
@@ -153,7 +153,7 @@ public class TileMachineStamper extends TileMachine implements IInventory, IFlui
 	}
 
 	@Override
-	public void clearSavedRecipeSource() {
+	public void clearSavedRecipe() {
 		LogHelper.severe("Clear Recipe");
 	}
 
@@ -171,14 +171,11 @@ public class TileMachineStamper extends TileMachine implements IInventory, IFlui
 	}
 
 	@Override
-	public void setRecipeSource() {
-		recipeEnergy = RECIPE_ENERGY;
-	}
-
+	public void setRecipe() {	}
+	
 	@Override
-	public boolean hasSourceChanged() {
-		/* Different button selected */
-		return false;
+	public int getRecipeEnergy() {
+		return RECIPE_ENERGY;
 	}
 
 	/**

@@ -3,10 +3,14 @@ package ipsis.mackit.tileentity;
 import ipsis.mackit.block.ModBlocks;
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.Container;
+import net.minecraft.inventory.ICrafting;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagList;
 
 public class TileMachineBBBuilder extends TileMachine implements IInventory, ISidedInventory {
 	
@@ -24,11 +28,9 @@ public class TileMachineBBBuilder extends TileMachine implements IInventory, ISi
 
 	private static final int RECIPE_DIRT_STACKSIZE = 128;
 	private static final int RECIPE_REDSTONE_STACKSIZE = 1;
-	private static final int RECIPE_ENERGY = 100;
+	private static final int RECIPE_ENERGY = 1000;
 	private static final int RECIPE_OUTPUT_STACKSIZE = 1;
 	
-	private int invDirtAmount = 0;
-	private boolean machineReady = false;
 	
 	private static final ItemStack DIRT = new ItemStack(Block.dirt);
 	private static final ItemStack REDSTONE = new ItemStack(Item.redstone);
@@ -41,18 +43,6 @@ public class TileMachineBBBuilder extends TileMachine implements IInventory, ISi
 		items = new ItemStack[8];
 	}
 	
-	private int getInvDirtAmount() {
-		if (invDirtAmount == -1) {
-			invDirtAmount = 0;
-			for (int i = FIRST_DIRT_SLOT; i <= LAST_DIRT_SLOT; i++) {
-				if (items[i] != null && items[i].isItemEqual(DIRT))
-					invDirtAmount += items[i].stackSize;
-			}
-		}
-		
-		return invDirtAmount;
-	}
-	
 	private boolean isInputReady() {
 		if (items[REDSTONE_SLOT] == null)
 			return false;
@@ -63,13 +53,21 @@ public class TileMachineBBBuilder extends TileMachine implements IInventory, ISi
 		if (!items[REDSTONE_SLOT].isItemEqual(REDSTONE))
 			return false;
 			
-		if (getInvDirtAmount() < RECIPE_DIRT_STACKSIZE)
+		int invDirtAmount = 0;
+		for (int i = FIRST_DIRT_SLOT; i <= LAST_DIRT_SLOT; i++) {
+			if (items[i] != null && items[i].isItemEqual(DIRT))
+				invDirtAmount += items[i].stackSize;
+		}
+		
+		if (invDirtAmount < RECIPE_DIRT_STACKSIZE)
 			return false;
 		
 		return true;
 	}
 	
-	private boolean checkInputAndOutput() {
+
+	@Override
+	public boolean canMachineStart() {
 		if (!isInputReady())
 			return false;
 		
@@ -87,13 +85,7 @@ public class TileMachineBBBuilder extends TileMachine implements IInventory, ISi
 	}
 
 	@Override
-	public boolean isMachineReady() {
-		machineReady = checkInputAndOutput();
-		return machineReady;
-	}
-
-	@Override
-	public void clearSavedRecipeSource() { /* not used */ }
+	public void clearSavedRecipe() { /* not used */ }
 
 	@Override
 	public void createOutput() {
@@ -122,23 +114,11 @@ public class TileMachineBBBuilder extends TileMachine implements IInventory, ISi
 	}
 
 	@Override
-	public void setRecipeSource() {
-		recipeEnergy = RECIPE_ENERGY;
-	}
-
+	public void setRecipe() {	}
+	
 	@Override
-	public boolean hasSourceChanged() {
-		boolean t = isInputReady();
-		
-		/* this can be true->false or false->true
-		 * doesn't really matter
-		 */
-		if (machineReady != t) {
-			machineReady = t;			
-			return true;
-		}
-		
-		return false; /* not changed */
+	public int getRecipeEnergy() {
+		return RECIPE_ENERGY;
 	}
 	
 	/* IInventory */
@@ -216,7 +196,9 @@ public class TileMachineBBBuilder extends TileMachine implements IInventory, ISi
     public void onInventoryChanged()
     {
         super.onInventoryChanged();
-        invDirtAmount = -1;
+        
+        /* recheck the input if there is a change */
+        setIsInventoryOk(isInputReady());
     }
 
 	@Override
@@ -253,5 +235,52 @@ public class TileMachineBBBuilder extends TileMachine implements IInventory, ISi
 		
 		return true;
 	}
+	
+	@Override
+	public void writeToNBT(NBTTagCompound compound) {
+		super.writeToNBT(compound);
+		
+		NBTTagList items = new NBTTagList();		
+		for (int i = 0; i < getSizeInventory(); i++) {
+			ItemStack stack = getStackInSlot(i);
+			
+			if (stack != null) {
+				NBTTagCompound item = new NBTTagCompound();
+				item.setByte("Slot", (byte)i);
+				stack.writeToNBT(item);
+				items.appendTag(item);
+				
+			}
+		}
+		compound.setTag("Items", items);	
+		
+	}
+	
+	@Override
+	public void readFromNBT(NBTTagCompound compound) {
+		super.readFromNBT(compound);
+		
+		NBTTagList items = compound.getTagList("Items");
+		for (int i = 0; i < items.tagCount(); i++) {
+			NBTTagCompound item = (NBTTagCompound)items.tagAt(i);
+			int slot = item.getByte("Slot");
+			
+			
+			if (slot >= 0 && slot < getSizeInventory()) {
+				setInventorySlotContents(slot, ItemStack.loadItemStackFromNBT(item));
+			}
+		}
+	}
+	
+	/* Gui */
+	public void sendGUINetworkData(Container container, ICrafting iCrafting) {
+		super.sendGUINetworkData(container, iCrafting);
+	}
+	
+
+	public void getGUINetworkData(int id, int data) {		
+		super.getGUINetworkData(id, data);
+	}
+	
 
 }
