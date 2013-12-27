@@ -34,7 +34,7 @@ public class TileMachineBBBuilder extends TileMachine implements IInventory, ISi
 	
 	private static final ItemStack DIRT = new ItemStack(Block.dirt);
 	private static final ItemStack REDSTONE = new ItemStack(Item.redstone);
-	private static final ItemStack BEAVER_BLOCK = new ItemStack(ModBlocks.waterFiller);
+	private static final ItemStack BEAVER_BLOCK = new ItemStack(ModBlocks.beaverBlock);
 	
 	
 	public TileMachineBBBuilder() {

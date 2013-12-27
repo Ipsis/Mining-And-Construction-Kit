@@ -12,16 +12,13 @@ public class ModBlocks {
 
 	/* Mod block instantiations */
 	public static Block fixedEarth;
-	public static Block waterFiller;
+	public static Block beaverBlock;
 	
 	public static Block machineDyeExtractor;
 	public static Block machineDyeMixer;
 	public static Block machineDyeStamper;
 	public static Block machineDyeApplicator;
 	public static Block machineBBBuilder;
-	
-	public static Block dyeTransposer;
-	public static Block waterFillerMachine;
 	
 	public static Block redDye;
 	public static Block yellowDye;
@@ -36,7 +33,7 @@ public class ModBlocks {
 		
 		/* blocks */
 		fixedEarth = new BlockFixedEarth(BlockIds.FIXED_EARTH);		
-		waterFiller = new BlockWaterFiller(BlockIds.WATER_FILLER);
+		beaverBlock = new BlockBeaverBlock(BlockIds.BEAVER_BLOCK);
 		
 		/* machine blocks */
 		machineDyeExtractor = new BlockMachineExtractor(BlockIds.MACHINE_EXTRACTOR);
@@ -44,17 +41,10 @@ public class ModBlocks {
 		machineDyeStamper = new BlockMachineStamper(BlockIds.MACHINE_STAMPER);
 		machineDyeApplicator = new BlockMachineApplicator(BlockIds.MACHINE_APPLICATOR);
 		machineBBBuilder = new BlockMachineBBBuilder(BlockIds.MACHINE_BBBUILDER);
-
-		
-		
-		dyeTransposer = new BlockDyeTransposer(BlockIds.DYE_TRANSPOSER);		
-		waterFillerMachine = new BlockWaterFillerMachine(BlockIds.WATER_FILLER_MACHINE);				
-		GameRegistry.registerBlock(dyeTransposer, Strings.BLOCK_DYE_TRANSPOSER);		
-		GameRegistry.registerBlock(waterFillerMachine, Strings.BLOCK_WATER_FILLER_MACHINE);
 		
 		/* blocks */
 		GameRegistry.registerBlock(fixedEarth, ItemBlockFixedEarth.class ,Strings.BLOCK_FIXED_EARTH);
-		GameRegistry.registerBlock(waterFiller, Strings.BLOCK_WATER_FILLER);
+		GameRegistry.registerBlock(beaverBlock, Strings.BLOCK_BEAVER_BLOCK);
 		
 		/* machine blocks */
 		GameRegistry.registerBlock(machineDyeExtractor, Strings.BLOCK_MACHINE_EXTRACTOR);

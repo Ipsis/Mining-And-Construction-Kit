@@ -40,8 +40,7 @@ public class ItemFixerFoamGun extends ItemMK {
 		int xDiff = 1;
 		int yDiff = 1;
 		int zDiff = 1;
-		
-		
+	
 		if (facing == 0 || facing == 2) {
 			zDiff = 0;
 		} else {

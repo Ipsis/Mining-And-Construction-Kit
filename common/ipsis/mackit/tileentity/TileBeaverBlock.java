@@ -1,11 +1,11 @@
 package ipsis.mackit.tileentity;
 
-import ipsis.mackit.block.BlockWaterFiller;
+import ipsis.mackit.block.BlockBeaverBlock;
 import net.minecraft.block.Block;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 
-public class TileWaterFiller extends TileEntity {
+public class TileBeaverBlock extends TileEntity {
 	
 	private int step;
 	private boolean running = false;
@@ -16,7 +16,7 @@ public class TileWaterFiller extends TileEntity {
 	private static int UPDATE_FREQ = 10;
 
 	
-	public TileWaterFiller() {
+	public TileBeaverBlock() {
 	}
 	
 	private void placeDirt(int x, int y, int z) {
@@ -27,7 +27,7 @@ public class TileWaterFiller extends TileEntity {
 		}
 	}
 	
-	private void runCircle() {
+	private void runSurface() {
 		
 		placeDirt(xCoord - step, yCoord, zCoord);
 		placeDirt(xCoord + step, yCoord, zCoord);
@@ -50,42 +50,11 @@ public class TileWaterFiller extends TileEntity {
 		}		
 	}
 	
-	private void runPyramid() {
+	private void runDam() {
 		
-		int ox = xCoord - step;
-		int oz = zCoord + step;
-		
-		for (int c = 0; c < (step * 2) + 1; c++) {
-			for (int d = 0; d < (step * 2) + 1; d++) {
-				int px = ox + c;
-				int pz = oz - d;
-				int py = yCoord - step;
-				
-				if (step == 1 && px == xCoord && py == yCoord && pz == zCoord) {
-					continue;
-				}
-				
-				placeDirt(px, py, pz);
-			}
-		}
 	}
 	
-	private void runColumn(int width) {
-		
-		int ox = xCoord - ((width - 1) / 2);
-		
-		for (int c = 0; c < width; c++) {
-			
-			int px = ox + c;
-			int pz = zCoord;
-			int py = yCoord - step + 1;
-			
-			if (step == 1 && px == xCoord && py == yCoord && pz == zCoord) {
-				continue;
-			}
-			
-			placeDirt(px, py, pz);
-		}
+	private void runColumn() {
 		
 	}
 	
@@ -118,22 +87,12 @@ public class TileWaterFiller extends TileEntity {
 				/* all finished so replace the water filler block */
 				worldObj.setBlock(xCoord, yCoord, zCoord, Block.dirt.blockID);
 			} else {
-				switch (mode) {
-				case 0:
-					runCircle();
-					break;
-				case 1:
-					runPyramid();
-					break;
-				case 2:
-					runColumn(7);
-					break;
-				case 3:
-					runColumn(11);
-					break;
-				}
-					
-				step++;
+				if (mode == 0)
+					runSurface();
+				else if (mode == 1)
+					runDam();
+				else
+					runColumn();
 			}
 		}
 	}
@@ -145,7 +104,7 @@ public class TileWaterFiller extends TileEntity {
 			step = 1;
 			tcount = 0;
 			int meta = worldObj.getBlockMetadata(xCoord, yCoord, zCoord);
-			mode = (meta & BlockWaterFiller.MODE_MASK) >> BlockWaterFiller.MODE_SHIFT;			
+			mode = (meta & BlockBeaverBlock.MODE_MASK) >> BlockBeaverBlock.MODE_SHIFT;			
 		}
 	}
 	

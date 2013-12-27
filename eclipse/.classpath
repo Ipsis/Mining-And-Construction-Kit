@@ -4,7 +4,5 @@
 	<classpathentry kind="src" path="resources"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/Minecraft"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/BuildCraft"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/CoFHLib"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

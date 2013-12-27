@@ -26,12 +26,8 @@ public class ConfigurationHandler {
 			BlockIds.MACHINE_APPLICATOR = configuration.getBlock(Strings.BLOCK_MACHINE_APPLICATOR, BlockIds.MACHINE_APPLICATOR_DEFAULT).getInt(BlockIds.MACHINE_APPLICATOR);
 			BlockIds.MACHINE_BBBUILDER = configuration.getBlock(Strings.BLOCK_MACHINE_BBBUILDER, BlockIds.MACHINE_BBBUILDER_DEFAULT).getInt(BlockIds.MACHINE_BBBUILDER);
 			
-			
-			BlockIds.DYE_MACHINE = configuration.getBlock(Strings.BLOCK_DYE_MACHINE, BlockIds.DYE_MACHINE_DEFAULT).getInt(BlockIds.DYE_MACHINE_DEFAULT);
+			BlockIds.BEAVER_BLOCK = configuration.getBlock(Strings.BLOCK_BEAVER_BLOCK,  BlockIds.BLOCK_BEAVER_BLOCK_DEFAULT).getInt(BlockIds.BEAVER_BLOCK);	
 			BlockIds.FIXED_EARTH = configuration.getBlock(Strings.BLOCK_FIXED_EARTH, BlockIds.FIXED_EARTH_DEFAULT).getInt(BlockIds.FIXED_EARTH_DEFAULT);
-			BlockIds.DYE_TRANSPOSER = configuration.getBlock(Strings.BLOCK_DYE_TRANSPOSER,  BlockIds.DYE_TRANSPOSER_DEFAULT).getInt(BlockIds.DYE_TRANSPOSER_DEFAULT);
-			BlockIds.WATER_FILLER = configuration.getBlock(Strings.BLOCK_WATER_FILLER, BlockIds.WATER_FILLER_DEFAULT).getInt(BlockIds.WATER_FILLER_DEFAULT);
-			BlockIds.WATER_FILLER_MACHINE = configuration.getBlock(Strings.BLOCK_WATER_FILLER_MACHINE, BlockIds.WATER_FILLER_MACHINE_DEFAULT).getInt(BlockIds.WATER_FILLER_MACHINE_DEFAULT);
 			
 			BlockIds.LIQUID_DYE_RED = configuration.getBlock(Strings.BLOCK_LIQUID_RED_DYE, BlockIds.LIQUID_DYE_RED_DEFAULT).getInt(BlockIds.LIQUID_DYE_RED_DEFAULT);
 			BlockIds.LIQUID_DYE_YELLOW = configuration.getBlock(Strings.BLOCK_LIQUID_YELLOW_DYE, BlockIds.LIQUID_DYE_YELLOW_DEFAULT).getInt(BlockIds.LIQUID_DYE_YELLOW_DEFAULT);

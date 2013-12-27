@@ -1,9 +1,10 @@
 package ipsis.mackit.block;
 
 import ipsis.mackit.MacKit;
+import ipsis.mackit.core.util.LogHelper;
 import ipsis.mackit.lib.Reference;
 import ipsis.mackit.lib.Strings;
-import ipsis.mackit.tileentity.TileWaterFiller;
+import ipsis.mackit.tileentity.TileBeaverBlock;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
@@ -19,12 +20,12 @@ import net.minecraftforge.common.ForgeDirection;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
-public class BlockWaterFiller extends BlockContainer {
+public class BlockBeaverBlock extends BlockContainer {
 	
-	public BlockWaterFiller(int id) {
+	public BlockBeaverBlock(int id) {
 		super(id, Material.iron);
 		setCreativeTab(MacKit.tabsMacKit);
-		setUnlocalizedName(Strings.BLOCK_WATER_FILLER);
+		setUnlocalizedName(Strings.BLOCK_BEAVER_BLOCK);
 	}
 	
 	/**
@@ -52,12 +53,12 @@ public class BlockWaterFiller extends BlockContainer {
 	@Override
 	@SideOnly(Side.CLIENT)
 	public void registerIcons(IconRegister register) {
-		sideIcon = register.registerIcon(Reference.MOD_ID + ":" + Strings.BLOCK_WATER_FILLER + "_side");
-		topIcon = register.registerIcon(Reference.MOD_ID + ":" + Strings.BLOCK_WATER_FILLER);
+		sideIcon = register.registerIcon(Reference.MOD_ID + ":" + Strings.BLOCK_BEAVER_BLOCK + "_side");
+		topIcon = register.registerIcon(Reference.MOD_ID + ":" + Strings.BLOCK_BEAVER_BLOCK);
 		
-		modeIcons = new Icon[Strings.BLOCK_WATER_FILLER_MODES.length];
+		modeIcons = new Icon[Strings.BLOCK_BEAVER_MODES.length];
 		for (int i = 0; i < modeIcons.length; i++) {
-			modeIcons[i] = register.registerIcon(Reference.MOD_ID + ":" + Strings.BLOCK_WATER_FILLER_MODES[i]);
+			modeIcons[i] = register.registerIcon(Reference.MOD_ID + ":" + Strings.BLOCK_BEAVER_BLOCK + "_" + Strings.BLOCK_BEAVER_MODES[i]);
 		}
 
 	}
@@ -74,24 +75,30 @@ public class BlockWaterFiller extends BlockContainer {
 		int mode = (meta & MODE_MASK) >> MODE_SHIFT;
 		int facing = (meta & FACING_MASK) + 2;
 		
+		if (mode >= Strings.BLOCK_BEAVER_MODES.length) {
+			LogHelper.severe("BlockBeaverBlock: Mode out of range " + mode);
+			return null;
+		}
+		
 		return (side == facing ? modeIcons[mode] : sideIcon);
 	}
 	
 	@Override
 	public TileEntity createNewTileEntity(World world) {
-		return new TileWaterFiller();
+		return new TileBeaverBlock();
 	}
 	
 
 	@Override
 	public boolean canPlaceBlockAt(World world, int x, int y, int z) {
-		
+		return true;
+		/*
 		int id = world.getBlockId(x, y, z);
 		if (id == Block.waterMoving.blockID || id == Block.waterStill.blockID) {
 			return true;
 		}
 		
-		return false;
+		return false;*/
 	}
 	
 	private ForgeDirection getForgeDir(int x)
@@ -133,9 +140,11 @@ public class BlockWaterFiller extends BlockContainer {
 	
 	private int setNextMode(int meta) {
 		
+		
 		int mode = (meta & MODE_MASK) >> MODE_SHIFT;
 		meta &= ~MODE_MASK;
-		meta |= (++mode & 0x03) << MODE_SHIFT;
+		mode = (mode + 1) % 3;
+		meta |= (mode & 0x03) << MODE_SHIFT;
 		return meta;
 	}
 	
@@ -146,11 +155,11 @@ public class BlockWaterFiller extends BlockContainer {
 		if (!world.isRemote) {
 			/* no mode change while it is running */
 			TileEntity te = world.getBlockTileEntity(x, y, z);
-			if (!(te instanceof TileWaterFiller)) {
+			if (!(te instanceof TileBeaverBlock)) {
 				return false;
 			}
 	
-			if (((TileWaterFiller)te).getRunning())
+			if (((TileBeaverBlock)te).getRunning())
 				return true;
 			
 			int newMeta = world.getBlockMetadata(x, y, z);
@@ -167,11 +176,10 @@ public class BlockWaterFiller extends BlockContainer {
 	
 		if (!world.isRemote && world.isBlockIndirectlyGettingPowered(x, y, z)) {
 			TileEntity te = world.getBlockTileEntity(x, y, z);
-			if (te != null && te instanceof TileWaterFiller) {				
-				TileWaterFiller wf = (TileWaterFiller)te;		
-				wf.setRunning();
-			}
-			
+			if (te != null && te instanceof TileBeaverBlock) {				
+				TileBeaverBlock bb = (TileBeaverBlock)te;		
+				bb.setRunning();
+			}			
 		}
 	}
 
