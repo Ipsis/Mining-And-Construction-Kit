@@ -6,4 +6,9 @@ public class Strings {
 
 	/* Block name constants */
 	public static final String ENCHANTER_NAME = "enchanter";
+	
+	/* Item name constants */
+	
+	/* TileEntity name constants */
+	public static final String TE_ENCHANTER_NAME = "tileEnchanter";
 }
