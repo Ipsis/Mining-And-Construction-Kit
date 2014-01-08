@@ -36,13 +36,24 @@ public class GuiEnchanter extends GuiContainer {
 				
 	}
 	
+	private static final int GUI_BUTTON_INCR = 0;
+	private static final int GUI_BUTTON_DESR = 1;
+	private static final int GUI_BUTTON_ENCHANT = 2;
+	
 	@Override
 	public void initGui() {
 		super.initGui();
 		buttonList.clear();
 		
+		GuiButton incrButton = new GuiButton(GUI_BUTTON_INCR, guiLeft + 72, guiTop + 23, 16, 16, "+");
+		incrButton.enabled = tileEnchanter.getEnchantLevel() == 30 ? false : true;
+		buttonList.add(incrButton);
+		GuiButton decrButton = new GuiButton(GUI_BUTTON_DESR, guiLeft + 72, guiTop + 50, 16, 16, "-");
+		decrButton.enabled = tileEnchanter.getEnchantLevel() == 30 ? false : true;
+		buttonList.add(decrButton);
 		
-		GuiButton enchantButton = new GuiButton(0, guiLeft + 80, guiTop + 14, 48, 20, "Enchant");
+		
+		GuiButton enchantButton = new GuiButton(GUI_BUTTON_ENCHANT, guiLeft + 80, guiTop + 14, 48, 20, "Enchant");
 		enchantButton.enabled = true;
 		buttonList.add(enchantButton);		
 	}

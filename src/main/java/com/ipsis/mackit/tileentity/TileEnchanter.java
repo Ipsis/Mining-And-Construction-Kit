@@ -21,10 +21,30 @@ public class TileEnchanter extends TileEntity implements IInventory {
 	public static final int INVENTORY_SIZE = 2;
 	public static final int SLOT_INPUT = 0;
 	public static final int SLOT_OUTPUT = 1;
+
+	
 	
 	public TileEnchanter() {
 		
 		inventory = new ItemStack[INVENTORY_SIZE];
+	}
+
+	/* Level we are currently enchanting at */
+	private int enchantLevel = 1;
+	public void incrementEnchantLevel() {
+		enchantLevel++;
+		if (enchantLevel > 30)
+			enchantLevel = 30;
+	}
+	
+	public void decrementEnchantLevel() {
+		enchantLevel--;
+		if (enchantLevel < 1)
+			enchantLevel = 1;
+	}
+	
+	public int getEnchantLevel() {
+		return enchantLevel;
 	}
 
 	@Override
@@ -56,6 +76,7 @@ public class TileEnchanter extends TileEntity implements IInventory {
 				{
 					setInventorySlotContents(slotIndex, null);
 				}
+				onInventoryChanged();
 			}
 		}
 		
@@ -81,6 +102,8 @@ public class TileEnchanter extends TileEntity implements IInventory {
 		{
 			itemStack.stackSize = getInventoryStackLimit();
 		}
+		
+		onInventoryChanged();
 		
 	}
 
