@@ -6,6 +6,8 @@ import net.minecraft.entity.player.InventoryPlayer;
 
 import org.lwjgl.opengl.GL11;
 
+import scala.Int;
+
 import com.ipsis.mackit.inventory.ContainerEnchanter;
 import com.ipsis.mackit.lib.GuiIds;
 import com.ipsis.mackit.lib.Textures;
@@ -43,8 +45,8 @@ public class GuiEnchanter extends GuiContainer {
 
 		fontRenderer.drawString("Enchant-o-mat", 8, 6, 0x404040);
 		
-		String str = "Level " + tileEnchanter.getEnchantLevel();
-		fontRenderer.drawString(str, 45, 44, 0x404040);
+		String str = Byte.toString(tileEnchanter.getEnchantLevel());
+		fontRenderer.drawString(str, 70, 40, 0x404040);
 	}
 	
 	@Override
@@ -69,14 +71,14 @@ public class GuiEnchanter extends GuiContainer {
 		super.initGui();
 		buttonList.clear();
 		
-		incrButton = new GuiButton(GUI_BUTTON_INCR, guiLeft + 72, guiTop + 23, 16, 16, "+");
+		incrButton = new GuiButton(GUI_BUTTON_INCR, guiLeft + 68, guiTop + 20, 18, 18, "+");
 		incrButton.enabled = tileEnchanter.getEnchantLevel() == 30 ? false : true;
 		buttonList.add(incrButton);
-		decrButton = new GuiButton(GUI_BUTTON_DESR, guiLeft + 72, guiTop + 50, 16, 16, "-");
+		decrButton = new GuiButton(GUI_BUTTON_DESR, guiLeft + 68, guiTop + 50, 18, 18, "-");
 		decrButton.enabled = tileEnchanter.getEnchantLevel() == 30 ? false : true;
 		buttonList.add(decrButton);
 				
-		enchantButton = new GuiButton(GUI_BUTTON_ENCHANT, guiLeft + 80, guiTop + 14, 48, 20, "Enchant");
+		enchantButton = new GuiButton(GUI_BUTTON_ENCHANT, guiLeft + 55, guiTop + 72, 48, 18, "Enchant");
 		enchantButton.enabled = tileEnchanter.getCanEnchant();
 		buttonList.add(enchantButton);		
 	}

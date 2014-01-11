@@ -14,7 +14,6 @@ import net.minecraft.nbt.NBTTagList;
 import net.minecraft.tileentity.TileEntity;
 
 import com.ipsis.mackit.client.gui.inventory.GuiEnchanter;
-import com.ipsis.mackit.helper.LogHelper;
 import com.ipsis.mackit.network.PacketHandler;
 
 public class TileEnchanter extends TileEntity implements IInventory {
@@ -25,7 +24,10 @@ public class TileEnchanter extends TileEntity implements IInventory {
 	public enum OutputSlot {
 		INV_SLOT_OUTPUT1(1),
 		INV_SLOT_OUTPUT2(2),
-		INV_SLOT_OUTPUT3(3);
+		INV_SLOT_OUTPUT3(3),
+		INV_SLOT_OUTPUT4(4),
+		INV_SLOT_OUTPUT5(5),
+		INV_SLOT_OUTPUT6(6);
 		
 		private final int slot;
 		OutputSlot(int slot) {
@@ -103,14 +105,12 @@ public class TileEnchanter extends TileEntity implements IInventory {
 	}	
 	
 	public void incEnchantLevel() {
-		LogHelper.severe("incEnchant");
 		enchantLevel++;
 		if (enchantLevel > MAX_ENCHANT_LEVEL)
 			enchantLevel = MAX_ENCHANT_LEVEL;
 	}
 	
 	public void decEnchantLevel() {
-		LogHelper.severe("decEnchant");
 		enchantLevel--;
 		if (enchantLevel < MIN_ENCHANT_LEVEL)
 			enchantLevel = MIN_ENCHANT_LEVEL;
@@ -131,18 +131,15 @@ public class TileEnchanter extends TileEntity implements IInventory {
 	
 	public void enchantItem() {
 
-		LogHelper.severe("enchantItem");
-		
 		if (worldObj.isRemote)
 			return;		
-		
-		EntityPlayer player = getEnchantingPlayer();
-		
+			
 		/* validate slots contents first */
 		updateCanEnchant();
 		if (!canEnchant)
 			return;
 		
+		EntityPlayer player = getEnchantingPlayer();
 		if (player.experienceLevel < enchantLevel && !player.capabilities.isCreativeMode)
 			return;
 		
@@ -213,13 +210,11 @@ public class TileEnchanter extends TileEntity implements IInventory {
 	private void updateCanEnchant() {
 	
 		if (inventory[INV_SLOT_INPUT] == null || inventory[INV_SLOT_INPUT].stackSize <= 0) {
-			LogHelper.severe("updateCanEnchant: no input");
 			canEnchant = false;
 			return;
 		}
 		
 		if (!freeOutputSlot()) {
-			LogHelper.severe("updateCanEnchant: no output");
 			canEnchant = false;
 			return;
 		}
@@ -227,15 +222,12 @@ public class TileEnchanter extends TileEntity implements IInventory {
 		ItemStack itemStack = inventory[INV_SLOT_INPUT].copy();
 		itemStack.stackSize = 1;
 		if (!itemStack.isItemEnchantable()) {
-			LogHelper.severe("updateCanEnchant: item not enchantable");
 			canEnchant = false;
 			return;
 		}
 		
 		EntityPlayer entityplayer = getEnchantingPlayer();
-		LogHelper.severe("updateCanEnchant: player " + entityplayer.experienceLevel + " creative " + entityplayer.capabilities.isCreativeMode);
-		if (entityplayer.experienceLevel < enchantLevel && !entityplayer.capabilities.isCreativeMode) {
-			LogHelper.severe("updateCanEnchant: no levels");
+		if (entityplayer == null || entityplayer.experienceLevel < enchantLevel && !entityplayer.capabilities.isCreativeMode) {
 			canEnchant = false;
 		}
 		

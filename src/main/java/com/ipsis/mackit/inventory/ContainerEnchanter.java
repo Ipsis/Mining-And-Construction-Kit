@@ -7,6 +7,7 @@ import net.minecraft.inventory.ICrafting;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
 
+import com.ipsis.mackit.client.gui.inventory.SlotOutput;
 import com.ipsis.mackit.tileentity.TileEnchanter;
 
 import cpw.mods.fml.relauncher.Side;
@@ -24,9 +25,13 @@ public class ContainerEnchanter extends Container {
 		this.tileEnchanter = tileEnchanter;
 		
 		this.addSlotToContainer(new Slot(tileEnchanter, TileEnchanter.INV_SLOT_INPUT, 24, 35));
-		this.addSlotToContainer(new Slot(tileEnchanter, TileEnchanter.OutputSlot.INV_SLOT_OUTPUT1.slot(), 130, 35));
-		this.addSlotToContainer(new Slot(tileEnchanter, TileEnchanter.OutputSlot.INV_SLOT_OUTPUT2.slot(), 150, 35));
-		this.addSlotToContainer(new Slot(tileEnchanter, TileEnchanter.OutputSlot.INV_SLOT_OUTPUT3.slot(), 170, 35));
+		
+		this.addSlotToContainer(new SlotOutput(tileEnchanter, TileEnchanter.OutputSlot.INV_SLOT_OUTPUT1.slot(), 114, 17));
+		this.addSlotToContainer(new SlotOutput(tileEnchanter, TileEnchanter.OutputSlot.INV_SLOT_OUTPUT2.slot(), 132, 17));
+		this.addSlotToContainer(new SlotOutput(tileEnchanter, TileEnchanter.OutputSlot.INV_SLOT_OUTPUT3.slot(), 114, 35));
+		this.addSlotToContainer(new SlotOutput(tileEnchanter, TileEnchanter.OutputSlot.INV_SLOT_OUTPUT4.slot(), 132, 35));
+		this.addSlotToContainer(new SlotOutput(tileEnchanter, TileEnchanter.OutputSlot.INV_SLOT_OUTPUT5.slot(), 114, 53));
+		this.addSlotToContainer(new SlotOutput(tileEnchanter, TileEnchanter.OutputSlot.INV_SLOT_OUTPUT6.slot(), 132, 53));
 		
 		/* Player hotbar */
 		for (int x = 0; x < PLAYER_INV_COLS; x++) {
@@ -52,7 +57,32 @@ public class ContainerEnchanter extends Container {
 	}
 
 	@Override
-	public ItemStack transferStackInSlot(EntityPlayer player, int slot) {
+	public ItemStack transferStackInSlot(EntityPlayer player, int i) {
+		Slot slot = getSlot(i);
+		
+		if (slot != null && slot.getHasStack()) {
+			ItemStack stack = slot.getStack();
+			ItemStack result = stack.copy();
+			
+			if (i >= 36) {
+				if (!mergeItemStack(stack, 0, 36, false)) {
+					return null;
+				}
+			}else if (!mergeItemStack(stack, 36, 36 + tileEnchanter.getSizeInventory(), false)) {
+				return null;
+			}
+			
+			if (stack.stackSize == 0) {
+				slot.putStack(null);
+			}else{
+				slot.onSlotChanged();
+			}
+			
+			slot.onPickupFromSlot(player, stack);
+			
+			return result;
+		}
+		
 		return null;
 	}
 	
