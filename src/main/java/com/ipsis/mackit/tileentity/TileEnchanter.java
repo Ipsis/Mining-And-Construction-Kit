@@ -13,40 +13,236 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.tileentity.TileEntity;
 
+import com.ipsis.mackit.client.gui.inventory.GuiEnchanter;
+import com.ipsis.mackit.helper.LogHelper;
+import com.ipsis.mackit.network.PacketHandler;
+
 public class TileEnchanter extends TileEntity implements IInventory {
 
 	private ItemStack[] inventory;
 	private Random rand = new Random();
 	
-	public static final int INVENTORY_SIZE = 2;
-	public static final int SLOT_INPUT = 0;
-	public static final int SLOT_OUTPUT = 1;
-
+	public enum OutputSlot {
+		INV_SLOT_OUTPUT1(1),
+		INV_SLOT_OUTPUT2(2),
+		INV_SLOT_OUTPUT3(3);
+		
+		private final int slot;
+		OutputSlot(int slot) {
+			this.slot = slot;
+		}
+		
+		public int slot() {
+			return slot;
+		}
+	}
 	
+	public static final int INVENTORY_SIZE = OutputSlot.values().length + 1;
+	public static final int INV_SLOT_INPUT = 0;
+
+	public static final byte MIN_ENCHANT_LEVEL = 1;
+	public static final byte MAX_ENCHANT_LEVEL = 30;
+
+	private byte enchantLevel;
+	private boolean canEnchant;	
 	
 	public TileEnchanter() {
 		
 		inventory = new ItemStack[INVENTORY_SIZE];
+		enchantLevel = 1;
+		canEnchant = false;
 	}
+	
+	@Override
+	public void readFromNBT(NBTTagCompound nbtTagCompound) {
 
-	/* Level we are currently enchanting at */
-	private int enchantLevel = 1;
-	public void incrementEnchantLevel() {
-		enchantLevel++;
-		if (enchantLevel > 30)
-			enchantLevel = 30;
+		super.readFromNBT(nbtTagCompound);
+		
+        NBTTagList tagList = nbtTagCompound.getTagList("Items");
+        inventory = new ItemStack[this.getSizeInventory()];
+        for (int idx = 0; idx < tagList.tagCount(); idx++)
+        {
+            NBTTagCompound tagCompound = (NBTTagCompound) tagList.tagAt(idx);
+            byte slotIndex = tagCompound.getByte("Slot");
+            if (slotIndex >= 0 && slotIndex < inventory.length)
+            {
+                inventory[slotIndex] = ItemStack.loadItemStackFromNBT(tagCompound);
+            }
+        }
+        
+        enchantLevel = nbtTagCompound.getByte("EnchantLevel");
 	}
 	
-	public void decrementEnchantLevel() {
-		enchantLevel--;
-		if (enchantLevel < 1)
-			enchantLevel = 1;
+	@Override
+	public void writeToNBT(NBTTagCompound nbtTagCompound) {
+
+		super.writeToNBT(nbtTagCompound);
+		
+		NBTTagList tagList = new NBTTagList();
+		for (int idx = 0; idx < inventory.length; idx++)
+		{
+			if (inventory[idx] != null)
+			{
+				NBTTagCompound tagCompound = new NBTTagCompound();
+				tagCompound.setByte("Slot",  (byte)idx);
+				inventory[idx].writeToNBT(tagCompound);
+				tagList.appendTag(tagCompound);;
+			}
+		}
+		nbtTagCompound.setTag("Items", tagList);
+		nbtTagCompound.setByte("EnchantLevel", enchantLevel);
 	}
 	
-	public int getEnchantLevel() {
+	public byte getEnchantLevel() {
 		return enchantLevel;
 	}
+	
+	/* Gui update only */
+	public void setEnchantLevel(byte level) {
+		enchantLevel = level;
+	}	
+	
+	public void incEnchantLevel() {
+		LogHelper.severe("incEnchant");
+		enchantLevel++;
+		if (enchantLevel > MAX_ENCHANT_LEVEL)
+			enchantLevel = MAX_ENCHANT_LEVEL;
+	}
+	
+	public void decEnchantLevel() {
+		LogHelper.severe("decEnchant");
+		enchantLevel--;
+		if (enchantLevel < MIN_ENCHANT_LEVEL)
+			enchantLevel = MIN_ENCHANT_LEVEL;
+	}
+	
+	public boolean getCanEnchant() {
+		return canEnchant;
+	}
+	
+	/* Gui update only */
+	public void setCanEnchant(boolean enchant) {
+		canEnchant = enchant;
+	}
+	
+	private EntityPlayer getEnchantingPlayer() {
+		return this.worldObj.getClosestPlayer((double)((float)this.xCoord + 0.5F), (double)((float)this.yCoord + 0.5F), (double)((float)this.zCoord + 0.5F), 3.0D);
+	}
+	
+	public void enchantItem() {
 
+		LogHelper.severe("enchantItem");
+		
+		if (worldObj.isRemote)
+			return;		
+		
+		EntityPlayer player = getEnchantingPlayer();
+		
+		/* validate slots contents first */
+		updateCanEnchant();
+		if (!canEnchant)
+			return;
+		
+		if (player.experienceLevel < enchantLevel && !player.capabilities.isCreativeMode)
+			return;
+		
+		int oslot = getOutputSlot();
+		if (oslot == -1)
+			return;
+		
+		/* take a copy of the input, but we only want 1 of whatever it is! */
+		ItemStack sourceStack = inventory[INV_SLOT_INPUT].copy();
+		sourceStack.stackSize = 1;
+		
+		List list = EnchantmentHelper.buildEnchantmentList(this.rand, sourceStack, enchantLevel);
+		boolean isBook = sourceStack.itemID == Item.book.itemID;
+		
+		if (list != null)
+		{
+			/* remove from inventory and cleanup */
+			inventory[INV_SLOT_INPUT].stackSize--;
+			if (inventory[INV_SLOT_INPUT].stackSize <= 0)
+				inventory[INV_SLOT_INPUT] = null;
+			
+			/* Can enchant this item */
+			player.addExperienceLevel(-enchantLevel);
+			
+			/* Update the item id for a book */
+			if (isBook)
+				sourceStack.itemID = Item.enchantedBook.itemID;
+
+			/*
+			 * Books only get one enchant, other items can get multiple
+			 */
+            for (int k = 0; k < list.size(); ++k)
+            {
+                EnchantmentData enchant = (EnchantmentData)list.get(k);
+                
+                if (isBook)
+                {
+                	Item.enchantedBook.addEnchantment(sourceStack, enchant);
+                	break;
+                }
+                
+                sourceStack.addEnchantment(enchant.enchantmentobj, enchant.enchantmentLevel);                    
+            }
+            
+            /* move to the output */
+            inventory[oslot] = sourceStack;            
+		}	onInventoryChanged();			
+	}
+	
+	private boolean freeOutputSlot() {
+		
+		for (OutputSlot s: OutputSlot.values()) {
+			if (inventory[s.slot()] == null)
+				return true;
+		}
+		return false;
+	}
+	
+	private int getOutputSlot() {
+		
+		for (OutputSlot s: OutputSlot.values()) {
+			if (inventory[s.slot()] == null)
+				return s.slot();
+		}
+		return -1; /* no outputs available */
+	}
+	
+	private void updateCanEnchant() {
+	
+		if (inventory[INV_SLOT_INPUT] == null || inventory[INV_SLOT_INPUT].stackSize <= 0) {
+			LogHelper.severe("updateCanEnchant: no input");
+			canEnchant = false;
+			return;
+		}
+		
+		if (!freeOutputSlot()) {
+			LogHelper.severe("updateCanEnchant: no output");
+			canEnchant = false;
+			return;
+		}
+		
+		ItemStack itemStack = inventory[INV_SLOT_INPUT].copy();
+		itemStack.stackSize = 1;
+		if (!itemStack.isItemEnchantable()) {
+			LogHelper.severe("updateCanEnchant: item not enchantable");
+			canEnchant = false;
+			return;
+		}
+		
+		EntityPlayer entityplayer = getEnchantingPlayer();
+		LogHelper.severe("updateCanEnchant: player " + entityplayer.experienceLevel + " creative " + entityplayer.capabilities.isCreativeMode);
+		if (entityplayer.experienceLevel < enchantLevel && !entityplayer.capabilities.isCreativeMode) {
+			LogHelper.severe("updateCanEnchant: no levels");
+			canEnchant = false;
+		}
+		
+		canEnchant = true;
+	}
+	
+	/* IInventory */
 	@Override
 	public int getSizeInventory() {
 
@@ -133,14 +329,10 @@ public class TileEnchanter extends TileEntity implements IInventory {
 
 	@Override
 	public void openChest() {
-
-		
 	}
 
 	@Override
-	public void closeChest() {
-
-		
+	public void closeChest() {	
 	}
 
 	@Override
@@ -150,88 +342,22 @@ public class TileEnchanter extends TileEntity implements IInventory {
 	}
 	
 	@Override
-	public void readFromNBT(NBTTagCompound nbtTagCompound) {
-
-		super.readFromNBT(nbtTagCompound);
+	public void onInventoryChanged() {
+		super.onInventoryChanged();
 		
-        NBTTagList tagList = nbtTagCompound.getTagList("Items");
-        inventory = new ItemStack[this.getSizeInventory()];
-        for (int idx = 0; idx < tagList.tagCount(); idx++)
-        {
-            NBTTagCompound tagCompound = (NBTTagCompound) tagList.tagAt(idx);
-            byte slotIndex = tagCompound.getByte("Slot");
-            if (slotIndex >= 0 && slotIndex < inventory.length)
-            {
-                inventory[slotIndex] = ItemStack.loadItemStackFromNBT(tagCompound);
-            }
-        }
+		updateCanEnchant();
 	}
 	
-	@Override
-	public void writeToNBT(NBTTagCompound nbtTagCompound) {
-
-		super.writeToNBT(nbtTagCompound);
+	public void handleInterfacePacket(byte eventId, int data) {
 		
-		NBTTagList tagList = new NBTTagList();
-		for (int idx = 0; idx < inventory.length; idx++)
-		{
-			if (inventory[idx] != null)
-			{
-				NBTTagCompound tagCompound = new NBTTagCompound();
-				tagCompound.setByte("Slot",  (byte)idx);
-				inventory[idx].writeToNBT(tagCompound);
-				tagList.appendTag(tagCompound);;
+		if (eventId == PacketHandler.INTERFACE_PKT_BUTTON) {
+			if (data == GuiEnchanter.GUI_BUTTON_DESR) {
+				decEnchantLevel();
+			} else if (data == GuiEnchanter.GUI_BUTTON_INCR) {
+				incEnchantLevel();
+			} else if (data == GuiEnchanter.GUI_BUTTON_ENCHANT) {
+				enchantItem();
 			}
 		}
-		nbtTagCompound.setTag("Items", tagList);
-	}
-	
-	/*
-	 * Try to enchant the item at the requested level
-	 * Pretty much the same as vanilla enchanting as it is supposed to work the same way!
-	 */
-	public boolean enchantItem(EntityPlayer player, int levels) {
-		
-		ItemStack sourceItemStack = inventory[SLOT_INPUT];
-		
-		if (sourceItemStack == null || levels <= 0)
-			return false;
-		
-		if (player.experienceLevel < levels && !player.capabilities.isCreativeMode)
-			return false;
-		
-		if (!worldObj.isRemote)
-		{
-			List list = EnchantmentHelper.buildEnchantmentList(this.rand, sourceItemStack, levels);
-			boolean isBook = sourceItemStack.itemID == Item.book.itemID;
-			
-			if (list != null)
-			{
-				/* Can enchant this item */
-				player.addExperienceLevel(-levels);
-				
-				/* Update the item id for a book */
-				if (isBook)
-					sourceItemStack.itemID = Item.enchantedBook.itemID;
-
-				/*
-				 * Books only get one enchant, other items can get multiple
-				 */
-                for (int k = 0; k < list.size(); ++k)
-                {
-                    EnchantmentData enchant = (EnchantmentData)list.get(k);
-                    
-                    if (isBook)
-                    {
-                    	Item.enchantedBook.addEnchantment(sourceItemStack, enchant);
-                    	break;
-                    }
-                    
-                    sourceItemStack.addEnchantment(enchant.enchantmentobj, enchant.enchantmentLevel);                    
-                }                
-			}			
-		}	
-		
-		return true;
 	}
 }

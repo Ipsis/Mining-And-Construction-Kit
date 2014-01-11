@@ -3,10 +3,14 @@ package com.ipsis.mackit.inventory;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Container;
+import net.minecraft.inventory.ICrafting;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
 
 import com.ipsis.mackit.tileentity.TileEnchanter;
+
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 public class ContainerEnchanter extends Container {
 	
@@ -19,8 +23,10 @@ public class ContainerEnchanter extends Container {
 		
 		this.tileEnchanter = tileEnchanter;
 		
-		this.addSlotToContainer(new Slot(tileEnchanter, TileEnchanter.SLOT_INPUT, 24, 35));
-		this.addSlotToContainer(new Slot(tileEnchanter, TileEnchanter.SLOT_OUTPUT, 132, 35));
+		this.addSlotToContainer(new Slot(tileEnchanter, TileEnchanter.INV_SLOT_INPUT, 24, 35));
+		this.addSlotToContainer(new Slot(tileEnchanter, TileEnchanter.OutputSlot.INV_SLOT_OUTPUT1.slot(), 130, 35));
+		this.addSlotToContainer(new Slot(tileEnchanter, TileEnchanter.OutputSlot.INV_SLOT_OUTPUT2.slot(), 150, 35));
+		this.addSlotToContainer(new Slot(tileEnchanter, TileEnchanter.OutputSlot.INV_SLOT_OUTPUT3.slot(), 170, 35));
 		
 		/* Player hotbar */
 		for (int x = 0; x < PLAYER_INV_COLS; x++) {
@@ -34,6 +40,10 @@ public class ContainerEnchanter extends Container {
 			}
 		}		
 	}
+	
+	public TileEnchanter getTileEntity() {
+		return tileEnchanter;
+	}
 
 	@Override
 	public boolean canInteractWith(EntityPlayer entityplayer) {
@@ -44,6 +54,47 @@ public class ContainerEnchanter extends Container {
 	@Override
 	public ItemStack transferStackInSlot(EntityPlayer player, int slot) {
 		return null;
+	}
+	
+	@Override
+	public void addCraftingToCrafters(ICrafting player) {
+		super.addCraftingToCrafters(player);
+		
+		player.sendProgressBarUpdate(this, 0, tileEnchanter.getEnchantLevel());
+		player.sendProgressBarUpdate(this, 1, tileEnchanter.getCanEnchant() ? 1 : 0);
+	}
+	
+	@Override
+	@SideOnly(Side.CLIENT)
+	public void updateProgressBar(int id, int data) {
+		
+		if (id == 0) {
+			tileEnchanter.setEnchantLevel((byte)data);
+		} else if (id == 1) {
+			tileEnchanter.setCanEnchant(data == 1 ? true : false);
+		}
+	}
+	
+	private boolean oldCanEnchant;
+	private byte oldEnchantLevel;
+	
+	@Override
+	public void detectAndSendChanges() {
+		super.detectAndSendChanges();
+		
+		for (Object player : crafters) {
+			
+			if (oldEnchantLevel != tileEnchanter.getEnchantLevel()) {
+				((ICrafting)player).sendProgressBarUpdate(this, 0, tileEnchanter.getEnchantLevel());
+			}
+			
+			if (oldCanEnchant != tileEnchanter.getCanEnchant()) {
+				((ICrafting)player).sendProgressBarUpdate(this, 1, tileEnchanter.getCanEnchant() ? 1 : 0);
+			}
+		}
+		
+		oldCanEnchant = tileEnchanter.getCanEnchant();
+		oldEnchantLevel = tileEnchanter.getEnchantLevel();
 	}
 	
 }
