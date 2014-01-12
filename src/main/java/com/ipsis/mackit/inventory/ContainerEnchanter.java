@@ -8,6 +8,7 @@ import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
 
 import com.ipsis.mackit.client.gui.inventory.SlotOutput;
+import com.ipsis.mackit.helper.LogHelper;
 import com.ipsis.mackit.tileentity.TileEnchanter;
 
 import cpw.mods.fml.relauncher.Side;

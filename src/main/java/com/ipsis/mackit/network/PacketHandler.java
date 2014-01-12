@@ -47,7 +47,7 @@ public class PacketHandler implements IPacketHandler {
 				if (container != null && container instanceof ContainerEnchanter) {
 					TileEnchanter te = ((ContainerEnchanter)container).getTileEntity();
 					
-					te.handleInterfacePacket(eventId, data);
+					te.handleInterfacePacket(eventId, data, player);
 				}
 			}
 			break;

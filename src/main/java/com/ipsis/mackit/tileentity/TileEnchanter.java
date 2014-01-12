@@ -16,6 +16,8 @@ import net.minecraft.tileentity.TileEntity;
 import com.ipsis.mackit.client.gui.inventory.GuiEnchanter;
 import com.ipsis.mackit.network.PacketHandler;
 
+import cpw.mods.fml.common.network.Player;
+
 public class TileEnchanter extends TileEntity implements IInventory {
 
 	private ItemStack[] inventory;
@@ -73,6 +75,7 @@ public class TileEnchanter extends TileEntity implements IInventory {
         }
         
         enchantLevel = nbtTagCompound.getByte("EnchantLevel");
+        updateCanEnchant();
 	}
 	
 	@Override
@@ -129,18 +132,19 @@ public class TileEnchanter extends TileEntity implements IInventory {
 		return this.worldObj.getClosestPlayer((double)((float)this.xCoord + 0.5F), (double)((float)this.yCoord + 0.5F), (double)((float)this.zCoord + 0.5F), 3.0D);
 	}
 	
-	public void enchantItem() {
+	public void enchantItem(Player player) {
 
 		if (worldObj.isRemote)
 			return;		
 			
+		EntityPlayer entityPlayer = (EntityPlayer)player;
+		
 		/* validate slots contents first */
 		updateCanEnchant();
 		if (!canEnchant)
 			return;
 		
-		EntityPlayer player = getEnchantingPlayer();
-		if (player.experienceLevel < enchantLevel && !player.capabilities.isCreativeMode)
+		if (entityPlayer.experienceLevel < enchantLevel && !entityPlayer.capabilities.isCreativeMode)
 			return;
 		
 		int oslot = getOutputSlot();
@@ -162,7 +166,7 @@ public class TileEnchanter extends TileEntity implements IInventory {
 				inventory[INV_SLOT_INPUT] = null;
 			
 			/* Can enchant this item */
-			player.addExperienceLevel(-enchantLevel);
+			entityPlayer.addExperienceLevel(-enchantLevel);
 			
 			/* Update the item id for a book */
 			if (isBook)
@@ -224,11 +228,6 @@ public class TileEnchanter extends TileEntity implements IInventory {
 		if (!itemStack.isItemEnchantable()) {
 			canEnchant = false;
 			return;
-		}
-		
-		EntityPlayer entityplayer = getEnchantingPlayer();
-		if (entityplayer == null || entityplayer.experienceLevel < enchantLevel && !entityplayer.capabilities.isCreativeMode) {
-			canEnchant = false;
 		}
 		
 		canEnchant = true;
@@ -340,7 +339,7 @@ public class TileEnchanter extends TileEntity implements IInventory {
 		updateCanEnchant();
 	}
 	
-	public void handleInterfacePacket(byte eventId, int data) {
+	public void handleInterfacePacket(byte eventId, int data, Player player) {
 		
 		if (eventId == PacketHandler.INTERFACE_PKT_BUTTON) {
 			if (data == GuiEnchanter.GUI_BUTTON_DESR) {
@@ -348,7 +347,7 @@ public class TileEnchanter extends TileEntity implements IInventory {
 			} else if (data == GuiEnchanter.GUI_BUTTON_INCR) {
 				incEnchantLevel();
 			} else if (data == GuiEnchanter.GUI_BUTTON_ENCHANT) {
-				enchantItem();
+				enchantItem(player);
 			}
 		}
 	}

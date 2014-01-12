@@ -21,11 +21,13 @@ import cpw.mods.fml.relauncher.SideOnly;
 public class GuiEnchanter extends GuiContainer {
 
 	private TileEnchanter tileEnchanter;
+	private InventoryPlayer invPlayer;
 	
 	public GuiEnchanter(InventoryPlayer inventoryPlayer, TileEnchanter tileEnchanter) {
 		
 		super(new ContainerEnchanter(inventoryPlayer, tileEnchanter));
 		this.tileEnchanter = tileEnchanter;
+		this.invPlayer = inventoryPlayer;
 		
 		xSize = 174;
 		ySize = 177;
@@ -55,7 +57,7 @@ public class GuiEnchanter extends GuiContainer {
 		
 		incrButton.enabled = tileEnchanter.getEnchantLevel() < TileEnchanter.MAX_ENCHANT_LEVEL;
 		decrButton.enabled = tileEnchanter.getEnchantLevel() > TileEnchanter.MIN_ENCHANT_LEVEL;
-		enchantButton.enabled = tileEnchanter.getCanEnchant();
+		enchantButton.enabled = isEnchantEnabled();
 	}
 	
 	public static final int GUI_BUTTON_INCR = 0;
@@ -65,6 +67,17 @@ public class GuiEnchanter extends GuiContainer {
 	private GuiButton incrButton;
 	private GuiButton decrButton;
 	private GuiButton enchantButton;
+	
+	private boolean isEnchantEnabled() {
+		
+		if (!tileEnchanter.getCanEnchant())
+			return false;
+		
+		if (this.mc.thePlayer.experienceLevel < tileEnchanter.getEnchantLevel() && !this.mc.thePlayer.capabilities.isCreativeMode)
+			return false;
+		
+		return true;
+	}
 	
 	@Override
 	public void initGui() {
@@ -79,7 +92,7 @@ public class GuiEnchanter extends GuiContainer {
 		buttonList.add(decrButton);
 				
 		enchantButton = new GuiButton(GUI_BUTTON_ENCHANT, guiLeft + 55, guiTop + 72, 48, 18, "Enchant");
-		enchantButton.enabled = tileEnchanter.getCanEnchant();
+		enchantButton.enabled = isEnchantEnabled();
 		buttonList.add(enchantButton);		
 	}
 	
