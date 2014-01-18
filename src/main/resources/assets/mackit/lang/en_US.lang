@@ -1,7 +1,11 @@
 # Block localizations
 tile.mackit:enchanter.name=Enchant-o-mat
+tile.mackit:fixedEarth.fixedEarthSand.name=Fixed Sand
+tile.mackit:fixedEarth.fixedEarthGravel.name=Fixed Gravel
 
 # Item localizations
+item.mackit:fixerFoamGun.name=Fixer-foam Gun
+item.mackit:fixerFoamPellet.name=Fixer-foam Pellet
 
 # Creative Tab localizations
 itemGroup.mackit=Mining And Construction Kit

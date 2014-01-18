@@ -9,6 +9,7 @@ import com.ipsis.mackit.configuration.ConfigurationHandler;
 import com.ipsis.mackit.creativetab.CreativeTabMK;
 import com.ipsis.mackit.handler.GuiHandler;
 import com.ipsis.mackit.helper.LogHelper;
+import com.ipsis.mackit.item.ModItems;
 import com.ipsis.mackit.lib.Reference;
 import com.ipsis.mackit.network.PacketHandler;
 import com.ipsis.mackit.proxy.CommonProxy;
@@ -56,6 +57,9 @@ public class MacKit {
 		
 		/* init the blocks */
         ModBlocks.init();
+        
+        /* init the items */
+        ModItems.init();
         
 	}
 	

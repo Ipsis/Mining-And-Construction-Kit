@@ -7,6 +7,7 @@ import net.minecraft.enchantment.EnchantmentData;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
+import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -18,7 +19,7 @@ import com.ipsis.mackit.network.PacketHandler;
 
 import cpw.mods.fml.common.network.Player;
 
-public class TileEnchanter extends TileEntity implements IInventory {
+public class TileEnchanter extends TileEntity implements IInventory, ISidedInventory {
 
 	private ItemStack[] inventory;
 	private Random rand = new Random();
@@ -350,5 +351,46 @@ public class TileEnchanter extends TileEntity implements IInventory {
 				enchantItem(player);
 			}
 		}
+	}
+	
+	/**
+	 * ISidedInventory
+	 * Can only extract output items
+	 */
+	
+	private static int[] sidedInfo = new int[]{ 
+		OutputSlot.INV_SLOT_OUTPUT1.slot(), 
+		OutputSlot.INV_SLOT_OUTPUT2.slot(),
+		OutputSlot.INV_SLOT_OUTPUT3.slot(),
+		OutputSlot.INV_SLOT_OUTPUT4.slot(),
+		OutputSlot.INV_SLOT_OUTPUT5.slot(),
+		OutputSlot.INV_SLOT_OUTPUT6.slot()
+	};
+
+	@Override
+	public int[] getAccessibleSlotsFromSide(int side) {
+		
+		if (side == 0 || side == 1)
+			return null;
+		else
+			return sidedInfo;
+	}
+
+	@Override
+	public boolean canInsertItem(int slot, ItemStack itemstack, int side) {
+
+		return false;
+	}
+
+	@Override
+	public boolean canExtractItem(int slot, ItemStack itemstack, int side) {
+		
+		if (side == 0 || side == 1)
+			return false;
+		
+		if (slot >= OutputSlot.INV_SLOT_OUTPUT1.slot() && slot <= OutputSlot.INV_SLOT_OUTPUT6.slot())
+			return true;
+		
+		return false;
 	}
 }

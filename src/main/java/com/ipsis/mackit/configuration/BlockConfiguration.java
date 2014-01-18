@@ -22,7 +22,8 @@ public class BlockConfiguration {
 			blockConfig.load();
 			
 			BlockIds.ENCHANTER = blockConfig.getBlock(Strings.ENCHANTER_NAME,  BlockIds.ENCHANTER_DEFAULT).getInt(BlockIds.ENCHANTER_DEFAULT);
-			
+			BlockIds.FIXED_EARTH = blockConfig.getBlock(Strings.FIXED_EARTH_NAME, BlockIds.FIXED_EARTH_DEFAULT).getInt(BlockIds.FIXED_EARTH_DEFAULT);
+			BlockIds.BEAVER_BLOCK = blockConfig.getBlock(Strings.BEAVER_BLOCK_NAME, BlockIds.BEAVER_BLOCK_DEFAULT).getInt(BlockIds.BEAVER_BLOCK_DEFAULT);
 		}
 		catch (Exception e)
 		{
