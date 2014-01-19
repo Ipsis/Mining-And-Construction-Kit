@@ -1,6 +1,7 @@
 package com.ipsis.mackit.helper;
 
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.MathHelper;
 import net.minecraftforge.common.ForgeDirection;
 
@@ -22,5 +23,15 @@ public class Helper {
 			return ForgeDirection.NORTH;
 		else
 			return ForgeDirection.EAST;
+	}
+	
+	public static void writeToNBTForgeDirection(String s, ForgeDirection f, NBTTagCompound nbtTagCompound) {
+		
+		nbtTagCompound.setByte(s, (byte)f.ordinal());
+	}
+	
+	public static ForgeDirection readFromNBTForgeDirection(String s, NBTTagCompound nbtTagCompound) {
+		
+		return ForgeDirection.getOrientation((int)nbtTagCompound.getByte(s));
 	}
 }

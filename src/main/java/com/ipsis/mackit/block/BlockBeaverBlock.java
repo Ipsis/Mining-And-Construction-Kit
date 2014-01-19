@@ -13,6 +13,7 @@ import net.minecraftforge.common.ForgeDirection;
 
 import com.ipsis.mackit.MacKit;
 import com.ipsis.mackit.helper.Helper;
+import com.ipsis.mackit.helper.LogHelper;
 import com.ipsis.mackit.lib.Strings;
 import com.ipsis.mackit.tileentity.TileBeaverBlock;
 
@@ -99,7 +100,7 @@ public class BlockBeaverBlock extends BlockContainer {
 		return Mode.getMode(v);
 	}
 	
-	public int setMetadataMode(int metadata, Mode mode) {
+	public static int setMetadataMode(int metadata, Mode mode) {
 		metadata &= ~0xC;
 		int v = mode.getMdValue();
 		metadata |= ((v & 0x3) << 2);
@@ -107,15 +108,15 @@ public class BlockBeaverBlock extends BlockContainer {
 	}
 	
 	/** Set the orientation in the metadata */
-	public int setMetadataOrientation(int metadata, ForgeDirection dir) {
+	public static int setMetadataOrientation(int metadata, ForgeDirection dir) {
 		int v = 0;
 		if (dir == ForgeDirection.NORTH)
 			v = 0;
 		else if (dir == ForgeDirection.SOUTH)
 			v = 1;
-		else if (dir == ForgeDirection.EAST)
-			v = 2;
 		else if (dir == ForgeDirection.WEST)
+			v = 2;
+		else if (dir == ForgeDirection.EAST)
 			v = 3;
 		
 		metadata &= 0x3;
@@ -123,13 +124,13 @@ public class BlockBeaverBlock extends BlockContainer {
 		return metadata;
 	}
 	
-	public ForgeDirection getMetadataOrientation(int metadata) {
+	public static ForgeDirection getMetadataOrientation(int metadata) {
 		int v = (metadata & 0x3);
 		return ForgeDirection.getOrientation(v + 2);
 	}
 	
-	/** Placement and interaction */
-	
+
+	/** Placement and interaction */	
 	@Override
 	public void onBlockPlacedBy(World world, int x, int y, int z, EntityLivingBase entityLiving, ItemStack itemStack) {
 	
