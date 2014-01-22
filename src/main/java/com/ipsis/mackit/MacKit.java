@@ -3,10 +3,13 @@ package com.ipsis.mackit;
 import java.io.File;
 
 import net.minecraft.creativetab.CreativeTabs;
+import net.minecraftforge.common.MinecraftForge;
 
 import com.ipsis.mackit.block.ModBlocks;
 import com.ipsis.mackit.configuration.ConfigurationHandler;
+import com.ipsis.mackit.core.handlers.TextureStitchHandler;
 import com.ipsis.mackit.creativetab.CreativeTabMK;
+import com.ipsis.mackit.fluid.ModFluids;
 import com.ipsis.mackit.handler.GuiHandler;
 import com.ipsis.mackit.helper.LogHelper;
 import com.ipsis.mackit.item.ModItems;
@@ -55,6 +58,9 @@ public class MacKit {
         /* init the configuration */
         ConfigurationHandler.init(event.getModConfigurationDirectory().getAbsolutePath() + File.separator + Reference.CHANNEL_NAME.toLowerCase() + File.separator);
 		
+        /* init the fluids */
+        ModFluids.init();
+        
 		/* init the blocks */
         ModBlocks.init();
         
@@ -72,6 +78,8 @@ public class MacKit {
 	
 		/* Tile entities */
 		proxy.registerTileEntities();
+		
+		MinecraftForge.EVENT_BUS.register(new TextureStitchHandler());
 	}
 	
 	@EventHandler

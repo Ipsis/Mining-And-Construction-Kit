@@ -9,6 +9,7 @@ import com.ipsis.mackit.lib.Reference;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
+/* default getUnlocalized name returns "item.mackit:<name>" */
 public class ItemMK extends Item {
 
 	public static final int SHIFTED_ID_RANGE_CORRECTION = 256;
@@ -22,8 +23,6 @@ public class ItemMK extends Item {
 	@Override
 	@SideOnly(Side.CLIENT)
 	public void registerIcons(IconRegister iconRegister) {
-		/* this is broken as you get mackit:fixerFoamPellet.png */
-		itemIcon = iconRegister.registerIcon(Reference.MOD_ID + ":" + 
-					this.getUnlocalizedName().substring(this.getUnlocalizedName().indexOf(".") + 1));
+		itemIcon = iconRegister.registerIcon(this.getUnlocalizedName().substring(this.getUnlocalizedName().indexOf(".") + 1));
 	}
 }
