@@ -28,7 +28,9 @@ public class BlockEnchanter extends BlockContainer {
 	
 	@SideOnly(Side.CLIENT)
 	private Icon sideIcon;
+	@SideOnly(Side.CLIENT)
 	private Icon topIcon;
+	@SideOnly(Side.CLIENT)
 	private Icon bottomIcon;
 	
 	@Override
