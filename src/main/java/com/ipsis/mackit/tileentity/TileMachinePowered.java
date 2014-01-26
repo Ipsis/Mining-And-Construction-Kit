@@ -34,12 +34,23 @@ public abstract class TileMachinePowered extends TileMachineInventory implements
 	public void readFromNBT(NBTTagCompound compound) {
 		super.readFromNBT(compound);
 		storage.readFromNBT(compound);
+		
+		consumedEnergy = compound.getInteger("Consumed");
+		currState = State.values()[compound.getByte("CurrState")];
+		isActive = compound.getBoolean("IsActive");
+		inventoryChanged = true;
+		
 	}
 	
 	@Override
 	public void writeToNBT(NBTTagCompound compound) {
 		super.writeToNBT(compound);
 		storage.writeToNBT(compound);
+		
+		compound.setInteger("Consumed", consumedEnergy);
+		compound.setByte("CurrState", (byte)currState.ordinal());
+		compound.setBoolean("IsActive", isActive);
+		
 	}
 	
 	@Override
@@ -92,10 +103,25 @@ public abstract class TileMachinePowered extends TileMachineInventory implements
 	 */
 	
 	private static enum State { INIT, STOPPED, READY, RUNNING, CONSUME, PRODUCE };
+	private boolean isActive;
+	
+	/*
+	 * Returns true if the value changed
+	 */
+	private boolean setIsActive(boolean isActive) {
+		boolean changed = false;
+		if (this.isActive != isActive) {
+			changed = true;
+			this.isActive = isActive;
+		}
+		
+		return changed;
+	}
 	
 	private void runSM() {
 		
 		State lastState = currState;
+		boolean changedIsActive = false;
 		
 		switch (currState) {
 		case INIT:
@@ -106,12 +132,14 @@ public abstract class TileMachinePowered extends TileMachineInventory implements
 				currState = State.READY;
 			break;
 		case RUNNING:
-			if (inventoryChanged && !isMachineReady())
+			if (inventoryChanged && !isMachineReady()) {
 				currState = State.STOPPED;
-			else if (consumedEnergy > getRecipeEnergy())
+				changedIsActive = setIsActive(false);
+			} else if (consumedEnergy > getRecipeEnergy()) {
 				currState = State.PRODUCE;
-			else if (consumedEnergy < getRecipeEnergy() && storage.extractEnergy(rfPerTick, true) == rfPerTick)
+			} else if (consumedEnergy < getRecipeEnergy() && storage.extractEnergy(rfPerTick, true) == rfPerTick) {
 				currState = State.CONSUME;
+			}
 			break;
 		case READY:
 		case CONSUME:
@@ -133,6 +161,7 @@ public abstract class TileMachinePowered extends TileMachineInventory implements
 			case READY:
 				setRecipe();
 				currState = State.RUNNING;
+				changedIsActive = setIsActive(true);
 				break;
 			case RUNNING:				
 				break;
@@ -144,6 +173,7 @@ public abstract class TileMachinePowered extends TileMachineInventory implements
 				if (isMachineReady())
 					produceOutput();
 				currState = State.STOPPED;
+				changedIsActive = setIsActive(false);
 				break;
 			default:
 				break;

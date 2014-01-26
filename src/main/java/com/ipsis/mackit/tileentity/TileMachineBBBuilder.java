@@ -1,10 +1,11 @@
 package com.ipsis.mackit.tileentity;
 
-import net.minecraft.item.Item;
+import net.minecraft.block.Block;
+import net.minecraft.inventory.Container;
+import net.minecraft.inventory.ICrafting;
 import net.minecraft.item.ItemStack;
 
 import com.ipsis.mackit.block.ModBlocks;
-import com.ipsis.mackit.lib.BlockIds;
 
 /*
  * Inventory of
@@ -20,12 +21,17 @@ public class TileMachineBBBuilder extends TileMachinePowered {
 	/* Recipe */
 	private static final int RECIPE_RF_ENERGY = 1000;
 	private static final int RECIPE_DIRT_STACKSIZE = 128;
+	private static final int RECIPE_RS_STACKSIZE = 1;
 	
 	/* Slots */
 	public static final int SLOT_DIRT_FIRST = 0;
 	public static final int SLOT_DIRT_LAST = 5;
 	public static final int SLOT_RS_BLOCK = 6;
 	public static final int SLOT_OUTPUT = 7;
+	
+	private static ItemStack inputDirt = new ItemStack(Block.dirt, RECIPE_DIRT_STACKSIZE);
+	private static ItemStack inputRsBlock = new ItemStack(Block.blockRedstone, RECIPE_RS_STACKSIZE);
+	private static ItemStack outputBBBlock = new ItemStack(ModBlocks.beaverBlock, 1);
 	
 	public TileMachineBBBuilder() {
 		super(RF_CAPACITY);
@@ -45,20 +51,28 @@ public class TileMachineBBBuilder extends TileMachinePowered {
 		
 		/* Dirt */
 		int dirtCount = 0;
-		for (int i = SLOT_DIRT_FIRST; i <= SLOT_DIRT_LAST; i++)
-			dirtCount += getStackInSlot(i).stackSize;
+		for (int i = SLOT_DIRT_FIRST; i <= SLOT_DIRT_LAST; i++) {
+			ItemStack t = getStackInSlot(i);
+			if (t != null && t.isItemEqual(this.inputDirt))
+				dirtCount += getStackInSlot(i).stackSize;
+		}
 		
-		if (dirtCount < RECIPE_DIRT_STACKSIZE)
+		if (dirtCount < this.inputDirt.stackSize)
 			return false;
 		
 		/* Redstone block */
-		if (getStackInSlot(SLOT_RS_BLOCK) == null || getStackInSlot(SLOT_RS_BLOCK).getItem().itemID != Item.redstone.itemID)
+		if (getStackInSlot(SLOT_RS_BLOCK) == null || getStackInSlot(SLOT_RS_BLOCK).isItemEqual(this.inputRsBlock) || getStackInSlot(SLOT_RS_BLOCK).stackSize < this.inputRsBlock.stackSize)
 			return false;
 		
+		/* output empty */
 		if (getStackInSlot(SLOT_OUTPUT) == null)
 			return true;
 		
-		if (getStackInSlot(SLOT_OUTPUT).getItem().itemID != BlockIds.BEAVER_BLOCK)
+		/* output !empty */
+		if (!getStackInSlot(SLOT_OUTPUT).isItemEqual(this.outputBBBlock))
+			return false;
+		
+		if (getStackInSlot(SLOT_OUTPUT).stackSize >= getInventoryStackLimit())
 			return false;
 		
 		return true;
@@ -84,9 +98,13 @@ public class TileMachineBBBuilder extends TileMachinePowered {
 		
 		int left = RECIPE_DIRT_STACKSIZE;
 		for (int i = SLOT_DIRT_FIRST; i < SLOT_DIRT_LAST; i++) {
-			/* ???? */
+			ItemStack t = decrStackSize(SLOT_DIRT_FIRST, left);
+			if (t != null) {
+				left -= t.stackSize;
+			}
 		}
 		
+				
 		decrStackSize(SLOT_RS_BLOCK, 1);
 		
 		ItemStack output = getStackInSlot(SLOT_OUTPUT);
@@ -98,6 +116,14 @@ public class TileMachineBBBuilder extends TileMachinePowered {
 		setInventorySlotContents(SLOT_OUTPUT, output);
 	}
 	
+	/*
+	 * Gui Network Information
+	 */
+	public void getGUINetworkData(int id, int data) {
+	}
 	
+	public void sendGUINetworkData(Container container, ICrafting iCrafting) {
+		
+	}
 
 }
