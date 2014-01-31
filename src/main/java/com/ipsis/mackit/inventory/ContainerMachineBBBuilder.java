@@ -5,6 +5,7 @@ import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.ICrafting;
 import net.minecraft.inventory.Slot;
+import net.minecraftforge.common.ForgeDirection;
 
 import com.ipsis.mackit.client.gui.inventory.SlotOutput;
 import com.ipsis.mackit.tileentity.TileMachineBBBuilder;
@@ -58,18 +59,53 @@ public class ContainerMachineBBBuilder extends Container {
 		return this.tileMachineBBBuilder.isUseableByPlayer(entityplayer);
 	}
 	
+	/*
+	 * Gui Updating
+	 * 
+	 * current energy stored
+	 * recipe energy used
+	 * recipe ebergy total
+	 */
+	private static final int GUI_UPD_ENERGY_STORED = 0;
+	private static final int GUI_UPD_ENERGY_CONSUMED = 1;
+	
+	@Override
+	public void addCraftingToCrafters(ICrafting iCrafting) {
+		super.addCraftingToCrafters(iCrafting);
+	
+		iCrafting.sendProgressBarUpdate(this, GUI_UPD_ENERGY_STORED, tileMachineBBBuilder.storage.getEnergyStored());
+		iCrafting.sendProgressBarUpdate(this, GUI_UPD_ENERGY_CONSUMED, tileMachineBBBuilder.getEnergyConsumed());
+	}
+	
+	private int lastEnergyStored;
+	private int lastEnergyConsumed;
+	
 	@Override
 	public void detectAndSendChanges() {
 		super.detectAndSendChanges();
 		
-		for (int i = 0; i < crafters.size(); i++)
-			tileMachineBBBuilder.sendGUINetworkData(this, (ICrafting)crafters.get(i));
+        for (Object crafter : this.crafters)
+        {
+            ICrafting icrafting = (ICrafting) crafter;
+            
+            if (lastEnergyStored != tileMachineBBBuilder.storage.getEnergyStored())
+            	icrafting.sendProgressBarUpdate(this, GUI_UPD_ENERGY_STORED, tileMachineBBBuilder.storage.getEnergyStored());
+            
+            if (lastEnergyConsumed != tileMachineBBBuilder.getEnergyConsumed())
+            	icrafting.sendProgressBarUpdate(this, GUI_UPD_ENERGY_CONSUMED, tileMachineBBBuilder.getEnergyConsumed());
+        }
+        
+        lastEnergyStored = tileMachineBBBuilder.storage.getEnergyStored();
+        lastEnergyConsumed = tileMachineBBBuilder.getEnergyConsumed();
 	}
 	
 	@SideOnly(Side.CLIENT)
 	@Override
 	public void updateProgressBar(int id, int data) {
-		tileMachineBBBuilder.getGUINetworkData(id, data);
+		if (id == GUI_UPD_ENERGY_STORED)
+			tileMachineBBBuilder.storage.setEnergyStored(data);
+		else if (id == GUI_UPD_ENERGY_CONSUMED)
+			tileMachineBBBuilder.setEnergyConsumed(data);
 	}
 
 }

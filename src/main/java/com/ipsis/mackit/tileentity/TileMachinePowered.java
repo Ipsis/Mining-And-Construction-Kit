@@ -1,19 +1,27 @@
 package com.ipsis.mackit.tileentity;
 
+import net.minecraft.inventory.Container;
+import net.minecraft.inventory.ICrafting;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.network.packet.Packet;
 import net.minecraftforge.common.ForgeDirection;
 import cofh.api.energy.EnergyStorage;
 import cofh.api.energy.IEnergyHandler;
+
+import com.ipsis.mackit.helper.Helper;
+
+import cpw.mods.fml.common.network.PacketDispatcher;
 
 public abstract class TileMachinePowered extends TileMachineInventory implements IEnergyHandler {
 	
 	private static final int DEF_RF_PER_TICK = 1000;
 	
-	protected EnergyStorage storage;
+	public EnergyStorage storage;
 	private State currState;	
 	private int rfPerTick;
-	private int consumedEnergy;	
+	private int energyConsumed;	
 	private boolean inventoryChanged;
+	private ForgeDirection facing;
 	
 	public TileMachinePowered(int capacity) {
 		this(capacity, DEF_RF_PER_TICK);		
@@ -25,6 +33,23 @@ public abstract class TileMachinePowered extends TileMachineInventory implements
 		storage = new EnergyStorage(capacity);
 		currState = State.INIT;
 		inventoryChanged = false;
+		facing = ForgeDirection.SOUTH;
+	}
+	
+	/*
+	private Packet getDescriptionPacket() {
+		Object[] toSend = {xCoord, yCoord, zCoord, facing.ordinal(), isActive};
+	}*/
+	
+	public void setFacing(ForgeDirection dir) {
+		facing = dir;
+		if (worldObj != null)
+			worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
+		//PacketDispatcher.sendPacketToAllAround(xCoord, yCoord, zCoord, 50, worldObj.provider.dimensionId, getDescriptionPacket());
+	}
+	
+	public ForgeDirection getFacing() {
+		return facing;
 	}
 	
 	/*
@@ -35,9 +60,10 @@ public abstract class TileMachinePowered extends TileMachineInventory implements
 		super.readFromNBT(compound);
 		storage.readFromNBT(compound);
 		
-		consumedEnergy = compound.getInteger("Consumed");
+		energyConsumed = compound.getInteger("Consumed");
 		currState = State.values()[compound.getByte("CurrState")];
 		isActive = compound.getBoolean("IsActive");
+		facing = Helper.readFromNBTForgeDirection("Facing", compound);
 		inventoryChanged = true;
 		
 	}
@@ -47,9 +73,10 @@ public abstract class TileMachinePowered extends TileMachineInventory implements
 		super.writeToNBT(compound);
 		storage.writeToNBT(compound);
 		
-		compound.setInteger("Consumed", consumedEnergy);
+		compound.setInteger("Consumed", energyConsumed);
 		compound.setByte("CurrState", (byte)currState.ordinal());
 		compound.setBoolean("IsActive", isActive);
+		Helper.writeToNBTForgeDirection("Facing", facing, compound);
 		
 	}
 	
@@ -135,9 +162,9 @@ public abstract class TileMachinePowered extends TileMachineInventory implements
 			if (inventoryChanged && !isMachineReady()) {
 				currState = State.STOPPED;
 				changedIsActive = setIsActive(false);
-			} else if (consumedEnergy > getRecipeEnergy()) {
+			} else if (energyConsumed > getRecipeEnergy()) {
 				currState = State.PRODUCE;
-			} else if (consumedEnergy < getRecipeEnergy() && storage.extractEnergy(rfPerTick, true) == rfPerTick) {
+			} else if (energyConsumed < getRecipeEnergy() && storage.extractEnergy(rfPerTick, true) == rfPerTick) {
 				currState = State.CONSUME;
 			}
 			break;
@@ -155,7 +182,7 @@ public abstract class TileMachinePowered extends TileMachineInventory implements
 			case INIT:
 				break;
 			case STOPPED:
-				consumedEnergy = 0;
+				energyConsumed = 0;
 				clearRecipe();
 				break;
 			case READY:
@@ -181,8 +208,20 @@ public abstract class TileMachinePowered extends TileMachineInventory implements
 		}
 	}
 	
+	public int getEnergyConsumed() {
+		return energyConsumed;
+	}
+	
+	public void setEnergyConsumed(int consumed) {
+		energyConsumed = consumed;
+	}
+		
 	protected abstract boolean isMachineReady();
-	protected abstract int getRecipeEnergy();
+	
+	/* server->client gui update only */
+	public abstract void setRecipeEnergy(int energy);
+	public abstract int getRecipeEnergy();
+	
 	protected abstract void clearRecipe();
 	protected abstract void setRecipe();
 	protected abstract void produceOutput();
@@ -191,6 +230,5 @@ public abstract class TileMachinePowered extends TileMachineInventory implements
 		return false;
 	}
 	
-	
-
+		
 }

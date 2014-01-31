@@ -79,8 +79,13 @@ public class TileMachineBBBuilder extends TileMachinePowered {
 	}
 
 	@Override
-	protected int getRecipeEnergy() {
+	public int getRecipeEnergy() {
 		return RECIPE_RF_ENERGY;
+	}
+	
+	@Override
+	public void setRecipeEnergy(int energy) {
+		/* constant recipe => nothing to do here */
 	}
 
 	@Override
@@ -114,16 +119,6 @@ public class TileMachineBBBuilder extends TileMachinePowered {
 			output = new ItemStack(ModBlocks.beaverBlock);
 		
 		setInventorySlotContents(SLOT_OUTPUT, output);
-	}
-	
-	/*
-	 * Gui Network Information
-	 */
-	public void getGUINetworkData(int id, int data) {
-	}
-	
-	public void sendGUINetworkData(Container container, ICrafting iCrafting) {
-		
 	}
 
 }

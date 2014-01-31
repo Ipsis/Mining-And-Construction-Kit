@@ -46,9 +46,8 @@ public class BlockEnchanter extends BlockContainer {
 	public Icon getIcon(int side, int metadata) {
 		
 		if (side == 0)
-			return bottomIcon;
-		
-		if (side == 1)
+			return bottomIcon;		
+		else if (side == 1)
 			return topIcon;
 		
 		return sideIcon;	
