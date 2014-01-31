@@ -52,11 +52,10 @@ public class PacketHandler implements IPacketHandler {
 			}
 			break;
 		}
-
-		
 	}
 	
 	public static void sendInterfacePacket(byte guiId, byte eventId, byte data) {
+		
 		ByteArrayOutputStream byteStream = new ByteArrayOutputStream();
 		DataOutputStream dataStream = new DataOutputStream(byteStream);
 
@@ -67,7 +66,7 @@ public class PacketHandler implements IPacketHandler {
 			dataStream.writeByte(data);
 			
 			PacketDispatcher.sendPacketToServer(PacketDispatcher.getPacket(Reference.CHANNEL_NAME, byteStream.toByteArray()));
-		}catch(IOException ex) {
+		} catch(IOException ex) {
 			System.err.append("Failed to send button click packet");
 		}
 	}	

@@ -39,6 +39,7 @@ public class BlockBeaverBlock extends BlockContainer {
 	}
 	
 	public enum Mode {
+		
 		SURFACE(0, "surface", "Surface Mode"),
 		DAM(1, "dam", "Dam Mode"),
 		COLUMN(2, "column", "Column Mode");
@@ -49,20 +50,24 @@ public class BlockBeaverBlock extends BlockContainer {
 		public static final Mode[] VALID_MODES = { SURFACE, DAM, COLUMN };
 		
 		private Mode(int mdValue, String texture, String displayName) {
+			
 			this.mdValue = mdValue;
 			this.texture = texture;
 			this.displayName = displayName;
 		}
 		
 		public String getTexture() {
+			
 			return texture;
 		}
 		
 		public String getDisplayName() {
+			
 			return displayName;
 		}
 		
 		public int getMdValue() {
+			
 			return mdValue;
 		}
 		
@@ -72,6 +77,7 @@ public class BlockBeaverBlock extends BlockContainer {
 		 * @return the next mode 
 		 */
 		public static Mode getNextMode(Mode m) {
+			
 			if (m == SURFACE)
 				return Mode.DAM;
 			else if (m == DAM)
@@ -86,6 +92,7 @@ public class BlockBeaverBlock extends BlockContainer {
 		 * @return the mode
 		 */
 		public static Mode getMode(int mdValue) {
+			
 			if (mdValue >= 0 && mdValue < VALID_MODES.length)
 				return VALID_MODES[mdValue];
 			else
@@ -96,11 +103,13 @@ public class BlockBeaverBlock extends BlockContainer {
 	/* Metadata manipulation */
 	
 	public static Mode getMetadataMode(int metadata) {
+		
 		int v = (metadata & 0xC) >> 2;
 		return Mode.getMode(v);
 	}
 	
 	public static int setMetadataMode(int metadata, Mode mode) {
+		
 		metadata &= ~0xC;
 		int v = mode.getMdValue();
 		metadata |= ((v & 0x3) << 2);
@@ -109,6 +118,7 @@ public class BlockBeaverBlock extends BlockContainer {
 	
 	/** Set the orientation in the metadata */
 	public static int setMetadataOrientation(int metadata, ForgeDirection dir) {
+		
 		int v = 0;
 		if (dir == ForgeDirection.NORTH)
 			v = 0;
@@ -125,6 +135,7 @@ public class BlockBeaverBlock extends BlockContainer {
 	}
 	
 	public static ForgeDirection getMetadataOrientation(int metadata) {
+		
 		int v = (metadata & 0x3);
 		return ForgeDirection.getOrientation(v + 2);
 	}
@@ -146,15 +157,15 @@ public class BlockBeaverBlock extends BlockContainer {
 	@Override
 	public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer player, int side, float hitX, float hitY, float hitZ) {
 		
-		if (player.isSneaking()) {
+		if (player.isSneaking())
 			return false;
-		}
 		
 		if (!world.isRemote){
 			
 			TileEntity te = world.getBlockTileEntity(x, y, z);
 			if (te != null && te instanceof TileBeaverBlock) {
 				TileBeaverBlock bb = (TileBeaverBlock) te;
+				
 				if (!bb.getIsRunning()) {
 					int metadata = world.getBlockMetadata(x, y, z);
 					Mode m = getMetadataMode(metadata);
@@ -198,9 +209,9 @@ public class BlockBeaverBlock extends BlockContainer {
 		bottomIcon = iconRegister.registerIcon(Strings.RESOURCE_PREFIX + Strings.BEAVER_BLOCK_NAME + "_bottom");
 		
 		modeIcons = new Icon[Mode.VALID_MODES.length];
-		for (int i = 0; i < Mode.VALID_MODES.length; i++) {
+		for (int i = 0; i < Mode.VALID_MODES.length; i++)
 			modeIcons[i] = iconRegister.registerIcon(Strings.RESOURCE_PREFIX + Strings.BEAVER_BLOCK_NAME + "_" + Mode.VALID_MODES[i].texture);
-		}
+		
 	}
 	
 	@Override
@@ -210,20 +221,19 @@ public class BlockBeaverBlock extends BlockContainer {
 		ForgeDirection forgeDir = getMetadataOrientation(metadata);
 		ForgeDirection forgeSide = ForgeDirection.getOrientation(side);
 		
-		if (forgeSide == ForgeDirection.UP) {
+		if (forgeSide == ForgeDirection.UP)
 			return topIcon;
-		} else if (forgeSide == ForgeDirection.DOWN) {
+		else if (forgeSide == ForgeDirection.DOWN)
 			return bottomIcon;
-		} else if (forgeSide == forgeDir) {
+		else if (forgeSide == forgeDir)
 			return modeIcons[m.getMdValue()];
-		} else {
+		else
 			return sideIcon;
-		}
 	}
 
 	@Override
 	public TileEntity createNewTileEntity(World world) {
+		
 		return new TileBeaverBlock();
-
 	}
 }

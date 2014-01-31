@@ -13,6 +13,7 @@ public class Helper {
 	 * @return direction (ForgeDirection WEST/NORTH/EAST/SOUTH ony)
 	 */
 	public static ForgeDirection getFacing(EntityLivingBase entity) {
+		
 		int v = MathHelper.floor_double((double)(entity.rotationYaw * 4.0F / 360.0F) + 0.5D) & 3;
 		
 		if (v == 0)

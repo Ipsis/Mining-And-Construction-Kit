@@ -20,5 +20,4 @@ public class ModItems {
 		GameRegistry.registerItem(foamFixerGun, "item." + Strings.FIXER_FOAM_GUN_NAME);
 		GameRegistry.registerItem(foamFixerPellet, "item." + Strings.FIXER_FOAM_PELLET_NAME);
 	}
-	
 }

@@ -39,7 +39,8 @@ public class BlockEnchanter extends BlockContainer {
 		
 		sideIcon = iconRegister.registerIcon(Strings.RESOURCE_PREFIX + Strings.ENCHANTER_NAME + "_side");
 		topIcon = iconRegister.registerIcon(Strings.RESOURCE_PREFIX + Strings.ENCHANTER_NAME + "_top");
-		bottomIcon = iconRegister.registerIcon(Strings.RESOURCE_PREFIX + Strings.ENCHANTER_NAME + "_bottom");}
+		bottomIcon = iconRegister.registerIcon(Strings.RESOURCE_PREFIX + Strings.ENCHANTER_NAME + "_bottom");
+	}
 	
 	@Override
 	@SideOnly(Side.CLIENT)
@@ -57,17 +58,13 @@ public class BlockEnchanter extends BlockContainer {
 	public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer player, int side, float hitX, float hitY, float hitZ) {
 		
 		if (player.isSneaking())
-		{
 			return false;
-		}
 		
 		if (!world.isRemote)
 		{
 			TileEntity tileEntityEnchanter = world.getBlockTileEntity(x, y, z);
 			if (tileEntityEnchanter != null && tileEntityEnchanter instanceof TileEnchanter)
-			{
 				player.openGui(MacKit.instance, GuiIds.ENCHANTER, world, x, y, z);
-			}
 		}
 		
 		return true;
@@ -75,6 +72,7 @@ public class BlockEnchanter extends BlockContainer {
 
 	@Override
 	public TileEntity createNewTileEntity(World world) {
+		
 		return new TileEnchanter();
 	}
 }

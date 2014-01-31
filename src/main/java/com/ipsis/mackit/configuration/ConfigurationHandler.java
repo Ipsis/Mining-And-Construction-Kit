@@ -8,8 +8,8 @@ public class ConfigurationHandler {
 
 	public static Configuration configuration;
 	
-	public static void init(String configPath)
-	{
+	public static void init(String configPath) {
+
 		BlockConfiguration.init(new File(configPath + "block.properties"));
 		ItemConfiguration.init(new File(configPath + "item.properties"));
 	}

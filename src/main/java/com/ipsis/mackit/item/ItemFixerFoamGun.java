@@ -30,17 +30,18 @@ public class ItemFixerFoamGun extends ItemMK {
 
 	/* Swap a sand or gravel block for the fixed version */
     private void changeBlock(World world, int x, int y, int z) {
-            int id = world.getBlockId(x, y, z);
+    	
+        int id = world.getBlockId(x, y, z);
             
-            if (id == Block.sand.blockID || id == Block.gravel.blockID) {
-                    world.setBlock(x, y, z, BlockIds.FIXED_EARTH, (id == Block.sand.blockID ? 0 : 1), 3);
-            }
+        if (id == Block.sand.blockID || id == Block.gravel.blockID)
+        	world.setBlock(x, y, z, BlockIds.FIXED_EARTH, (id == Block.sand.blockID ? 0 : 1), 3);
     }
     
     private ForgeDirection getFacing(EntityPlayer player) {
     	
     	/* Not sure about 0,2,3,X */
     	int facing = MathHelper.floor_double((double)(player.rotationYaw * 4.0F / 360.0F) + 0.5D) & 3;
+    	
     	if (facing == 0)
     		return ForgeDirection.SOUTH;
     	else if (facing == 2)
@@ -58,18 +59,17 @@ public class ItemFixerFoamGun extends ItemMK {
         ForgeDirection facing = getFacing(player);
         
         if (facing == ForgeDirection.SOUTH || facing == ForgeDirection.NORTH)
-                zDiff = 0;
+        	zDiff = 0;
         else
-                xDiff = 0;
+        	xDiff = 0;
         
         int xPos, yPos, zPos;
               
         for (xPos = x - xDiff; xPos <= x + xDiff; xPos++) {
-                for (yPos = y; yPos <= y + 2; yPos++) {
-                        for (zPos = z - zDiff; zPos <= z + zDiff; zPos++) {
-                                changeBlock(world, xPos, yPos, zPos);
-                        }
-                }
+        	for (yPos = y; yPos <= y + 2; yPos++) {
+        		for (zPos = z - zDiff; zPos <= z + zDiff; zPos++)
+        			changeBlock(world, xPos, yPos, zPos);
+        	}
         }    	
     }
     
@@ -80,27 +80,23 @@ public class ItemFixerFoamGun extends ItemMK {
     	int xPos, zPos;
     	if (facing == ForgeDirection.NORTH) {
     		for (zPos = z; zPos >= z - 2; zPos--) {
-    			for (xPos = x - 1; xPos <= x + 1; xPos++) {
+    			for (xPos = x - 1; xPos <= x + 1; xPos++)
     				changeBlock(world, xPos, y, zPos);
-    			}
     		}
     	} else if (facing == ForgeDirection.SOUTH) {
     		for (zPos = z; zPos <= z + 2; zPos++) {
-    			for (xPos = x - 1; xPos <= x + 1; xPos++) {
+    			for (xPos = x - 1; xPos <= x + 1; xPos++)
     				changeBlock(world, xPos, y, zPos);
-    			}
     		}
     	} else if (facing == ForgeDirection.WEST) {
     		for (xPos = x; xPos >= x - 2; xPos--) {
-    			for (zPos = z - 1; zPos <= z + 1; zPos++) {
+    			for (zPos = z - 1; zPos <= z + 1; zPos++)
     				changeBlock(world, xPos, y, zPos);
-    			}
     		}
     	} else if (facing == ForgeDirection.EAST) {
     		for (xPos = x; xPos <= x + 2; xPos++) {
-    			for (zPos = z - 1; zPos <= z + 1; zPos++) {
+    			for (zPos = z - 1; zPos <= z + 1; zPos++)
     				changeBlock(world, xPos, y, zPos);
-    			}
     		}
     	}
     }
@@ -150,9 +146,8 @@ public class ItemFixerFoamGun extends ItemMK {
 			/* flip between horizontal and vertical modes */
 			itemStack.setItemDamage(isHorizontalMode(itemStack) ? VERTICAL_MODE : HORIZONTAL_MODE);
 			
-			if (!world.isRemote) {
+			if (!world.isRemote)
 				player.addChatMessage(isHorizontalMode(itemStack) ? "Horizontal Mode" : "Vertical Mode");
-			}
 		}
 		
 		return itemStack;

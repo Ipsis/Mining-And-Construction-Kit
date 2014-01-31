@@ -18,13 +18,10 @@ public class GuiHandler implements IGuiHandler {
 	@Override
 	public Object getServerGuiElement(int ID, EntityPlayer player, World world, int x, int y, int z) {
 
-		if (ID == GuiIds.ENCHANTER)
-		{
+		if (ID == GuiIds.ENCHANTER) {
 			TileEnchanter te = (TileEnchanter)world.getBlockTileEntity(x, y,  z);
 			return new ContainerEnchanter(player.inventory, te);	
-		}
-		else if (ID == GuiIds.BBBUILDER)
-		{
+		} else if (ID == GuiIds.BBBUILDER) {
 			TileMachineBBBuilder te = (TileMachineBBBuilder)world.getBlockTileEntity(x, y,  z);
 			return new ContainerMachineBBBuilder(player.inventory, te);	
 		}
@@ -35,13 +32,10 @@ public class GuiHandler implements IGuiHandler {
 	@Override
 	public Object getClientGuiElement(int ID, EntityPlayer player, World world, int x, int y, int z) {
 
-		if (ID == GuiIds.ENCHANTER)
-		{
+		if (ID == GuiIds.ENCHANTER) {
 			TileEnchanter te = (TileEnchanter)world.getBlockTileEntity(x, y,  z);
 			return new GuiEnchanter(player.inventory, te);						
-		}
-		else if (ID == GuiIds.BBBUILDER)
-		{
+		} else if (ID == GuiIds.BBBUILDER) {
 			TileMachineBBBuilder te = (TileMachineBBBuilder)world.getBlockTileEntity(x, y,  z);
 			return new GuiMachineBBBuilder(player.inventory, te);						
 		}

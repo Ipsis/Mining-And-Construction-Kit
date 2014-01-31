@@ -6,8 +6,7 @@ import net.minecraftforge.event.ForgeSubscribe;
 public class TextureStitchHandler {
 
 	@ForgeSubscribe
-    public void postStitch(TextureStitchEvent.Post event)
-    {
+    public void postStitch(TextureStitchEvent.Post event) {
 		
     }
 }

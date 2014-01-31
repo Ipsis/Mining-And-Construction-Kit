@@ -25,6 +25,7 @@ public class ModBlocks {
 	
 	public static void init()
 	{
+		
 		enchanter = new BlockEnchanter(BlockIds.ENCHANTER);
 		fixedEarth = new BlockFixedEarth(BlockIds.FIXED_EARTH);
 		beaverBlock = new BlockBeaverBlock(BlockIds.BEAVER_BLOCK);
@@ -49,7 +50,6 @@ public class ModBlocks {
 		GameRegistry.registerBlock(yellowDye, "block." + Strings.YELLOW_DYE_BLOCK_NAME);
 		GameRegistry.registerBlock(blueDye, "block." + Strings.BLUE_DYE_BLOCK_NAME);
 		GameRegistry.registerBlock(whiteDye, "block." + Strings.WHITE_DYE_BLOCK_NAME);
-		GameRegistry.registerBlock(pureDye, "block." + Strings.PURE_DYE_BLOCK_NAME);
-		
+		GameRegistry.registerBlock(pureDye, "block." + Strings.PURE_DYE_BLOCK_NAME);		
 	}
 }

@@ -38,8 +38,7 @@ public class GuiEnchanter extends GuiContainer {
 
 		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
 		this.mc.getTextureManager().bindTexture(Textures.GUI_ENCHANTER);
-		drawTexturedModalRect(guiLeft, guiTop, 0, 0, xSize, ySize);
-				
+		drawTexturedModalRect(guiLeft, guiTop, 0, 0, xSize, ySize);				
 	}
 	
 	@Override
@@ -53,6 +52,7 @@ public class GuiEnchanter extends GuiContainer {
 	
 	@Override
 	public void updateScreen() {
+		
 		super.updateScreen();
 		
 		incrButton.enabled = tileEnchanter.getEnchantLevel() < TileEnchanter.MAX_ENCHANT_LEVEL;
@@ -81,6 +81,7 @@ public class GuiEnchanter extends GuiContainer {
 	
 	@Override
 	public void initGui() {
+		
 		super.initGui();
 		buttonList.clear();
 		
@@ -98,6 +99,7 @@ public class GuiEnchanter extends GuiContainer {
 	
 	@Override
 	protected void actionPerformed(GuiButton button) {
+		
 		PacketHandler.sendInterfacePacket((byte)GuiIds.ENCHANTER, (byte)PacketHandler.INTERFACE_PKT_BUTTON, (byte)button.id);
 	}
 	

@@ -34,10 +34,12 @@ public class TileEnchanter extends TileEntity implements IInventory, ISidedInven
 		
 		private final int slot;
 		OutputSlot(int slot) {
+			
 			this.slot = slot;
 		}
 		
 		public int slot() {
+			
 			return slot;
 		}
 	}
@@ -70,9 +72,7 @@ public class TileEnchanter extends TileEntity implements IInventory, ISidedInven
             NBTTagCompound tagCompound = (NBTTagCompound) tagList.tagAt(idx);
             byte slotIndex = tagCompound.getByte("Slot");
             if (slotIndex >= 0 && slotIndex < inventory.length)
-            {
                 inventory[slotIndex] = ItemStack.loadItemStackFromNBT(tagCompound);
-            }
         }
         
         enchantLevel = nbtTagCompound.getByte("EnchantLevel");
@@ -100,36 +100,43 @@ public class TileEnchanter extends TileEntity implements IInventory, ISidedInven
 	}
 	
 	public byte getEnchantLevel() {
+		
 		return enchantLevel;
 	}
 	
 	/* Gui update only */
 	public void setEnchantLevel(byte level) {
+		
 		enchantLevel = level;
 	}	
 	
 	public void incEnchantLevel() {
+		
 		enchantLevel++;
 		if (enchantLevel > MAX_ENCHANT_LEVEL)
 			enchantLevel = MAX_ENCHANT_LEVEL;
 	}
 	
 	public void decEnchantLevel() {
+		
 		enchantLevel--;
 		if (enchantLevel < MIN_ENCHANT_LEVEL)
 			enchantLevel = MIN_ENCHANT_LEVEL;
 	}
 	
 	public boolean getCanEnchant() {
+		
 		return canEnchant;
 	}
 	
 	/* Gui update only */
 	public void setCanEnchant(boolean enchant) {
+		
 		canEnchant = enchant;
 	}
 	
 	private EntityPlayer getEnchantingPlayer() {
+		
 		return this.worldObj.getClosestPlayer((double)((float)this.xCoord + 0.5F), (double)((float)this.yCoord + 0.5F), (double)((float)this.zCoord + 0.5F), 3.0D);
 	}
 	
@@ -159,8 +166,7 @@ public class TileEnchanter extends TileEntity implements IInventory, ISidedInven
 		List list = EnchantmentHelper.buildEnchantmentList(this.rand, sourceStack, enchantLevel);
 		boolean isBook = sourceStack.itemID == Item.book.itemID;
 		
-		if (list != null)
-		{
+		if (list != null) {
 			/* remove from inventory and cleanup */
 			inventory[INV_SLOT_INPUT].stackSize--;
 			if (inventory[INV_SLOT_INPUT].stackSize <= 0)
@@ -176,12 +182,10 @@ public class TileEnchanter extends TileEntity implements IInventory, ISidedInven
 			/*
 			 * Books only get one enchant, other items can get multiple
 			 */
-            for (int k = 0; k < list.size(); ++k)
-            {
+            for (int k = 0; k < list.size(); ++k) {
                 EnchantmentData enchant = (EnchantmentData)list.get(k);
                 
-                if (isBook)
-                {
+                if (isBook) {
                 	Item.enchantedBook.addEnchantment(sourceStack, enchant);
                 	break;
                 }
@@ -251,19 +255,13 @@ public class TileEnchanter extends TileEntity implements IInventory, ISidedInven
 	public ItemStack decrStackSize(int slotIndex, int amount) {
 
 		ItemStack itemStack = getStackInSlot(slotIndex);
-		if (itemStack != null)
-		{
-			if (itemStack.stackSize <= amount)
-			{
+		if (itemStack != null) {
+			if (itemStack.stackSize <= amount) {
 				setInventorySlotContents(slotIndex, null);
-			}
-			else
-			{
+			} else {
 				itemStack = itemStack.splitStack(amount);
 				if (itemStack.stackSize == 0)
-				{
 					setInventorySlotContents(slotIndex, null);
-				}
 				onInventoryChanged();
 			}
 		}
@@ -276,9 +274,8 @@ public class TileEnchanter extends TileEntity implements IInventory, ISidedInven
 
 		ItemStack itemStack = getStackInSlot(slotIndex);
 		if (itemStack != null)
-		{
 			setInventorySlotContents(slotIndex, null);
-		}
+		
 		return itemStack;
 	}
 
@@ -287,22 +284,21 @@ public class TileEnchanter extends TileEntity implements IInventory, ISidedInven
 
 		inventory[slotIndex] = itemStack;
 		if (itemStack != null && itemStack.stackSize > getInventoryStackLimit())
-		{
 			itemStack.stackSize = getInventoryStackLimit();
-		}
 		
-		onInventoryChanged();
-		
+		onInventoryChanged();		
 	}
 
 	@Override
 	public String getInvName() {
+		
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
 	public boolean isInvNameLocalized() {
+		
 		// TODO Auto-generated method stub
 		return false;
 	}
@@ -335,6 +331,7 @@ public class TileEnchanter extends TileEntity implements IInventory, ISidedInven
 	
 	@Override
 	public void onInventoryChanged() {
+		
 		super.onInventoryChanged();
 		
 		updateCanEnchant();
@@ -343,13 +340,12 @@ public class TileEnchanter extends TileEntity implements IInventory, ISidedInven
 	public void handleInterfacePacket(byte eventId, int data, Player player) {
 		
 		if (eventId == PacketHandler.INTERFACE_PKT_BUTTON) {
-			if (data == GuiEnchanter.GUI_BUTTON_DESR) {
+			if (data == GuiEnchanter.GUI_BUTTON_DESR)
 				decEnchantLevel();
-			} else if (data == GuiEnchanter.GUI_BUTTON_INCR) {
+			else if (data == GuiEnchanter.GUI_BUTTON_INCR)
 				incEnchantLevel();
-			} else if (data == GuiEnchanter.GUI_BUTTON_ENCHANT) {
+			else if (data == GuiEnchanter.GUI_BUTTON_ENCHANT)
 				enchantItem(player);
-			}
 		}
 	}
 	
@@ -359,6 +355,7 @@ public class TileEnchanter extends TileEntity implements IInventory, ISidedInven
 	 */
 	
 	private static int[] sidedInfo = new int[]{ 
+		
 		OutputSlot.INV_SLOT_OUTPUT1.slot(), 
 		OutputSlot.INV_SLOT_OUTPUT2.slot(),
 		OutputSlot.INV_SLOT_OUTPUT3.slot(),

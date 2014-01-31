@@ -35,19 +35,18 @@ public class ContainerEnchanter extends Container {
 		this.addSlotToContainer(new SlotOutput(tileEnchanter, TileEnchanter.OutputSlot.INV_SLOT_OUTPUT6.slot(), 132, 53));
 		
 		/* Player hotbar */
-		for (int x = 0; x < PLAYER_INV_COLS; x++) {
+		for (int x = 0; x < PLAYER_INV_COLS; x++)
 			this.addSlotToContainer(new Slot(inventoryPlayer, x, 6 + x * 18, 153));
-		}
 		
 		/* Player inventory */
 		for (int y = 0; y < PLAYER_INV_ROWS; y++)  {
-			for (int x = 0; x < PLAYER_INV_COLS; x++) {
+			for (int x = 0; x < PLAYER_INV_COLS; x++)
 				this.addSlotToContainer(new Slot(inventoryPlayer, x + y * 9 + 9, 6 + x * 18, 95 + y * 18));
-			}
 		}		
 	}
 	
 	public TileEnchanter getTileEntity() {
+		
 		return tileEnchanter;
 	}
 
@@ -59,6 +58,7 @@ public class ContainerEnchanter extends Container {
 
 	@Override
 	public ItemStack transferStackInSlot(EntityPlayer player, int i) {
+		
 		Slot slot = getSlot(i);
 		
 		if (slot != null && slot.getHasStack()) {
@@ -66,21 +66,18 @@ public class ContainerEnchanter extends Container {
 			ItemStack result = stack.copy();
 			
 			if (i >= 36) {
-				if (!mergeItemStack(stack, 0, 36, false)) {
+				if (!mergeItemStack(stack, 0, 36, false))
 					return null;
-				}
 			}else if (!mergeItemStack(stack, 36, 36 + tileEnchanter.getSizeInventory(), false)) {
 				return null;
 			}
 			
-			if (stack.stackSize == 0) {
+			if (stack.stackSize == 0)
 				slot.putStack(null);
-			}else{
+			else
 				slot.onSlotChanged();
-			}
 			
-			slot.onPickupFromSlot(player, stack);
-			
+			slot.onPickupFromSlot(player, stack);			
 			return result;
 		}
 		
@@ -89,6 +86,7 @@ public class ContainerEnchanter extends Container {
 	
 	@Override
 	public void addCraftingToCrafters(ICrafting player) {
+		
 		super.addCraftingToCrafters(player);
 		
 		player.sendProgressBarUpdate(this, 0, tileEnchanter.getEnchantLevel());
@@ -99,11 +97,10 @@ public class ContainerEnchanter extends Container {
 	@SideOnly(Side.CLIENT)
 	public void updateProgressBar(int id, int data) {
 		
-		if (id == 0) {
+		if (id == 0)
 			tileEnchanter.setEnchantLevel((byte)data);
-		} else if (id == 1) {
+		else if (id == 1)
 			tileEnchanter.setCanEnchant(data == 1 ? true : false);
-		}
 	}
 	
 	private boolean oldCanEnchant;
@@ -111,21 +108,19 @@ public class ContainerEnchanter extends Container {
 	
 	@Override
 	public void detectAndSendChanges() {
+		
 		super.detectAndSendChanges();
 		
 		for (Object player : crafters) {
 			
-			if (oldEnchantLevel != tileEnchanter.getEnchantLevel()) {
+			if (oldEnchantLevel != tileEnchanter.getEnchantLevel())
 				((ICrafting)player).sendProgressBarUpdate(this, 0, tileEnchanter.getEnchantLevel());
-			}
 			
-			if (oldCanEnchant != tileEnchanter.getCanEnchant()) {
+			if (oldCanEnchant != tileEnchanter.getCanEnchant())
 				((ICrafting)player).sendProgressBarUpdate(this, 1, tileEnchanter.getCanEnchant() ? 1 : 0);
-			}
 		}
 		
 		oldCanEnchant = tileEnchanter.getCanEnchant();
 		oldEnchantLevel = tileEnchanter.getEnchantLevel();
-	}
-	
+	}	
 }

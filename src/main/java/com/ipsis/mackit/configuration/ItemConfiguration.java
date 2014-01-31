@@ -13,22 +13,19 @@ import cpw.mods.fml.common.FMLLog;
 
 public class ItemConfiguration {
 
-	protected static void init(File configFile)
-	{
+	protected static void init(File configFile) {
+		
 		Configuration itemConfig = new Configuration(configFile);
 		
-		try
-		{
+		try {
 			itemConfig.load();
 			
 			ItemIds.FIXER_FOAM_GUN = itemConfig.getItem(Strings.FIXER_FOAM_GUN_NAME, ItemIds.FIXER_FOAM_GUN_DEFAULT).getInt(ItemIds.FIXER_FOAM_GUN_DEFAULT);		
 		}
-		catch (Exception e)
-		{
+		catch (Exception e) {
 			FMLLog.log(Level.SEVERE, e, Reference.MOD_NAME + " had a problem loading its item configuration");
 		}
-		finally
-		{
+		finally {
 			itemConfig.save();
 		}
 	}

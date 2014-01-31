@@ -21,6 +21,7 @@ public class ContainerMachineBBBuilder extends Container {
 	private TileMachineBBBuilder tileMachineBBBuilder;
 	
 	public ContainerMachineBBBuilder(InventoryPlayer inventoryPlayer, TileMachineBBBuilder tileMachineBBBuilder) {
+		
 		this.tileMachineBBBuilder = tileMachineBBBuilder;
 		
 		this.addSlotToContainer(new Slot(tileMachineBBBuilder, 0, 31, 17));
@@ -36,20 +37,18 @@ public class ContainerMachineBBBuilder extends Container {
 		
 		
 		/* Player hotbar */
-		for (int x = 0; x < PLAYER_INV_COLS; x++) {
+		for (int x = 0; x < PLAYER_INV_COLS; x++)
 			this.addSlotToContainer(new Slot(inventoryPlayer, x, 6 + x * 18, 153));
-		}
 		
 		/* Player inventory */
 		for (int y = 0; y < PLAYER_INV_ROWS; y++)  {
-			for (int x = 0; x < PLAYER_INV_COLS; x++) {
+			for (int x = 0; x < PLAYER_INV_COLS; x++)
 				this.addSlotToContainer(new Slot(inventoryPlayer, x + y * 9 + 9, 6 + x * 18, 95 + y * 18));
-			}
-		}	
-		
+		}		
 	}
 	
 	public TileMachineBBBuilder getTileEntity() {
+		
 		return this.tileMachineBBBuilder;
 	}
 
@@ -71,6 +70,7 @@ public class ContainerMachineBBBuilder extends Container {
 	
 	@Override
 	public void addCraftingToCrafters(ICrafting iCrafting) {
+		
 		super.addCraftingToCrafters(iCrafting);
 	
 		iCrafting.sendProgressBarUpdate(this, GUI_UPD_ENERGY_STORED, tileMachineBBBuilder.storage.getEnergyStored());
@@ -82,10 +82,10 @@ public class ContainerMachineBBBuilder extends Container {
 	
 	@Override
 	public void detectAndSendChanges() {
+		
 		super.detectAndSendChanges();
 		
-        for (Object crafter : this.crafters)
-        {
+        for (Object crafter : this.crafters) {
             ICrafting icrafting = (ICrafting) crafter;
             
             if (lastEnergyStored != tileMachineBBBuilder.storage.getEnergyStored())
@@ -102,6 +102,7 @@ public class ContainerMachineBBBuilder extends Container {
 	@SideOnly(Side.CLIENT)
 	@Override
 	public void updateProgressBar(int id, int data) {
+		
 		if (id == GUI_UPD_ENERGY_STORED)
 			tileMachineBBBuilder.storage.setEnergyStored(data);
 		else if (id == GUI_UPD_ENERGY_CONSUMED)

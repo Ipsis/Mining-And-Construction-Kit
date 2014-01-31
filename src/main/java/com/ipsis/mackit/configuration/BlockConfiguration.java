@@ -13,12 +13,11 @@ import cpw.mods.fml.common.FMLLog;
 
 public class BlockConfiguration {
 
-	protected static void init(File configFile)
-	{
+	protected static void init(File configFile) {
+		
 		Configuration blockConfig = new Configuration(configFile);
 		
-		try
-		{
+		try {
 			blockConfig.load();
 			
 			BlockIds.ENCHANTER = blockConfig.getBlock(Strings.ENCHANTER_NAME,  BlockIds.ENCHANTER_DEFAULT).getInt(BlockIds.ENCHANTER_DEFAULT);
@@ -34,12 +33,10 @@ public class BlockConfiguration {
 			BlockIds.FLUID_WHITE_DYE = blockConfig.getBlock(Strings.WHITE_DYE_BLOCK_NAME, BlockIds.FLUID_WHITE_DYE_DEFAULT).getInt(BlockIds.FLUID_WHITE_DYE_DEFAULT);
 			BlockIds.FLUID_PURE_DYE = blockConfig.getBlock(Strings.PURE_DYE_BLOCK_NAME, BlockIds.FLUID_PURE_DYE_DEFAULT).getInt(BlockIds.FLUID_PURE_DYE_DEFAULT);
 		}
-		catch (Exception e)
-		{
+		catch (Exception e) {
 			FMLLog.log(Level.SEVERE, e, Reference.MOD_NAME + " had a problem loading its block configuration");
 		}
-		finally
-		{
+		finally {
 			blockConfig.save();
 		}
 	}

@@ -55,7 +55,6 @@ public class BlockMachineBBBuilder extends BlockContainer {
 	@SideOnly(Side.CLIENT)
 	public Icon getIcon(int side, int metadata) {
 		
-		
 		if (side == 0)
 			return bottomIcon;
 		else if (side == 1)
@@ -71,9 +70,8 @@ public class BlockMachineBBBuilder extends BlockContainer {
 		
 		int facing = 2;
 		TileEntity te = iBlockAccess.getBlockTileEntity(x, y, z);
-		if (te instanceof TileMachinePowered) {
+		if (te instanceof TileMachinePowered)
 			facing = ((TileMachinePowered) te).getFacing().ordinal();
-		}
 		
 		if (side == 0)
 			return bottomIcon;
@@ -88,9 +86,8 @@ public class BlockMachineBBBuilder extends BlockContainer {
 	@Override
 	public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer player, int side, float hitX, float hitY, float hitZ) {
 		
-		if (player.isSneaking()) {
+		if (player.isSneaking())
 			return false;
-		}
 		
 		if (!world.isRemote) {
 			TileEntity tileMachineBBBuilder = world.getBlockTileEntity(x, y, z);
@@ -104,6 +101,7 @@ public class BlockMachineBBBuilder extends BlockContainer {
 	
 	@Override
 	public void onBlockPlacedBy(World world, int x, int y, int z, EntityLivingBase entityLiving, ItemStack itemStack) {
+		
 		if (!world.isRemote) {
 			ForgeDirection orientation = Helper.getFacing(entityLiving).getOpposite();
 			
@@ -116,6 +114,7 @@ public class BlockMachineBBBuilder extends BlockContainer {
 	
 	@Override
 	public TileEntity createNewTileEntity(World world) {
+		
 		 return new TileMachineBBBuilder();
 	}
 

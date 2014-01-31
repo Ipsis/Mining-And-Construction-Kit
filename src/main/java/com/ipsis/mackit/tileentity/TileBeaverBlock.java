@@ -22,10 +22,12 @@ public class TileBeaverBlock extends TileEntity {
 	
 	private boolean isRunning;
 	public boolean getIsRunning() {
+		
 		return isRunning;
 	}
 	
 	public void setIsRunning() {
+		
 		if (!isRunning) {
 			this.isRunning = true;
 			int metadata = worldObj.getBlockMetadata(xCoord, yCoord, zCoord);
@@ -79,14 +81,12 @@ public class TileBeaverBlock extends TileEntity {
 		}
 		
 		/* Horizontal */
-		for (int x = 0; x <= level; x++) {
+		for (int x = 0; x <= level; x++)
 			placeDirt(xCoord + (x * mx), yCoord, zCoord + (level * mz), false);
-		}
 		
 		/* Vertical */
-		for (int z = 0; z <= level; z++) {
+		for (int z = 0; z <= level; z++)
 			placeDirt(xCoord + (level * mx), yCoord, zCoord + (z * mz), false);
-		}
 		
 		if (quadrant == 3 && level == SURFACE_MAX_WIDTH) {
 			/* destroy the block and tile entity */
@@ -101,9 +101,8 @@ public class TileBeaverBlock extends TileEntity {
 	private void runColumn() {
 			
 		if (level == 0) {
-			for (int y = 1; y <= COLUMN_MAX_DEPTH; y++) {
+			for (int y = 1; y <= COLUMN_MAX_DEPTH; y++)
 				placeDirt(xCoord, yCoord - y, zCoord, false);
-			}
 		} else {
 			
 			if (facing == ForgeDirection.SOUTH || facing == ForgeDirection.NORTH) {
@@ -190,6 +189,7 @@ public class TileBeaverBlock extends TileEntity {
 	
 	@Override
 	public void writeToNBT(NBTTagCompound nbtTagCompound) {
+		
 		super.writeToNBT(nbtTagCompound);
 		
 		nbtTagCompound.setBoolean("Running", this.isRunning);
@@ -204,6 +204,7 @@ public class TileBeaverBlock extends TileEntity {
 	
 	@Override
 	public void readFromNBT(NBTTagCompound nbtTagCompound) {
+		
 		super.readFromNBT(nbtTagCompound);
 		
 		this.isRunning = nbtTagCompound.getBoolean("Running");

@@ -17,6 +17,7 @@ public abstract class TileMachineInventory extends TileEntity implements ISidedI
 	}
 	
 	private boolean isSlotValidForInventory(int slot) {
+		
 		if (slot >= 0 && slot < inventory.length)
 			return true;
 		
@@ -116,12 +117,14 @@ public abstract class TileMachineInventory extends TileEntity implements ISidedI
 
 	@Override
 	public String getInvName() {
+		
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
 	public boolean isInvNameLocalized() {
+		
 		// TODO Auto-generated method stub
 		return false;
 	}
@@ -159,21 +162,22 @@ public abstract class TileMachineInventory extends TileEntity implements ISidedI
 	
 	@Override
 	public int[] getAccessibleSlotsFromSide(int side) {
+		
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
 	public boolean canInsertItem(int slot, ItemStack itemstack, int side) {
+		
 		// TODO Auto-generated method stub
 		return false;
 	}
 
 	@Override
 	public boolean canExtractItem(int slot, ItemStack itemstack, int side) {
+		
 		// TODO Auto-generated method stub
 		return false;
 	}
-
-	
 }

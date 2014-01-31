@@ -34,11 +34,13 @@ public class TileMachineBBBuilder extends TileMachinePowered {
 	private static ItemStack outputBBBlock = new ItemStack(ModBlocks.beaverBlock, 1);
 	
 	public TileMachineBBBuilder() {
+		
 		super(RF_CAPACITY);
 	}
 	
 	@Override
 	public int getSizeInventory() {	
+		
 		return 8;
 	}
 
@@ -80,21 +82,25 @@ public class TileMachineBBBuilder extends TileMachinePowered {
 
 	@Override
 	public int getRecipeEnergy() {
+		
 		return RECIPE_RF_ENERGY;
 	}
 	
 	@Override
 	public void setRecipeEnergy(int energy) {
+		
 		/* constant recipe => nothing to do here */
 	}
 
 	@Override
 	protected void clearRecipe() {
+		
 		/* constant recipe => nothing to do here */
 	}
 
 	@Override
 	protected void setRecipe() {
+		
 		/* constant recipe => nothing to do here */		
 	}
 
@@ -104,9 +110,8 @@ public class TileMachineBBBuilder extends TileMachinePowered {
 		int left = RECIPE_DIRT_STACKSIZE;
 		for (int i = SLOT_DIRT_FIRST; i < SLOT_DIRT_LAST; i++) {
 			ItemStack t = decrStackSize(SLOT_DIRT_FIRST, left);
-			if (t != null) {
+			if (t != null)
 				left -= t.stackSize;
-			}
 		}
 		
 				
@@ -120,5 +125,4 @@ public class TileMachineBBBuilder extends TileMachinePowered {
 		
 		setInventorySlotContents(SLOT_OUTPUT, output);
 	}
-
 }

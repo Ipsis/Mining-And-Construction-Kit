@@ -7,19 +7,16 @@ import com.google.common.base.Throwables;
 
 public class Reference {
 
-    static
-    {
+    static {
 
         Properties prop = new Properties();
 
-        try
-        {
+        try {
             InputStream stream = Reference.class.getClassLoader().getResourceAsStream("version.properties");
             prop.load(stream);
             stream.close();
         }
-        catch (Exception e)
-        {
+        catch (Exception e) {
             Throwables.propagate(e); // just throw it...
         }
 
@@ -35,7 +32,6 @@ public class Reference {
 	
 	public static final String SERVER_PROXY_CLASS = "com.ipsis.mackit.proxy.ServerProxy";
 	public static final String CLIENT_PROXY_CLASS = "com.ipsis.mackit.proxy.ClientProxy";
-	
 	
 	public static final int SHIFTED_ID_RANGE_CORRECTION = 256;
 	

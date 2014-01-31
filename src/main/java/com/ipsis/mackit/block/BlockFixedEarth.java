@@ -33,9 +33,8 @@ public class BlockFixedEarth extends BlockMK {
 
 		icons = new Icon[Strings.FIXED_EARTH_NAMES.length];
 		
-		for (int i = 0; i < Strings.FIXED_EARTH_NAMES.length; i++) {
+		for (int i = 0; i < Strings.FIXED_EARTH_NAMES.length; i++)
 			icons[i] = iconRegister.registerIcon(Strings.RESOURCE_PREFIX + Strings.FIXED_EARTH_NAMES[i]);
-		}
 	}
 	
 	@Override
@@ -49,9 +48,8 @@ public class BlockFixedEarth extends BlockMK {
 	@Override
 	public void getSubBlocks(int id, CreativeTabs creativeTab, List list) {
 
-		for (int i = 0; i < Strings.FIXED_EARTH_NAMES.length; i++) {
+		for (int i = 0; i < Strings.FIXED_EARTH_NAMES.length; i++)
 			list.add(new ItemStack(id, 1, i));
-		}
 	}
 	
 	@Override

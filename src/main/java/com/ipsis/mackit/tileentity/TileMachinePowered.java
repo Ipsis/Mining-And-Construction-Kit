@@ -24,10 +24,12 @@ public abstract class TileMachinePowered extends TileMachineInventory implements
 	private ForgeDirection facing;
 	
 	public TileMachinePowered(int capacity) {
+		
 		this(capacity, DEF_RF_PER_TICK);		
 	}
 	
 	public TileMachinePowered(int capacity, int rfPerTick) {
+		
 		super();
 		this.rfPerTick = rfPerTick;
 		storage = new EnergyStorage(capacity);
@@ -42,6 +44,7 @@ public abstract class TileMachinePowered extends TileMachineInventory implements
 	}*/
 	
 	public void setFacing(ForgeDirection dir) {
+		
 		facing = dir;
 		if (worldObj != null)
 			worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
@@ -49,6 +52,7 @@ public abstract class TileMachinePowered extends TileMachineInventory implements
 	}
 	
 	public ForgeDirection getFacing() {
+		
 		return facing;
 	}
 	
@@ -57,6 +61,7 @@ public abstract class TileMachinePowered extends TileMachineInventory implements
 	 */
 	@Override
 	public void readFromNBT(NBTTagCompound compound) {
+		
 		super.readFromNBT(compound);
 		storage.readFromNBT(compound);
 		
@@ -70,6 +75,7 @@ public abstract class TileMachinePowered extends TileMachineInventory implements
 	
 	@Override
 	public void writeToNBT(NBTTagCompound compound) {
+		
 		super.writeToNBT(compound);
 		storage.writeToNBT(compound);
 		
@@ -82,12 +88,14 @@ public abstract class TileMachinePowered extends TileMachineInventory implements
 	
 	@Override
 	public void onInventoryChanged() {
+		
 		super.onInventoryChanged();
 		inventoryChanged = true;
 	}
 	
 	@Override
 	public void updateEntity() {
+		
 		if (!worldObj.isRemote)
 			runSM();
 	}
@@ -136,6 +144,7 @@ public abstract class TileMachinePowered extends TileMachineInventory implements
 	 * Returns true if the value changed
 	 */
 	private boolean setIsActive(boolean isActive) {
+		
 		boolean changed = false;
 		if (this.isActive != isActive) {
 			changed = true;
@@ -209,10 +218,12 @@ public abstract class TileMachinePowered extends TileMachineInventory implements
 	}
 	
 	public int getEnergyConsumed() {
+		
 		return energyConsumed;
 	}
 	
 	public void setEnergyConsumed(int consumed) {
+		
 		energyConsumed = consumed;
 	}
 		
@@ -227,6 +238,7 @@ public abstract class TileMachinePowered extends TileMachineInventory implements
 	protected abstract void produceOutput();
 	
 	public boolean isRsDisabled() {
+		
 		return false;
 	}
 	
