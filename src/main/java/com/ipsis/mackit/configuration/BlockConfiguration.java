@@ -26,6 +26,7 @@ public class BlockConfiguration {
 			
 			/* Machines */
 			BlockIds.MACHINE_BBBUILDER = blockConfig.getBlock(Strings.MACHINE_BBBUILDER_NAME, BlockIds.MACHINE_BBBUILDER_DEFAULT).getInt(BlockIds.MACHINE_BBBUILDER_DEFAULT);
+			BlockIds.MACHINE = blockConfig.getBlock(Strings.MACHINE_BLOCK_NAME, BlockIds.MACHINE_DEFAULT).getInt(BlockIds.MACHINE_DEFAULT);
 			
 			BlockIds.FLUID_RED_DYE = blockConfig.getBlock(Strings.RED_DYE_BLOCK_NAME, BlockIds.FLUID_RED_DYE_DEFAULT).getInt(BlockIds.FLUID_RED_DYE_DEFAULT);
 			BlockIds.FLUID_YELLOW_DYE = blockConfig.getBlock(Strings.YELLOW_DYE_BLOCK_NAME, BlockIds.FLUID_YELLOW_DYE_DEFAULT).getInt(BlockIds.FLUID_YELLOW_DYE_DEFAULT);

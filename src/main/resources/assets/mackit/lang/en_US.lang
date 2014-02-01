@@ -12,6 +12,12 @@ tile.mackit:pureDyeBlock.name=Pure Fluid Dye
 
 tile.mackit:machineBBBuilder.name=Beaver Block Builder
 
+tile.mackit:machineBlock.machineBBBuilder2.name=Beaver Block Builder
+tile.mackit:machineBlock.machineSqueezer.name=Squeezer
+tile.mackit:machineBlock.machineMixer.name=Mixer
+tile.mackit:machineBlock.machinePainter.name=Painter
+tile.mackit:machineBlock.machineStamper.name=Stamper
+
 # Item localizations
 item.mackit:fixerFoamGun.name=Fixer-foam Gun
 item.mackit:fixerFoamPellet.name=Fixer-foam Pellet

@@ -8,6 +8,8 @@ public class BlockIds {
 	public static int BEAVER_BLOCK_DEFAULT = 2502;
 	public static int MACHINE_BBBUILDER_DEFAULT = 2503;
 	
+	public static int MACHINE_DEFAULT = 2504;
+	
 	public static int FLUID_RED_DYE_DEFAULT = 3000;
 	public static int FLUID_YELLOW_DYE_DEFAULT = 3001;
 	public static int FLUID_BLUE_DYE_DEFAULT = 3002;
@@ -20,6 +22,7 @@ public class BlockIds {
 	public static int FIXED_EARTH;
 	public static int BEAVER_BLOCK;
 	public static int MACHINE_BBBUILDER;
+	public static int MACHINE;
 	
 	public static int FLUID_RED_DYE;
 	public static int FLUID_YELLOW_DYE;

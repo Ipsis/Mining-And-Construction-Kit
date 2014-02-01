@@ -4,6 +4,7 @@ import net.minecraft.block.Block;
 
 import com.ipsis.mackit.fluid.ModFluids;
 import com.ipsis.mackit.item.ItemBlockFixedEarth;
+import com.ipsis.mackit.item.ItemBlockMachine;
 import com.ipsis.mackit.lib.BlockIds;
 import com.ipsis.mackit.lib.Strings;
 
@@ -16,6 +17,7 @@ public class ModBlocks {
 	public static BlockBeaverBlock beaverBlock;
 	
 	public static BlockMachineBBBuilder machineBBBuilder;
+	public static BlockMachine machineBlock;
 	
 	public static Block redDye;
 	public static Block yellowDye;
@@ -31,6 +33,7 @@ public class ModBlocks {
 		beaverBlock = new BlockBeaverBlock(BlockIds.BEAVER_BLOCK);
 		
 		machineBBBuilder = new BlockMachineBBBuilder(BlockIds.MACHINE_BBBUILDER);
+		machineBlock = new BlockMachine(BlockIds.MACHINE);
 		
 		/* Register with game */
 		GameRegistry.registerBlock(enchanter, "block." + Strings.ENCHANTER_NAME);
@@ -38,6 +41,7 @@ public class ModBlocks {
 		GameRegistry.registerBlock(beaverBlock,  "block." + Strings.BEAVER_BLOCK_NAME);
 		
 		GameRegistry.registerBlock(machineBBBuilder,  "block." + Strings.MACHINE_BBBUILDER_NAME);
+		GameRegistry.registerBlock(machineBlock, ItemBlockMachine.class, "block." + Strings.MACHINE_NAMES);
 		
 		/* Fluid Blocks */		
 		redDye = new BlockFluidDye(BlockIds.FLUID_RED_DYE, ModFluids.redDye, Strings.RED_DYE_BLOCK_NAME);
