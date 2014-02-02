@@ -16,7 +16,7 @@ public class ModBlocks {
 	public static Block fixedEarth;
 	public static BlockBeaverBlock beaverBlock;
 	
-	public static BlockMachineBBBuilder machineBBBuilder;
+	//public static BlockMachineBBBuilder machineBBBuilder;
 	public static BlockMachine machineBlock;
 	
 	public static Block redDye;
@@ -32,7 +32,7 @@ public class ModBlocks {
 		fixedEarth = new BlockFixedEarth(BlockIds.FIXED_EARTH);
 		beaverBlock = new BlockBeaverBlock(BlockIds.BEAVER_BLOCK);
 		
-		machineBBBuilder = new BlockMachineBBBuilder(BlockIds.MACHINE_BBBUILDER);
+		//machineBBBuilder = new BlockMachineBBBuilder(BlockIds.MACHINE_BBBUILDER);
 		machineBlock = new BlockMachine(BlockIds.MACHINE);
 		
 		/* Register with game */
@@ -40,7 +40,7 @@ public class ModBlocks {
 		GameRegistry.registerBlock(fixedEarth, ItemBlockFixedEarth.class, "block." + Strings.FIXED_EARTH_NAME);
 		GameRegistry.registerBlock(beaverBlock,  "block." + Strings.BEAVER_BLOCK_NAME);
 		
-		GameRegistry.registerBlock(machineBBBuilder,  "block." + Strings.MACHINE_BBBUILDER_NAME);
+		//GameRegistry.registerBlock(machineBBBuilder,  "block." + Strings.MACHINE_BBBUILDER_NAME);
 		GameRegistry.registerBlock(machineBlock, ItemBlockMachine.class, "block." + Strings.MACHINE_NAMES);
 		
 		/* Fluid Blocks */		
