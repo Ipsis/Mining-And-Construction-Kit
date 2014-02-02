@@ -1,9 +1,11 @@
 package com.ipsis.mackit.tileentity;
 
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.ICrafting;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.packet.Packet;
+import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
 import cofh.api.energy.EnergyStorage;
 import cofh.api.energy.IEnergyHandler;
@@ -232,6 +234,8 @@ public abstract class TileMachinePowered extends TileMachineInventory implements
 	/* server->client gui update only */
 	public abstract void setRecipeEnergy(int energy);
 	public abstract int getRecipeEnergy();
+	
+	public abstract void openGui(World world, int x, int y, int z, EntityPlayer player);
 	
 	protected abstract void clearRecipe();
 	protected abstract void setRecipe();

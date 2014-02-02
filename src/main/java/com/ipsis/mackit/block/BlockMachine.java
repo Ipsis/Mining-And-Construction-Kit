@@ -6,14 +6,20 @@ import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Icon;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
+import net.minecraftforge.common.ForgeDirection;
 
 import com.ipsis.mackit.MacKit;
+import com.ipsis.mackit.helper.Helper;
 import com.ipsis.mackit.lib.Strings;
+import com.ipsis.mackit.tileentity.TileMachineBBBuilder;
+import com.ipsis.mackit.tileentity.TileMachinePowered;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -31,7 +37,7 @@ public class BlockMachine extends BlockContainer {
 	@Override
 	public void getSubBlocks(int id, CreativeTabs creativeTab, List list) {
 		
-		for (int i = 0; i < Types.values().length; i++)
+		for (int i = 0; i < MachineTypes.values().length; i++)
 			list.add(new ItemStack(id, 1, i));
 	}
 	
@@ -39,6 +45,36 @@ public class BlockMachine extends BlockContainer {
 	public int damageDropped(int metadata) {
 
 		return metadata;
+	}
+	
+	@Override
+	public void onBlockPlacedBy(World world, int x, int y, int z, EntityLivingBase entityLiving, ItemStack itemStack) {
+
+		if (!world.isRemote) {
+			ForgeDirection orientation = Helper.getFacing(entityLiving).getOpposite();
+			
+			TileEntity te = world.getBlockTileEntity(x, y, z);
+			if (te != null && te instanceof TileMachinePowered) {
+				((TileMachinePowered)te).setFacing(orientation);
+			}
+		}
+	}
+	
+	@Override
+	public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer player, int side, float hitX, float hitY, float hitZ) {
+
+		if (player.isSneaking())
+			return false;
+		
+		if (!world.isRemote) {
+			
+			TileEntity te = world.getBlockTileEntity(x, y, z);
+			if (te != null && te instanceof TileMachinePowered) {
+				((TileMachinePowered)te).openGui(world, x, y, z, player);
+			}
+		}
+		
+		return true;
 	}
 	
 	/*
@@ -76,6 +112,10 @@ public class BlockMachine extends BlockContainer {
 	@Override
 	public Icon getIcon(int side, int metadata) {
 
+		/**
+		 * As far as I can work out, this will only be called for inventory icons as we have getBlockTexture overidden.
+		 * Side 3 is the standard side for you front texture in this situation.
+		 */
 		if (side == 0) {
 			return bottomIcon;
 		} else if (side == 1) {
@@ -88,7 +128,7 @@ public class BlockMachine extends BlockContainer {
 		}
 	}
 
-	public static enum Types {
+	public static enum MachineTypes {
 		BBBUILDER, SQUEEZER, MIXER, PAINTER, STAMPER;
 	}
 	
@@ -96,6 +136,33 @@ public class BlockMachine extends BlockContainer {
 	public TileEntity createNewTileEntity(World world) {
 		// TODO Auto-generated method stub
 		return null;
+	}
+	
+	@Override
+	public TileEntity createTileEntity(World world, int metadata) {
+	
+		if (metadata < 0 || metadata >= MachineTypes.values().length)
+			return null;
+		
+		switch (metadata) {
+		case 0:
+			return new TileMachineBBBuilder();
+			/*
+		case 1:
+			return new TileMachineSqueezer();
+			break;
+		case 2:
+			return new TileMachineMixer();
+			break;
+		case 3:
+			return new TileMachinePainter();
+			break;
+		case 4:
+			return new TileMachineStamper();
+			break; */
+		default:
+			return null;
+		}
 	}
 
 }

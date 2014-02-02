@@ -11,15 +11,25 @@ import net.minecraft.network.packet.Packet250CustomPayload;
 
 import com.google.common.io.ByteArrayDataInput;
 import com.google.common.io.ByteStreams;
-import com.ipsis.mackit.client.gui.inventory.GuiEnchanter;
 import com.ipsis.mackit.inventory.ContainerEnchanter;
 import com.ipsis.mackit.lib.GuiIds;
 import com.ipsis.mackit.lib.Reference;
+import com.ipsis.mackit.network.packet.PacketMK;
 import com.ipsis.mackit.tileentity.TileEnchanter;
 
 import cpw.mods.fml.common.network.IPacketHandler;
 import cpw.mods.fml.common.network.PacketDispatcher;
 import cpw.mods.fml.common.network.Player;
+
+
+/**
+ * PacketHandler implementation from Pahimars EE3.
+ * https://github.com/pahimar/Equivalent-Exchange-3/blob/master/src/main/java/com/pahimar/ee3/network/PacketHandler.java
+ * @author pahimar
+ * 
+ * Modified to the packets that I need to send
+ *
+ */
 
 public class PacketHandler implements IPacketHandler {
 	
@@ -70,5 +80,12 @@ public class PacketHandler implements IPacketHandler {
 			System.err.append("Failed to send button click packet");
 		}
 	}	
+	
+	public void onPacketData2(INetworkManager manager, Packet250CustomPayload packet, Player player) {
+		
+		PacketMK packetMK = PacketTypeHandler.buildPacket(packet.data);
+		
+		packetMK.execute(manager, player);
+	}
 
 }

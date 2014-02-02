@@ -1,11 +1,13 @@
 package com.ipsis.mackit.tileentity;
 
 import net.minecraft.block.Block;
-import net.minecraft.inventory.Container;
-import net.minecraft.inventory.ICrafting;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
+import net.minecraft.world.World;
 
+import com.ipsis.mackit.MacKit;
 import com.ipsis.mackit.block.ModBlocks;
+import com.ipsis.mackit.lib.GuiIds;
 
 /*
  * Inventory of
@@ -124,5 +126,11 @@ public class TileMachineBBBuilder extends TileMachinePowered {
 			output = new ItemStack(ModBlocks.beaverBlock);
 		
 		setInventorySlotContents(SLOT_OUTPUT, output);
+	}
+	
+	@Override
+	public void openGui(World world, int x, int y, int z, EntityPlayer player) {
+
+		player.openGui(MacKit.instance, GuiIds.BBBUILDER, world, x, y, z);
 	}
 }

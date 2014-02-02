@@ -1,5 +1,7 @@
 package com.ipsis.mackit.proxy;
 
+import net.minecraftforge.common.ForgeDirection;
+
 import com.ipsis.mackit.lib.Strings;
 import com.ipsis.mackit.tileentity.TileBeaverBlock;
 import com.ipsis.mackit.tileentity.TileEnchanter;
@@ -7,7 +9,7 @@ import com.ipsis.mackit.tileentity.TileMachineBBBuilder;
 
 import cpw.mods.fml.common.registry.GameRegistry;
 
-public class CommonProxy {
+public abstract class CommonProxy implements IProxy {
 
 	public void registerTileEntities() {
 		
