@@ -4,6 +4,7 @@
   "name": "Mining And Construction Kit",
   "description": "A helping hand for those tedious and dangerous Minecraft tasks.",
   "version": "${version}",
+  "mcversion": "${mcversion}",
   "url": "http://www.github.com/ipsis/Mining-And-Construction-Kit/",
   "updateUrl": "",
   "authors": ["Ipsis"],
