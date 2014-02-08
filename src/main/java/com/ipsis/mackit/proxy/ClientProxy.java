@@ -13,15 +13,21 @@ import cpw.mods.fml.common.network.Player;
  */
 public class ClientProxy extends CommonProxy {
 
-
-	public void handleTileEntityPacket(Player player, int x, int y, int z, ForgeDirection orientation, byte active, String customName) {
+	public void handlePacketTileEntity(Player player, int x, int y, int z, ForgeDirection orientation, boolean active, String customName) {
 		
 		TileEntity te = ((EntityPlayer)player).worldObj.getBlockTileEntity(x, y, z);
 		
 		if (te != null && te instanceof TileMachinePowered) {
-			//((TileMachinePowered)te).setFacing(orientation);
-			
+			((TileMachinePowered)te).setFacing(orientation);
 		}
 	}
+
+	@Override
+	public void handlePacketGui(Player player, int guiId, int ctrlType, int ctrlId, int ctrlData) {
+		
+		/* Nothing */
+	}
+	
+	
 	
 }

@@ -7,6 +7,7 @@ import net.minecraft.network.packet.Packet;
 import net.minecraft.network.packet.Packet250CustomPayload;
 
 import com.ipsis.mackit.lib.Reference;
+import com.ipsis.mackit.network.packet.PacketGui;
 import com.ipsis.mackit.network.packet.PacketMK;
 import com.ipsis.mackit.network.packet.PacketTileUpdate;
 
@@ -21,7 +22,8 @@ import com.ipsis.mackit.network.packet.PacketTileUpdate;
 
 public enum PacketTypeHandler {
 
-	TILE(PacketTileUpdate.class);
+	TILE(PacketTileUpdate.class),
+	GUI(PacketGui.class);
 	
 	private Class<? extends PacketMK> clazz;
 	

@@ -12,6 +12,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Icon;
 import net.minecraft.util.MathHelper;
+import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
 
@@ -70,7 +71,9 @@ public class BlockMachine extends BlockContainer {
 			
 			TileEntity te = world.getBlockTileEntity(x, y, z);
 			if (te != null && te instanceof TileMachinePowered) {
-				((TileMachinePowered)te).openGui(world, x, y, z, player);
+				int id = ((TileMachinePowered)te).getGuiID();
+				if (id != -1)
+					player.openGui(MacKit.instance, id, world, x, y, z);
 			}
 		}
 		
@@ -126,6 +129,30 @@ public class BlockMachine extends BlockContainer {
 			metadata = MathHelper.clamp_int(metadata, 0, Strings.MACHINE_NAMES.length - 1);
 			return frontIconsInactive[metadata];
 		}
+	}
+	
+	@Override
+	public Icon getBlockTexture(IBlockAccess iblockaccess, int x, int y, int z, int side) {
+
+		int metadata = iblockaccess.getBlockMetadata(x, y, z);
+		TileEntity te = iblockaccess.getBlockTileEntity(x, y, z);
+		if (te != null && te instanceof TileMachinePowered) {
+			
+			if (side == 0) {
+				return bottomIcon;
+			} else if (side == 1) {
+				return topIcon;
+			} else  {
+				ForgeDirection curr = ForgeDirection.getOrientation(side);
+				if (curr == ((TileMachinePowered)te).getFacing())
+					return frontIconsInactive[metadata];
+				else
+					return sideIcon;
+			}
+		}
+		
+		return null;
+		
 	}
 
 	public static enum MachineTypes {

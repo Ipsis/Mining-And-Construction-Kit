@@ -1,18 +1,14 @@
 package com.ipsis.mackit.tileentity;
 
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.Container;
-import net.minecraft.inventory.ICrafting;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.packet.Packet;
-import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
 import cofh.api.energy.EnergyStorage;
 import cofh.api.energy.IEnergyHandler;
 
 import com.ipsis.mackit.helper.Helper;
-
-import cpw.mods.fml.common.network.PacketDispatcher;
+import com.ipsis.mackit.network.PacketTypeHandler;
+import com.ipsis.mackit.network.packet.PacketTileUpdate;
 
 public abstract class TileMachinePowered extends TileMachineInventory implements IEnergyHandler {
 	
@@ -24,6 +20,7 @@ public abstract class TileMachinePowered extends TileMachineInventory implements
 	private int energyConsumed;	
 	private boolean inventoryChanged;
 	private ForgeDirection facing;
+	private boolean isActive;
 	
 	public TileMachinePowered(int capacity) {
 		
@@ -40,17 +37,17 @@ public abstract class TileMachinePowered extends TileMachineInventory implements
 		facing = ForgeDirection.SOUTH;
 	}
 	
-	/*
-	private Packet getDescriptionPacket() {
-		Object[] toSend = {xCoord, yCoord, zCoord, facing.ordinal(), isActive};
-	}*/
+	public int getEnergyConsumed() {
+		
+		return energyConsumed;
+	}
 	
 	public void setFacing(ForgeDirection dir) {
 		
-		facing = dir;
 		if (worldObj != null)
 			worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
-		//PacketDispatcher.sendPacketToAllAround(xCoord, yCoord, zCoord, 50, worldObj.provider.dimensionId, getDescriptionPacket());
+		
+		facing = dir;
 	}
 	
 	public ForgeDirection getFacing() {
@@ -84,8 +81,13 @@ public abstract class TileMachinePowered extends TileMachineInventory implements
 		compound.setInteger("Consumed", energyConsumed);
 		compound.setByte("CurrState", (byte)currState.ordinal());
 		compound.setBoolean("IsActive", isActive);
-		Helper.writeToNBTForgeDirection("Facing", facing, compound);
-		
+		Helper.writeToNBTForgeDirection("Facing", facing, compound);		
+	}
+	
+	@Override
+	public Packet getDescriptionPacket() {
+
+		return PacketTypeHandler.populatePacket(new PacketTileUpdate(xCoord, yCoord, zCoord, facing, isActive, ""));
 	}
 	
 	@Override
@@ -138,9 +140,7 @@ public abstract class TileMachinePowered extends TileMachineInventory implements
 	/*
 	 * State machine
 	 */
-	
 	private static enum State { INIT, STOPPED, READY, RUNNING, CONSUME, PRODUCE };
-	private boolean isActive;
 	
 	/*
 	 * Returns true if the value changed
@@ -219,32 +219,39 @@ public abstract class TileMachinePowered extends TileMachineInventory implements
 		}
 	}
 	
-	public int getEnergyConsumed() {
-		
-		return energyConsumed;
-	}
+	/*
+	 * return the GUI id of the tileentity (-1 if no GUI)
+	 */
+	public abstract int getGuiID();
 	
-	public void setEnergyConsumed(int consumed) {
-		
-		energyConsumed = consumed;
-	}
-		
-	protected abstract boolean isMachineReady();
-	
-	/* server->client gui update only */
-	public abstract void setRecipeEnergy(int energy);
-	public abstract int getRecipeEnergy();
-	
-	public abstract void openGui(World world, int x, int y, int z, EntityPlayer player);
-	
-	protected abstract void clearRecipe();
-	protected abstract void setRecipe();
-	protected abstract void produceOutput();
 	
 	public boolean isRsDisabled() {
 		
 		return false;
 	}
+	
+	/*
+	 * server->client update information
+	 * Used ONLY for updating the client.
+	 * The state machine will call setRecipe which will set the recipe energy on the server
+	 */	
+	public void setEnergyConsumed(int consumed) {
+		
+		energyConsumed = consumed;
+	}
+	
+	public abstract void setRecipeEnergy(int energy);
+	
+	/*
+	 * Implemented by the subclasses.
+	 * The per-machine actions that are driven from the state machine
+	 */
+	protected abstract boolean isMachineReady();
+	protected abstract void clearRecipe();
+	protected abstract void setRecipe();
+	protected abstract void produceOutput();
+	public abstract int getRecipeEnergy();
+	
 	
 		
 }

@@ -11,6 +11,7 @@ import net.minecraft.network.packet.Packet250CustomPayload;
 
 import com.google.common.io.ByteArrayDataInput;
 import com.google.common.io.ByteStreams;
+import com.ipsis.mackit.helper.LogHelper;
 import com.ipsis.mackit.inventory.ContainerEnchanter;
 import com.ipsis.mackit.lib.GuiIds;
 import com.ipsis.mackit.lib.Reference;
@@ -38,8 +39,8 @@ public class PacketHandler implements IPacketHandler {
 	public static final int INTERFACE_PKT_BUTTON = 0;
 	public static final int INTERFACE_PKT_SLIDER = 1;
 
-	@Override
-	public void onPacketData(INetworkManager manager, Packet250CustomPayload packet, Player player) {
+	//@Override
+	public void onPacketData2(INetworkManager manager, Packet250CustomPayload packet, Player player) {
 		
 		ByteArrayDataInput reader = ByteStreams.newDataInput(packet.data);
 		EntityPlayer entityPlayer = (EntityPlayer)player;
@@ -53,7 +54,7 @@ public class PacketHandler implements IPacketHandler {
 			byte data = reader.readByte();
 			
 			Container container = entityPlayer.openContainer;
-			if (guiId == GuiIds.ENCHANTER) {
+			if (container != null && guiId == GuiIds.ENCHANTER) {
 				if (container != null && container instanceof ContainerEnchanter) {
 					TileEnchanter te = ((ContainerEnchanter)container).getTileEntity();
 					
@@ -81,7 +82,8 @@ public class PacketHandler implements IPacketHandler {
 		}
 	}	
 	
-	public void onPacketData2(INetworkManager manager, Packet250CustomPayload packet, Player player) {
+	@Override
+	public void onPacketData(INetworkManager manager, Packet250CustomPayload packet, Player player) {
 		
 		PacketMK packetMK = PacketTypeHandler.buildPacket(packet.data);
 		

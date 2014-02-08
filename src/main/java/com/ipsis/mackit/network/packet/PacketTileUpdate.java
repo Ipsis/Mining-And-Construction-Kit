@@ -35,14 +35,14 @@ public class PacketTileUpdate extends PacketMK {
 		super(PacketTypeHandler.TILE, true);
 	}
 	
-	public PacketTileUpdate(int x, int y, int z, ForgeDirection orientation, byte active, String customName) {
+	public PacketTileUpdate(int x, int y, int z, ForgeDirection orientation, boolean active, String customName) {
 		
 		super(PacketTypeHandler.TILE, true);
 		this.x = x;
 		this.y = y;
 		this.z = z;
 		this.orientation = (byte)orientation.ordinal();
-		this.active = active;
+		this.active = (byte)(active ? 1 : 0);
 		this.customName = customName;		
 	}
 	
@@ -70,6 +70,12 @@ public class PacketTileUpdate extends PacketMK {
 	@Override
 	public void execute(INetworkManager network, Player player) {
 
-		MacKit.proxy.handleTileEntityPacket(player, x, y, z, ForgeDirection.getOrientation(orientation), active, customName);
+		MacKit.proxy.handlePacketTileEntity(player, x, y, z, ForgeDirection.getOrientation(orientation), active == 1 ? true : false, customName);
+	}
+	
+	@Override
+	public String toString() {
+
+		return String.format("PacketTileUpdate: (%d, %d, %d) orientation=%s active=%d", x, y, z, orientation, active);
 	}
 }

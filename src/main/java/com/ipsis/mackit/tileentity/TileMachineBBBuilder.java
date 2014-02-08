@@ -3,6 +3,7 @@ package com.ipsis.mackit.tileentity;
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
+import net.minecraft.network.packet.Packet;
 import net.minecraft.world.World;
 
 import com.ipsis.mackit.MacKit;
@@ -46,9 +47,6 @@ public class TileMachineBBBuilder extends TileMachinePowered {
 		return 8;
 	}
 
-	/*
-	 * Abstract functions from TileMachinePowered
-	 */
 	
 	@Override
 	protected boolean isMachineReady() {
@@ -129,8 +127,9 @@ public class TileMachineBBBuilder extends TileMachinePowered {
 	}
 	
 	@Override
-	public void openGui(World world, int x, int y, int z, EntityPlayer player) {
-
-		player.openGui(MacKit.instance, GuiIds.BBBUILDER, world, x, y, z);
+	public int getGuiID() {
+		
+		return GuiIds.BBBUILDER;
 	}
+	
 }
