@@ -6,6 +6,7 @@ import java.io.DataInputStream;
 import net.minecraft.network.packet.Packet;
 import net.minecraft.network.packet.Packet250CustomPayload;
 
+import com.ipsis.mackit.helper.LogHelper;
 import com.ipsis.mackit.lib.Reference;
 import com.ipsis.mackit.network.packet.PacketGui;
 import com.ipsis.mackit.network.packet.PacketMK;
@@ -39,7 +40,7 @@ public enum PacketTypeHandler {
         DataInputStream dis = new DataInputStream(bis);
 
         PacketMK packet = null;
-
+        
         try {
             packet = values()[selector].clazz.newInstance();
         }

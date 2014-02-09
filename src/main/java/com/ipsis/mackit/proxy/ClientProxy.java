@@ -4,6 +4,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.common.ForgeDirection;
 
+import com.ipsis.mackit.helper.LogHelper;
 import com.ipsis.mackit.tileentity.TileMachinePowered;
 
 import cpw.mods.fml.common.network.Player;
@@ -22,12 +23,6 @@ public class ClientProxy extends CommonProxy {
 		}
 	}
 
-	@Override
-	public void handlePacketGui(Player player, int guiId, int ctrlType, int ctrlId, int ctrlData) {
-		
-		/* Nothing */
-	}
-	
-	
+
 	
 }

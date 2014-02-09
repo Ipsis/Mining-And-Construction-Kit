@@ -4,22 +4,33 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.Container;
 import net.minecraft.network.INetworkManager;
 
 import com.ipsis.mackit.MacKit;
+import com.ipsis.mackit.helper.LogHelper;
+import com.ipsis.mackit.inventory.ContainerEnchanter;
+import com.ipsis.mackit.lib.GuiIds;
 import com.ipsis.mackit.network.PacketTypeHandler;
+import com.ipsis.mackit.tileentity.TileEnchanter;
 
 import cpw.mods.fml.common.network.Player;
 
 public class PacketGui extends PacketMK {
 
-	public static int CTRL_BUTTON;
-	public static int CTRL_SLIDER; /* yeah right! */
+	public static int CTRL_BUTTON = 0;
+	public static int CTRL_SLIDER = 1; /* yeah right! */
 	
 	public int guiId;
 	public int ctrlType;
 	public int ctrlId;
 	public int ctrlData;
+	
+	public PacketGui() {
+		
+		super(PacketTypeHandler.GUI, false);
+	}
 	
 	public PacketGui(int guiId, int ctrlType, int ctrlId, int ctrlData) {
 		
@@ -50,8 +61,17 @@ public class PacketGui extends PacketMK {
 	
 	@Override
 	public void execute(INetworkManager network, Player player) {
-
-		MacKit.proxy.handlePacketGui(player, guiId, ctrlType, ctrlId, ctrlData);
+		
+		EntityPlayer entityPlayer = (EntityPlayer)player;
+		Container container = entityPlayer.openContainer;
+		
+		if (container != null) {
+			if (guiId == GuiIds.ENCHANTER && container instanceof ContainerEnchanter) {
+				TileEnchanter te = ((ContainerEnchanter)container).getTileEntity();
+				if (te != null)
+					te.handleInterfacePacket(ctrlType, ctrlId, ctrlData, player);
+			}
+		}	
 	}
 	
 	@Override

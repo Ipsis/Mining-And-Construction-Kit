@@ -6,5 +6,5 @@ import cpw.mods.fml.common.network.Player;
 public interface IProxy {
 
 	 public abstract void handlePacketTileEntity(Player player, int x, int y, int z, ForgeDirection orientation, boolean state, String customName);
-	 public abstract void handlePacketGui(Player player, int guiId, int ctrlType, int ctrlId, int ctrlData);
+
 }

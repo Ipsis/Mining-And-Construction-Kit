@@ -1,14 +1,18 @@
 package com.ipsis.mackit.core.handlers;
 
+import net.minecraftforge.client.event.TextureStitchEvent;
+import net.minecraftforge.event.ForgeSubscribe;
+
 import com.ipsis.mackit.block.ModBlocks;
 import com.ipsis.mackit.fluid.ModFluids;
 
-import net.minecraftforge.client.event.TextureStitchEvent;
-import net.minecraftforge.event.ForgeSubscribe;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 public class TextureStitchHandler {
 
 	@ForgeSubscribe
+	@SideOnly(Side.CLIENT)
     public void postStitch(TextureStitchEvent.Post event) {
 		
 		ModFluids.blueDye.setIcons(ModBlocks.blueDye.getIcon(0, 0), ModBlocks.blueDye.getIcon(2, 0));

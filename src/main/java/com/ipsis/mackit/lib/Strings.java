@@ -9,11 +9,10 @@ public class Strings {
 	public static final String FIXED_EARTH_NAME = "fixedEarth";
 	public static final String FIXED_EARTH_NAMES[] = { "fixedEarthSand", "fixedEarthGravel" };
 	public static final String BEAVER_BLOCK_NAME = "beaverBlock";
-	public static final String MACHINE_BBBUILDER_NAME = "machineBBBuilder";
 	
 	
 	public static final String MACHINE_BLOCK_NAME = "machineBlock";
-	public static final String MACHINE_NAMES[] = { "machineBBBuilder2", "machineSqueezer", "machineMixer", "machinePainter", "machineStamper" };
+	public static final String MACHINE_NAMES[] = { "machineBBBuilder", "machineSqueezer", "machineMixer", "machinePainter", "machineStamper" };
 	
 	public static final String RED_DYE_BLOCK_NAME = "redDyeBlock";
 	public static final String YELLOW_DYE_BLOCK_NAME = "yellowDyeBlock";

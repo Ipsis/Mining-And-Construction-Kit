@@ -15,7 +15,9 @@ import net.minecraft.nbt.NBTTagList;
 import net.minecraft.tileentity.TileEntity;
 
 import com.ipsis.mackit.client.gui.inventory.GuiEnchanter;
+import com.ipsis.mackit.helper.LogHelper;
 import com.ipsis.mackit.network.PacketHandler;
+import com.ipsis.mackit.network.packet.PacketGui;
 
 import cpw.mods.fml.common.network.Player;
 
@@ -337,14 +339,13 @@ public class TileEnchanter extends TileEntity implements IInventory, ISidedInven
 		updateCanEnchant();
 	}
 	
-	public void handleInterfacePacket(byte eventId, int data, Player player) {
-		
-		if (eventId == PacketHandler.INTERFACE_PKT_BUTTON) {
-			if (data == GuiEnchanter.GUI_BUTTON_DESR)
+	public void handleInterfacePacket(int ctrlType, int ctrlId, int ctrlDat, Player player) {
+		if (ctrlType == PacketGui.CTRL_BUTTON) {
+			if (ctrlId == GuiEnchanter.GUI_BUTTON_DECR)
 				decEnchantLevel();
-			else if (data == GuiEnchanter.GUI_BUTTON_INCR)
+			else if (ctrlId == GuiEnchanter.GUI_BUTTON_INCR)
 				incEnchantLevel();
-			else if (data == GuiEnchanter.GUI_BUTTON_ENCHANT)
+			else if (ctrlId == GuiEnchanter.GUI_BUTTON_ENCHANT)
 				enchantItem(player);
 		}
 	}

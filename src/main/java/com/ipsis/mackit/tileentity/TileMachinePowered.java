@@ -99,7 +99,7 @@ public abstract class TileMachinePowered extends TileMachineInventory implements
 	
 	@Override
 	public void updateEntity() {
-		
+						
 		if (!worldObj.isRemote)
 			runSM();
 	}

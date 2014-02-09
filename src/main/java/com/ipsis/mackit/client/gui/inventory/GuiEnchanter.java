@@ -6,12 +6,12 @@ import net.minecraft.entity.player.InventoryPlayer;
 
 import org.lwjgl.opengl.GL11;
 
-import scala.Int;
-
 import com.ipsis.mackit.inventory.ContainerEnchanter;
 import com.ipsis.mackit.lib.GuiIds;
 import com.ipsis.mackit.lib.Textures;
 import com.ipsis.mackit.network.PacketHandler;
+import com.ipsis.mackit.network.packet.PacketGui;
+import com.ipsis.mackit.network.packet.PacketMK;
 import com.ipsis.mackit.tileentity.TileEnchanter;
 
 import cpw.mods.fml.relauncher.Side;
@@ -61,7 +61,7 @@ public class GuiEnchanter extends GuiContainer {
 	}
 	
 	public static final int GUI_BUTTON_INCR = 0;
-	public static final int GUI_BUTTON_DESR = 1;
+	public static final int GUI_BUTTON_DECR = 1;
 	public static final int GUI_BUTTON_ENCHANT = 2;
 	
 	private GuiButton incrButton;
@@ -88,7 +88,7 @@ public class GuiEnchanter extends GuiContainer {
 		incrButton = new GuiButton(GUI_BUTTON_INCR, guiLeft + 68, guiTop + 20, 18, 18, "+");
 		incrButton.enabled = tileEnchanter.getEnchantLevel() == 30 ? false : true;
 		buttonList.add(incrButton);
-		decrButton = new GuiButton(GUI_BUTTON_DESR, guiLeft + 68, guiTop + 50, 18, 18, "-");
+		decrButton = new GuiButton(GUI_BUTTON_DECR, guiLeft + 68, guiTop + 50, 18, 18, "-");
 		decrButton.enabled = tileEnchanter.getEnchantLevel() == 30 ? false : true;
 		buttonList.add(decrButton);
 				
@@ -100,7 +100,8 @@ public class GuiEnchanter extends GuiContainer {
 	@Override
 	protected void actionPerformed(GuiButton button) {
 		
-		PacketHandler.sendInterfacePacket((byte)GuiIds.ENCHANTER, (byte)PacketHandler.INTERFACE_PKT_BUTTON, (byte)button.id);
+		PacketMK packet = new PacketGui(GuiIds.ENCHANTER, PacketGui.CTRL_BUTTON, button.id, 0);
+		PacketHandler.sendPacketToServer(packet);	
 	}
 	
 }

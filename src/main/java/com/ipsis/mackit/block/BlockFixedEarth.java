@@ -10,6 +10,7 @@ import net.minecraft.util.Icon;
 import net.minecraft.util.MathHelper;
 
 import com.ipsis.mackit.MacKit;
+import com.ipsis.mackit.helper.LogHelper;
 import com.ipsis.mackit.lib.Strings;
 
 import cpw.mods.fml.relauncher.Side;

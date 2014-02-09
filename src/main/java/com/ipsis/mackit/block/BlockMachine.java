@@ -18,6 +18,7 @@ import net.minecraftforge.common.ForgeDirection;
 
 import com.ipsis.mackit.MacKit;
 import com.ipsis.mackit.helper.Helper;
+import com.ipsis.mackit.helper.LogHelper;
 import com.ipsis.mackit.lib.Strings;
 import com.ipsis.mackit.tileentity.TileMachineBBBuilder;
 import com.ipsis.mackit.tileentity.TileMachinePowered;
@@ -50,7 +51,7 @@ public class BlockMachine extends BlockContainer {
 	
 	@Override
 	public void onBlockPlacedBy(World world, int x, int y, int z, EntityLivingBase entityLiving, ItemStack itemStack) {
-
+		
 		if (!world.isRemote) {
 			ForgeDirection orientation = Helper.getFacing(entityLiving).getOpposite();
 			
@@ -133,26 +134,35 @@ public class BlockMachine extends BlockContainer {
 	
 	@Override
 	public Icon getBlockTexture(IBlockAccess iblockaccess, int x, int y, int z, int side) {
+		
+		int metadata = iblockaccess.getBlockMetadata(x, y, z);		
+		metadata = MathHelper.clamp_int(metadata, 0, Strings.MACHINE_NAMES.length - 1);
+		
+		if (side == 0) {
+			return bottomIcon;
+		} else if (side == 1) {
+			return topIcon;
+		} else {
 
-		int metadata = iblockaccess.getBlockMetadata(x, y, z);
-		TileEntity te = iblockaccess.getBlockTileEntity(x, y, z);
-		if (te != null && te instanceof TileMachinePowered) {
 			
-			if (side == 0) {
-				return bottomIcon;
-			} else if (side == 1) {
-				return topIcon;
-			} else  {
-				ForgeDirection curr = ForgeDirection.getOrientation(side);
-				if (curr == ((TileMachinePowered)te).getFacing())
-					return frontIconsInactive[metadata];
-				else
-					return sideIcon;
+			TileEntity te = iblockaccess.getBlockTileEntity(x, y, z);
+			if (te != null && te instanceof TileMachinePowered) {
+				
+				if (side == 0) {
+					return bottomIcon;
+				} else if (side == 1) {
+					return topIcon;
+				} else  {
+					ForgeDirection curr = ForgeDirection.getOrientation(side);
+					if (curr == ((TileMachinePowered)te).getFacing())
+						return frontIconsInactive[metadata];
+					else
+						return sideIcon;
+				}
+			} else {
+				return frontIconsInactive[metadata];
 			}
 		}
-		
-		return null;
-		
 	}
 
 	public static enum MachineTypes {
