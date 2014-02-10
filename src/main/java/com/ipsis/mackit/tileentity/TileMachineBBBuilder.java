@@ -49,7 +49,7 @@ public class TileMachineBBBuilder extends TileMachinePowered {
 
 	
 	@Override
-	protected boolean isMachineReady() {
+	public boolean isMachineReady() {
 		
 		/* Dirt */
 		int dirtCount = 0;
@@ -93,19 +93,19 @@ public class TileMachineBBBuilder extends TileMachinePowered {
 	}
 
 	@Override
-	protected void clearRecipe() {
+	public void clearRecipe() {
 		
 		/* constant recipe => nothing to do here */
 	}
 
 	@Override
-	protected void setRecipe() {
+	public void setRecipe() {
 		
 		/* constant recipe => nothing to do here */		
 	}
 
 	@Override
-	protected void produceOutput() {
+	public void produceOutput() {
 		
 		int left = RECIPE_DIRT_STACKSIZE;
 		for (int i = SLOT_DIRT_FIRST; i < SLOT_DIRT_LAST; i++) {

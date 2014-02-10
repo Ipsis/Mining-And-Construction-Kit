@@ -246,11 +246,27 @@ public abstract class TileMachinePowered extends TileMachineInventory implements
 	 * Implemented by the subclasses.
 	 * The per-machine actions that are driven from the state machine
 	 */
-	protected abstract boolean isMachineReady();
-	protected abstract void clearRecipe();
-	protected abstract void setRecipe();
-	protected abstract void produceOutput();
-	public abstract int getRecipeEnergy();
+	public boolean isMachineReady() {
+		
+		return false;
+	}
+	
+	public void clearRecipe() {
+		
+	}
+	
+	public void setRecipe() {
+		
+	}
+	
+	public void produceOutput() {
+		
+	}
+	
+	public int getRecipeEnergy() {
+		
+		return 1;
+	}
 	
 	
 		

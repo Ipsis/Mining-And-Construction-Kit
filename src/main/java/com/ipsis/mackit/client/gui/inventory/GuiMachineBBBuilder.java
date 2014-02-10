@@ -2,8 +2,8 @@ package com.ipsis.mackit.client.gui.inventory;
 
 import net.minecraft.entity.player.InventoryPlayer;
 
-import com.ipsis.gui.ElementEnergyStored;
-import com.ipsis.gui.GuiBase;
+import com.ipsis.mackit.gui.ElementEnergyStored;
+import com.ipsis.mackit.gui.GuiBase;
 import com.ipsis.mackit.inventory.ContainerMachineBBBuilder;
 import com.ipsis.mackit.lib.Textures;
 import com.ipsis.mackit.tileentity.TileMachineBBBuilder;
