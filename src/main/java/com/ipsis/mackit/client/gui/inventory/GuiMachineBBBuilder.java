@@ -30,6 +30,7 @@ public class GuiMachineBBBuilder extends GuiBase {
 		super.initGui();
 		
 		addElement(new ElementEnergyStored(this, 7, 22, this.tileMachineBBBuilder.storage));
+		
 	}
 	
 	@Override
