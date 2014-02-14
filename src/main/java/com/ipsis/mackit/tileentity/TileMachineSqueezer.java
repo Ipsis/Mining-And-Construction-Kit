@@ -17,7 +17,7 @@ public class TileMachineSqueezer extends TileMachinePowered implements IPoweredS
 	private static final int RF_CAPACITY = 32000;
 	private static final int TANK_CAPACITY = 10000;
 	
-	private FluidTank tank;
+	public FluidTank tank;
 	
 	/* Recipe */
 	private static final int RECIPE_RF_ENERGY = 1000;
@@ -30,6 +30,9 @@ public class TileMachineSqueezer extends TileMachinePowered implements IPoweredS
 		
 		super(RF_CAPACITY);
 		tank = new FluidTank(TANK_CAPACITY);
+		
+		FluidStack t = new FluidStack(ModFluids.blueDye, 5000);
+		tank.fill(t, true);
 	}
 
 	@Override

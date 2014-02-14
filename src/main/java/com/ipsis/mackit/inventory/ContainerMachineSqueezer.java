@@ -5,36 +5,25 @@ import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.ICrafting;
 import net.minecraft.inventory.Slot;
-import net.minecraftforge.common.ForgeDirection;
 
-import com.ipsis.mackit.client.gui.inventory.SlotOutput;
 import com.ipsis.mackit.tileentity.TileMachineBBBuilder;
+import com.ipsis.mackit.tileentity.TileMachineSqueezer;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
-public class ContainerMachineBBBuilder extends Container {
-	
+public class ContainerMachineSqueezer extends Container {
+
 	private final int PLAYER_INV_ROWS = 3;
 	private final int PLAYER_INV_COLS = 9;
 	
-	private TileMachineBBBuilder te;
+	private TileMachineSqueezer te;
 	
-	public ContainerMachineBBBuilder(InventoryPlayer inventoryPlayer, TileMachineBBBuilder tileMachineBBBuilder) {
+	public ContainerMachineSqueezer(InventoryPlayer inventoryPlayer, TileMachineSqueezer tileMachineSqueezer) {
 		
-		this.te = tileMachineBBBuilder;
+		this.te = tileMachineSqueezer;
 		
-		this.addSlotToContainer(new Slot(tileMachineBBBuilder, 0, 31, 17));
-		this.addSlotToContainer(new Slot(tileMachineBBBuilder, 1, 49, 17));
-		this.addSlotToContainer(new Slot(tileMachineBBBuilder, 2, 67, 17));
-		this.addSlotToContainer(new Slot(tileMachineBBBuilder, 3, 31, 35));
-		this.addSlotToContainer(new Slot(tileMachineBBBuilder, 4, 49, 35));
-		this.addSlotToContainer(new Slot(tileMachineBBBuilder, 5, 67, 35));
-		
-		this.addSlotToContainer(new Slot(tileMachineBBBuilder, 6, 49, 56));
-		
-		this.addSlotToContainer(new SlotOutput(tileMachineBBBuilder, 7, 114, 35));
-		
+		this.addSlotToContainer(new Slot(tileMachineSqueezer, 0, 76, 35));
 		
 		/* Player hotbar */
 		for (int x = 0; x < PLAYER_INV_COLS; x++)
@@ -44,10 +33,10 @@ public class ContainerMachineBBBuilder extends Container {
 		for (int y = 0; y < PLAYER_INV_ROWS; y++)  {
 			for (int x = 0; x < PLAYER_INV_COLS; x++)
 				this.addSlotToContainer(new Slot(inventoryPlayer, x + y * 9 + 9, 6 + x * 18, 95 + y * 18));
-		}		
+		}	
 	}
 	
-	public TileMachineBBBuilder getTileEntity() {
+	public TileMachineSqueezer getTileEntity() {
 		
 		return this.te;
 	}
@@ -62,9 +51,10 @@ public class ContainerMachineBBBuilder extends Container {
 	 * Gui Updating
 	 * 
 	 * current energy stored
-	 * 
 	 * recipe energy used
 	 * recipe energy total
+	 * 
+	 * fluid tank stored
 	 */
 	private static final int GUI_UPD_ENERGY_STORED = 0;
 	private static final int GUI_UPD_ENERGY_CONSUMED = 1;
@@ -109,5 +99,7 @@ public class ContainerMachineBBBuilder extends Container {
 		else if (id == GUI_UPD_ENERGY_CONSUMED)
 			te.setEnergyConsumed(data);
 	}
-
+	
+	
+	
 }

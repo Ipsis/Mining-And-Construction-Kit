@@ -1,4 +1,4 @@
-package com.ipsis.gui;
+package com.ipsis.mackit.gui;
 
 import java.util.List;
 
