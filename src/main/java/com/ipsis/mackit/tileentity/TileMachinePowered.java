@@ -233,7 +233,9 @@ public abstract class TileMachinePowered extends TileMachineInventory implements
 	/*
 	 * server->client update information
 	 * Used ONLY for updating the client.
-	 * The state machine will call setRecipe which will set the recipe energy on the server
+	 * The state machine will call setRecipe which will set the 
+	 * recipe energy on the server
+	 * The client needs this to work out the progress bar value.
 	 */	
 	public void setEnergyConsumed(int consumed) {
 		

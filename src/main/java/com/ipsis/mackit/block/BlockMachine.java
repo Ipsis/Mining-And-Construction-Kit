@@ -18,10 +18,10 @@ import net.minecraftforge.common.ForgeDirection;
 
 import com.ipsis.mackit.MacKit;
 import com.ipsis.mackit.helper.Helper;
-import com.ipsis.mackit.helper.LogHelper;
 import com.ipsis.mackit.lib.Strings;
 import com.ipsis.mackit.tileentity.TileMachineBBBuilder;
 import com.ipsis.mackit.tileentity.TileMachinePowered;
+import com.ipsis.mackit.tileentity.TileMachineSqueezer;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -184,10 +184,9 @@ public class BlockMachine extends BlockContainer {
 		switch (metadata) {
 		case 0:
 			return new TileMachineBBBuilder();
-			/*
 		case 1:
 			return new TileMachineSqueezer();
-			break;
+/*
 		case 2:
 			return new TileMachineMixer();
 			break;

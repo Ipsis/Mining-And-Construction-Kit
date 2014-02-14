@@ -17,7 +17,7 @@ import com.ipsis.mackit.lib.GuiIds;
  * 1 output slot (slot 7)
  */
 
-public class TileMachineBBBuilder extends TileMachinePowered {
+public class TileMachineBBBuilder extends TileMachinePowered implements IPoweredSM {
 	
 	private static final int RF_CAPACITY = 32000;
 	
