@@ -79,4 +79,17 @@ public class TileMachineSqueezer extends TileMachinePowered implements IPoweredS
 		
 		return RECIPE_RF_ENERGY;
 	}
+	
+	/* Gui Only */
+	public void setTankFluidId(int fluidId) {
+		
+	}
+	
+	public void setTankFluidAmount(int amount) {
+		
+		tank.fill(new FluidStack(ModFluids.blueDye, amount), true);
+		
+	}
+	
+
 }

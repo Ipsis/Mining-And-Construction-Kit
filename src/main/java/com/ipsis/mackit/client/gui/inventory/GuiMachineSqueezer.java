@@ -1,7 +1,9 @@
 package com.ipsis.mackit.client.gui.inventory;
 
 import net.minecraft.entity.player.InventoryPlayer;
+import net.minecraftforge.fluids.FluidStack;
 
+import com.ipsis.mackit.fluid.ModFluids;
 import com.ipsis.mackit.gui.ElementEnergyStored;
 import com.ipsis.mackit.gui.ElementFluidTank;
 import com.ipsis.mackit.gui.GuiBase;
@@ -29,13 +31,13 @@ public class GuiMachineSqueezer extends GuiBase {
 		super.initGui();
 		
 		addElement(new ElementEnergyStored(this, 7, 22, this.te.storage));
-		addElement(new ElementFluidTank(this, 150, 12, this.te.tank));
-		
+		addElement(new ElementFluidTank(this, 150, 12, this.te.tank));		
 	}
 	
 	@Override
 	protected void updateElements() {
 
 		te.storage.receiveEnergy(100, false);
+		te.tank.fill(new FluidStack(ModFluids.blueDye, 100), true);
 	}
 }

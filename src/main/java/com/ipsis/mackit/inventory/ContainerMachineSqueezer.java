@@ -56,8 +56,10 @@ public class ContainerMachineSqueezer extends Container {
 	 * 
 	 * fluid tank stored
 	 */
-	private static final int GUI_UPD_ENERGY_STORED = 0;
-	private static final int GUI_UPD_ENERGY_CONSUMED = 1;
+	private static final int GUI_UPD_ENERGY_STORED = 0;	/* how much stored */
+	private static final int GUI_UPD_ENERGY_CONSUMED = 1; /* how much used from the current recipe */
+	private static final int GUI_UPD_FLUID_ID = 2; /* Fluid ID in the tank */
+	private static final int GUI_UPD_FLUID_STORED = 3; /* how much stored of the current fluid */
 	
 	@Override
 	public void addCraftingToCrafters(ICrafting iCrafting) {
@@ -66,16 +68,22 @@ public class ContainerMachineSqueezer extends Container {
 	
 		iCrafting.sendProgressBarUpdate(this, GUI_UPD_ENERGY_STORED, te.storage.getEnergyStored());
 		iCrafting.sendProgressBarUpdate(this, GUI_UPD_ENERGY_CONSUMED, te.getEnergyConsumed());
+		
+		iCrafting.sendProgressBarUpdate(this, GUI_UPD_FLUID_ID,  te.tank.getFluid() == null ? -1 : te.tank.getFluid().fluidID);
+		iCrafting.sendProgressBarUpdate(this, GUI_UPD_FLUID_STORED, te.tank.getFluidAmount());
 	}
 	
 	private int lastEnergyStored;
 	private int lastEnergyConsumed;
+	private int lastFluidId;
+	private int lastFluidAmount;
 	
 	@Override
 	public void detectAndSendChanges() {
 		
-		super.detectAndSendChanges();
+		super.detectAndSendChanges();		
 		
+		int newId = te.tank.getFluid() == null ? -1 : te.tank.getFluid().fluidID;
         for (Object crafter : this.crafters) {
             ICrafting icrafting = (ICrafting) crafter;
             
@@ -84,10 +92,19 @@ public class ContainerMachineSqueezer extends Container {
             
             if (lastEnergyConsumed != te.getEnergyConsumed())
             	icrafting.sendProgressBarUpdate(this, GUI_UPD_ENERGY_CONSUMED, te.getEnergyConsumed());
+            
+            
+            if (lastFluidId != newId)
+            	icrafting.sendProgressBarUpdate(this, GUI_UPD_FLUID_ID, newId);
+            
+            if (lastFluidAmount != te.tank.getFluidAmount())
+            	icrafting.sendProgressBarUpdate(this, GUI_UPD_FLUID_STORED, te.tank.getFluidAmount());
         }
         
         lastEnergyStored = te.storage.getEnergyStored();
         lastEnergyConsumed = te.getEnergyConsumed();
+        lastFluidId = newId;
+        lastFluidAmount = te.tank.getFluidAmount();
 	}
 	
 	@SideOnly(Side.CLIENT)
@@ -98,6 +115,10 @@ public class ContainerMachineSqueezer extends Container {
 			te.storage.setEnergyStored(data);
 		else if (id == GUI_UPD_ENERGY_CONSUMED)
 			te.setEnergyConsumed(data);
+		else if (id == GUI_UPD_FLUID_ID)
+			te.setTankFluidAmount(data);
+		else if (id == GUI_UPD_FLUID_STORED)
+			te.setTankFluidAmount(data);
 	}
 	
 	
