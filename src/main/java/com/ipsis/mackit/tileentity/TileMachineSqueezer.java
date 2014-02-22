@@ -111,5 +111,4 @@ public class TileMachineSqueezer extends TileMachinePowered implements IPoweredS
 		else
 			f.amount = amount;
 	}
-	
 }

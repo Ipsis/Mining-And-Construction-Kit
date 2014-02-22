@@ -1,7 +1,9 @@
 package com.ipsis.mackit.client.gui.inventory;
 
 import net.minecraft.entity.player.InventoryPlayer;
+import net.minecraftforge.fluids.FluidStack;
 
+import com.ipsis.mackit.fluid.ModFluids;
 import com.ipsis.mackit.gui.ElementEnergyStored;
 import com.ipsis.mackit.gui.ElementFluidTank;
 import com.ipsis.mackit.gui.GuiBase;

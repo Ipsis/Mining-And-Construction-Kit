@@ -41,7 +41,6 @@ public class ContainerMachineSqueezer extends ContainerPowered {
 	/*
 	 * Gui Updating
 	 */
-
 	private void sendFluidStack(ICrafting iCrafting, FluidStack f) {
 		
 		if (f != null) {
@@ -66,7 +65,7 @@ public class ContainerMachineSqueezer extends ContainerPowered {
 	@Override
 	public void detectAndSendChanges() {
 		
-		super.detectAndSendChanges();
+		super.detectAndSendChanges();		
 		
         for (Object crafter : this.crafters) {
             ICrafting icrafting = (ICrafting) crafter;
@@ -76,14 +75,15 @@ public class ContainerMachineSqueezer extends ContainerPowered {
             
             FluidStack f = squeezerTe.tank.getFluid();
             if (f != null && (f.fluidID != lastFluidID || f.amount != lastFluidAmount))
-            	sendFluidStack(icrafting, f);
+                sendFluidStack(icrafting, f);
             else if (f == null && (lastFluidID != 0 || lastFluidAmount != 0))
-            	sendFluidStack(icrafting, f); 
+                sendFluidStack(icrafting, f); 
         }
         
         FluidStack f = squeezerTe.tank.getFluid();
         lastFluidID = f != null ? f.fluidID : 0;
         lastFluidAmount = f != null ? f.amount : 0;
+
 	}
 	
 	@SideOnly(Side.CLIENT)
