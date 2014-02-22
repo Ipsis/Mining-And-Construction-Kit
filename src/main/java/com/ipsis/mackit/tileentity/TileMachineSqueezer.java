@@ -1,5 +1,6 @@
 package com.ipsis.mackit.tileentity;
 
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTank;
 
@@ -31,7 +32,7 @@ public class TileMachineSqueezer extends TileMachinePowered implements IPoweredS
 		super(RF_CAPACITY);
 		tank = new FluidTank(TANK_CAPACITY);
 		
-		FluidStack t = new FluidStack(ModFluids.blueDye, 5000);
+		FluidStack t = new FluidStack(ModFluids.blueDye, 0);
 		tank.fill(t, true);
 	}
 
@@ -43,8 +44,8 @@ public class TileMachineSqueezer extends TileMachinePowered implements IPoweredS
 
 	@Override
 	public void setRecipeEnergy(int energy) {
-		// TODO Auto-generated method stub
 		
+		/* constant */		
 	}
 	
 	@Override
@@ -79,4 +80,36 @@ public class TileMachineSqueezer extends TileMachinePowered implements IPoweredS
 		
 		return RECIPE_RF_ENERGY;
 	}
+	
+	@Override
+	public void readFromNBT(NBTTagCompound compound) {
+
+		super.readFromNBT(compound);
+	}
+	
+	@Override
+	public void writeToNBT(NBTTagCompound compound) {
+
+		super.writeToNBT(compound);
+	}
+	
+	/* Gui Update */
+	public void setTankFluidID(int id) {
+		
+		FluidStack f = tank.getFluid();
+		if (f == null)
+			f = new FluidStack(id, 0);
+		else
+			f.fluidID = id;
+	}
+	
+	public void setTankFluidAmount(int amount) {
+		
+		FluidStack f = tank.getFluid();
+		if (f == null)
+			f = new FluidStack(ModFluids.blueDye, amount);
+		else
+			f.amount = amount;
+	}
+	
 }

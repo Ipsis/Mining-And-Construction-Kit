@@ -12,7 +12,7 @@ import com.ipsis.mackit.network.packet.PacketTileUpdate;
 
 public abstract class TileMachinePowered extends TileMachineInventory implements IEnergyHandler {
 	
-	private static final int DEF_RF_PER_TICK = 1000;
+	private static final int DEF_RF_PER_TICK = 10;
 	
 	public EnergyStorage storage;
 	private State currState;	
@@ -35,6 +35,9 @@ public abstract class TileMachinePowered extends TileMachineInventory implements
 		currState = State.INIT;
 		inventoryChanged = false;
 		facing = ForgeDirection.SOUTH;
+		
+		/* TODO fake fill for now */
+		storage.setEnergyStored(capacity);
 	}
 	
 	public int getEnergyConsumed() {
@@ -173,7 +176,7 @@ public abstract class TileMachinePowered extends TileMachineInventory implements
 			if (inventoryChanged && !isMachineReady()) {
 				currState = State.STOPPED;
 				changedIsActive = setIsActive(false);
-			} else if (energyConsumed > getRecipeEnergy()) {
+			} else if (energyConsumed >= getRecipeEnergy()) {
 				currState = State.PRODUCE;
 			} else if (energyConsumed < getRecipeEnergy() && storage.extractEnergy(rfPerTick, true) == rfPerTick) {
 				currState = State.CONSUME;
@@ -205,12 +208,14 @@ public abstract class TileMachinePowered extends TileMachineInventory implements
 				break;
 			case CONSUME:
 				storage.extractEnergy(rfPerTick, false);
+				energyConsumed += rfPerTick;
 				currState = State.RUNNING;
 				break;
 			case PRODUCE:
 				if (isMachineReady())
 					produceOutput();
 				currState = State.STOPPED;
+				energyConsumed = 0;
 				changedIsActive = setIsActive(false);
 				break;
 			default:

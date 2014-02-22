@@ -5,71 +5,63 @@ import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.ICrafting;
 import net.minecraft.inventory.Slot;
+import net.minecraft.item.ItemStack;
+import net.minecraftforge.fluids.FluidStack;
 
-import com.ipsis.mackit.tileentity.TileMachineBBBuilder;
+import com.ipsis.mackit.helper.LogHelper;
+import com.ipsis.mackit.lib.GuiIds;
 import com.ipsis.mackit.tileentity.TileMachineSqueezer;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
-public class ContainerMachineSqueezer extends Container {
+public class ContainerMachineSqueezer extends ContainerPowered {
 
-	private final int PLAYER_INV_ROWS = 3;
-	private final int PLAYER_INV_COLS = 9;
+	private TileMachineSqueezer squeezerTe;
 	
-	private TileMachineSqueezer te;
-	
-	public ContainerMachineSqueezer(InventoryPlayer inventoryPlayer, TileMachineSqueezer tileMachineSqueezer) {
+	public ContainerMachineSqueezer(InventoryPlayer invPlayer, TileMachineSqueezer te) {
 		
-		this.te = tileMachineSqueezer;
+		super(invPlayer, te, 6, 153, 6, 95);
+		this.squeezerTe = te;
 		
-		this.addSlotToContainer(new Slot(tileMachineSqueezer, 0, 76, 35));
-		
-		/* Player hotbar */
-		for (int x = 0; x < PLAYER_INV_COLS; x++)
-			this.addSlotToContainer(new Slot(inventoryPlayer, x, 6 + x * 18, 153));
-		
-		/* Player inventory */
-		for (int y = 0; y < PLAYER_INV_ROWS; y++)  {
-			for (int x = 0; x < PLAYER_INV_COLS; x++)
-				this.addSlotToContainer(new Slot(inventoryPlayer, x + y * 9 + 9, 6 + x * 18, 95 + y * 18));
-		}	
+		this.addSlotToContainer(new Slot(te, TileMachineSqueezer.SLOT_INPUT, 76, 35));	
 	}
 	
 	public TileMachineSqueezer getTileEntity() {
 		
-		return this.te;
+		return this.squeezerTe;
 	}
 
 	@Override
 	public boolean canInteractWith(EntityPlayer entityplayer) {
 
-		return this.te.isUseableByPlayer(entityplayer);
+		return this.squeezerTe.isUseableByPlayer(entityplayer);
 	}
 	
 	/*
 	 * Gui Updating
-	 * 
-	 * current energy stored
-	 * recipe energy used
-	 * recipe energy total
-	 * 
-	 * fluid tank stored
 	 */
-	private static final int GUI_UPD_ENERGY_STORED = 0;
-	private static final int GUI_UPD_ENERGY_CONSUMED = 1;
+
+	private void sendFluidStack(ICrafting iCrafting, FluidStack f) {
+		
+		if (f != null) {
+			iCrafting.sendProgressBarUpdate(this, GuiIds.GUI_UPD_TANK_FLUID_ID, f.fluidID);
+			iCrafting.sendProgressBarUpdate(this, GuiIds.GUI_UPD_TANK_FLUID_AMOUNT, f.amount);
+		} else {
+			iCrafting.sendProgressBarUpdate(this, GuiIds.GUI_UPD_TANK_FLUID_ID, 0);
+			iCrafting.sendProgressBarUpdate(this, GuiIds.GUI_UPD_TANK_FLUID_AMOUNT, 0);
+		}
+	}
 	
 	@Override
 	public void addCraftingToCrafters(ICrafting iCrafting) {
 		
-		super.addCraftingToCrafters(iCrafting);
-	
-		iCrafting.sendProgressBarUpdate(this, GUI_UPD_ENERGY_STORED, te.storage.getEnergyStored());
-		iCrafting.sendProgressBarUpdate(this, GUI_UPD_ENERGY_CONSUMED, te.getEnergyConsumed());
+		super.addCraftingToCrafters(iCrafting);		
+		sendFluidStack(iCrafting, squeezerTe.tank.getFluid());
 	}
 	
-	private int lastEnergyStored;
-	private int lastEnergyConsumed;
+	private int lastFluidID;
+	private int lastFluidAmount;
 	
 	@Override
 	public void detectAndSendChanges() {
@@ -79,27 +71,59 @@ public class ContainerMachineSqueezer extends Container {
         for (Object crafter : this.crafters) {
             ICrafting icrafting = (ICrafting) crafter;
             
-            if (lastEnergyStored != te.storage.getEnergyStored())
-            	icrafting.sendProgressBarUpdate(this, GUI_UPD_ENERGY_STORED, te.storage.getEnergyStored());
+            int fluidID;
+            int fluidAmount;
             
-            if (lastEnergyConsumed != te.getEnergyConsumed())
-            	icrafting.sendProgressBarUpdate(this, GUI_UPD_ENERGY_CONSUMED, te.getEnergyConsumed());
+            FluidStack f = squeezerTe.tank.getFluid();
+            if (f != null && (f.fluidID != lastFluidID || f.amount != lastFluidAmount))
+            	sendFluidStack(icrafting, f);
+            else if (f == null && (lastFluidID != 0 || lastFluidAmount != 0))
+            	sendFluidStack(icrafting, f); 
         }
         
-        lastEnergyStored = te.storage.getEnergyStored();
-        lastEnergyConsumed = te.getEnergyConsumed();
+        FluidStack f = squeezerTe.tank.getFluid();
+        lastFluidID = f != null ? f.fluidID : 0;
+        lastFluidAmount = f != null ? f.amount : 0;
 	}
 	
 	@SideOnly(Side.CLIENT)
 	@Override
 	public void updateProgressBar(int id, int data) {
-		
-		if (id == GUI_UPD_ENERGY_STORED)
-			te.storage.setEnergyStored(data);
-		else if (id == GUI_UPD_ENERGY_CONSUMED)
-			te.setEnergyConsumed(data);
+			
+		super.updateProgressBar(id, data);	
+		if (id == GuiIds.GUI_UPD_TANK_FLUID_ID)
+			squeezerTe.setTankFluidID(data);
+		else if (id == GuiIds.GUI_UPD_TANK_FLUID_AMOUNT)
+			squeezerTe.setTankFluidAmount(data);
 	}
 	
-	
-	
+	 @Override
+	public ItemStack transferStackInSlot(EntityPlayer player, int slotIndex) {
+		 
+		 /* Machine -> Player */
+		 if (slotIndex >= 36)
+			 return super.transferStackInSlot(player, slotIndex);
+		 
+		 Slot slot = getSlot(slotIndex);
+
+		if (slot != null && slot.getHasStack()) {
+			ItemStack stack = slot.getStack();
+			ItemStack result = stack.copy();
+			
+			/* lets anything in for now */
+			if (!mergeItemStack(stack, 36, 36 + squeezerTe.getSizeInventory(), false)) 
+				return null;
+			
+			if (stack.stackSize == 0)
+				slot.putStack(null);
+			else
+				slot.onSlotChanged();
+			
+			slot.onPickupFromSlot(player, stack);
+			
+			return result;			
+		}
+		 
+		 return null;
+	}
 }

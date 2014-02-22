@@ -28,6 +28,7 @@ public class Strings {
 	public static final String TE_ENCHANTER_NAME = "tileEnchanter";
 	public static final String TE_BEAVER_BLOCK_NAME = "tileBeaverBlock";
 	public static final String TE_MACHINE_BBBUILDER_NAME = "tileMachineBBBuilder";
+	public static final String TE_MACHINE_SQUEEZER_NAME = "tileMachineSqueezer";
 	
 	/* Fluid name constants */
 	public static final String FL_RED_DYE_NAME = "redDye";

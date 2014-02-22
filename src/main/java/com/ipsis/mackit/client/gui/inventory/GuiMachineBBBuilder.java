@@ -20,9 +20,7 @@ public class GuiMachineBBBuilder extends GuiBase {
 		this.invPlayer = inventoryPlayer;
 		
 		xSize = 174;
-		ySize = 177;
-		
-
+		ySize = 177;		
 	}
 	
 	@Override
