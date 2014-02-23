@@ -5,7 +5,11 @@ import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTank;
 
 import com.ipsis.mackit.fluid.ModFluids;
+import com.ipsis.mackit.helper.LogHelper;
 import com.ipsis.mackit.lib.GuiIds;
+import com.ipsis.mackit.manager.MKRegistry;
+import com.ipsis.mackit.manager.SqueezableRecipe;
+import com.ipsis.mackit.manager.SqueezerRecipe;
 
 /*
  * Inventory of
@@ -22,6 +26,7 @@ public class TileMachineSqueezer extends TileMachinePowered implements IPoweredS
 	
 	/* Recipe */
 	private static final int RECIPE_RF_ENERGY = 1000;
+	private SqueezableRecipe recipe;
 	
 	
 	/* Slots */
@@ -31,9 +36,6 @@ public class TileMachineSqueezer extends TileMachinePowered implements IPoweredS
 		
 		super(RF_CAPACITY);
 		tank = new FluidTank(TANK_CAPACITY);
-		
-		FluidStack t = new FluidStack(ModFluids.blueDye, 0);
-		tank.fill(t, true);
 	}
 
 	@Override
@@ -51,8 +53,19 @@ public class TileMachineSqueezer extends TileMachinePowered implements IPoweredS
 	@Override
 	public boolean isMachineReady() {
 		
-		/* simple version just now */
 		if (getStackInSlot(SLOT_INPUT) == null)
+			return false;
+		
+		SqueezableRecipe r = MKRegistry.getSqueezableManager().getRecipe(getStackInSlot(SLOT_INPUT));
+		if (r == null)
+			return false;
+		
+		/* empty tank is always fillable */
+		if (tank.getFluid() == null)
+			return true;
+		
+		SqueezerRecipe sr = MKRegistry.getSqueezerManager().getRecipe(r.getDye());
+		if (sr == null || !sr.isOutputFluid(tank.getFluid()))
 			return false;
 		
 		return true;
@@ -61,18 +74,39 @@ public class TileMachineSqueezer extends TileMachinePowered implements IPoweredS
 	@Override
 	public void clearRecipe() {
 		
+		recipe = null;
 	}
 	
 	@Override
 	public void setRecipe() {
 		
+		LogHelper.severe("setRecipe");
+		recipe = MKRegistry.getSqueezableManager().getRecipe(getStackInSlot(SLOT_INPUT));
 	}
 	
 	@Override
 	public void produceOutput() {
 		
 		decrStackSize(SLOT_INPUT, 1);
-		tank.fill(new FluidStack(ModFluids.blueDye, 1000), true);
+		
+		if (recipe == null)
+			return;
+		
+		SqueezerRecipe sr = MKRegistry.getSqueezerManager().getRecipe(recipe.getDye());
+		LogHelper.severe("produceOutput: " + sr);
+		return;
+		
+		/*
+		for (int i = 0; i < recipe.getDye().stackSize; i++) {
+			if (tank.getFluid() == null) {
+				tank.fill(sr.getRandomOutput(), true);
+				
+			} else {
+				tank.fill(new FluidStack(tank.getFluid(), sr.getAmount(tank.getFluid())), true);
+			}			
+		}
+		
+		tank.fill(new FluidStack(ModFluids.blueDye, 1000), true); */
 	}
 	
 	@Override

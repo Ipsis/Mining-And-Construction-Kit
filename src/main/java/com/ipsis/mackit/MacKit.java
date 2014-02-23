@@ -14,6 +14,8 @@ import com.ipsis.mackit.handler.GuiHandler;
 import com.ipsis.mackit.helper.LogHelper;
 import com.ipsis.mackit.item.ModItems;
 import com.ipsis.mackit.lib.Reference;
+import com.ipsis.mackit.manager.MKRegistry;
+import com.ipsis.mackit.manager.SqueezableManager;
 import com.ipsis.mackit.network.PacketHandler;
 import com.ipsis.mackit.proxy.CommonProxy;
 
@@ -80,14 +82,13 @@ public class MacKit {
 		proxy.registerTileEntities();
 		
 		MinecraftForge.EVENT_BUS.register(new TextureStitchHandler());
+		
 	}
 	
 	@EventHandler
 	public void postInit(FMLPostInitializationEvent event)
 	{
-		
+		MKRegistry.init();
 	}
-	
-	
 
 }
