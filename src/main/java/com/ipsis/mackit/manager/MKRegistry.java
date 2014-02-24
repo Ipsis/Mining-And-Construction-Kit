@@ -2,27 +2,27 @@ package com.ipsis.mackit.manager;
 
 public class MKRegistry {
 	
-	private static SqueezableManager squeezableManager;
-	private static SqueezerManager squeezerManager;
+	private static SqueezerManager squeezableManager;
+	private static DyeManager squeezerManager;
 	
 	private MKRegistry() {
 		
 	}
 	
-	public static SqueezableManager getSqueezableManager() {
+	public static SqueezerManager getSqueezableManager() {
 		
 		return squeezableManager;
 	}
 	
-	public static SqueezerManager getSqueezerManager() {
+	public static DyeManager getSqueezerManager() {
 		
 		return squeezerManager;
 	}
 	
 	public static void init() {
 		
-		squeezableManager = new SqueezableManager();
-		squeezerManager = new SqueezerManager();
+		squeezableManager = new SqueezerManager();
+		squeezerManager = new DyeManager();
 	}
 	
 }

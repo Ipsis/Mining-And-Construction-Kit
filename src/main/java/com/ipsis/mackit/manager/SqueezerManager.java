@@ -1,52 +1,125 @@
 package com.ipsis.mackit.manager;
 
 import java.util.HashMap;
+import java.util.List;
 
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.crafting.CraftingManager;
+import net.minecraft.item.crafting.IRecipe;
+import net.minecraft.item.crafting.ShapelessRecipes;
+import net.minecraftforge.oredict.OreDictionary;
 
+import com.ipsis.mackit.helper.LogHelper;
 import com.ipsis.mackit.util.ItemHelper;
 
 public class SqueezerManager {
-		
-		private HashMap<Integer, SqueezerRecipe> recipes;
-		
-		public SqueezerManager() {
-			
-			recipes = new HashMap<Integer, SqueezerRecipe>();			
-			addRecipes();
-		}
-		
-		private void addRecipes() {
-			
-			addRecipe(new ItemStack(Item.dyePowder, 1, 0), 33, 33, 33, 0);	/* black */
-			addRecipe(new ItemStack(Item.dyePowder, 1, 1), 100, 0, 0, 0); /* red */
-			addRecipe(new ItemStack(Item.dyePowder, 1, 2), 0, 50, 50, 0); /* green */
-			addRecipe(new ItemStack(Item.dyePowder, 1, 3), 33, 33, 33, 0);/* brown */
-			addRecipe(new ItemStack(Item.dyePowder, 1, 4), 0, 0, 100, 0); /* blue */
-			addRecipe(new ItemStack(Item.dyePowder, 1, 4), 50, 0, 50, 0); /* purple */
-			/* cyan */
-			addRecipe(new ItemStack(Item.dyePowder, 1, 4), 20, 20, 20, 40); /* light gray */
-			/* gray */
-			/* pink */
-			addRecipe(new ItemStack(Item.dyePowder, 1, 4), 0, 33, 33, 33);/* lime */
-			addRecipe(new ItemStack(Item.dyePowder, 1, 0), 0, 100, 0, 0); /* yellow */
-			addRecipe(new ItemStack(Item.dyePowder, 1, 4), 0, 0, 50, 50); /* light blue */
-			/* magenta */
-			addRecipe(new ItemStack(Item.dyePowder, 1, 4), 50, 50, 0, 0); /* orange */
-			addRecipe(new ItemStack(Item.dyePowder, 1, 4), 0, 0, 0, 100); /* white */
-			
-		}
-		
-		private void addRecipe(ItemStack source, int red, int yellow, int blue, int white) {
-			
-			recipes.put(ItemHelper.getHashCode(source), new SqueezerRecipe(source, red, yellow, blue, white));
-		}
-		
-		public SqueezerRecipe getRecipe(ItemStack dye) {
-			
-			int id = ItemHelper.getHashCode(dye);
-			return recipes.get(id);
-		}
+
+	private HashMap<Integer, SqueezerRecipe> recipes;
 	
+	public SqueezerManager() {
+		
+		recipes = new HashMap<Integer, SqueezerRecipe>();
+		
+		addDyeOreIds();
+		addVanilla();
+	}
+	
+	private void addRecipe(ItemStack source, ItemStack dye) {
+		
+		recipes.put(ItemHelper.getHashCode(source), new SqueezerRecipe(source, dye));
+	}
+	
+	public SqueezerRecipe getRecipe(ItemStack source) {
+		
+		int id = ItemHelper.getHashCode(source);
+		return recipes.get(id);
+	}
+	
+	
+	/*
+	 * Add the vanilla item->dye recipes
+	 */
+	private void addVanilla() {
+		
+		/* Shapeless recipes */
+		List<IRecipe> allrecipes = CraftingManager.getInstance().getRecipeList();
+		for (IRecipe irecipe : allrecipes) {
+			if (irecipe instanceof ShapelessRecipes) {
+				
+				/* 
+				 * Only add shapeless recipes where
+				 * single item creates a dye (can be 1 or more of the same dye)
+				 */
+				ShapelessRecipes r = (ShapelessRecipes)irecipe;
+				if (r.getRecipeSize() == 1) {
+					ItemStack out = irecipe.getRecipeOutput();
+					ItemStack in = (ItemStack)(r.recipeItems.get(0));
+					
+					if (isDye(out)) {
+					
+						LogHelper.severe("Add vanilla In: " + in + " Out: " + out);
+						addRecipe(in, out);
+					}					
+				}
+			}
+		}
+		
+		/* Manually add cactus as it is smelted! */
+		
+	}
+	
+	private void addMod() {
+		
+	}
+	
+	/* Is the itemstack a dye */
+	private boolean isDye(ItemStack input) {
+		
+		int id = OreDictionary.getOreID(input);
+		if (id == -1)
+			return false;
+
+		for (int i : dyeOreIds)
+			if (i == id)
+				return true;
+		
+		return false;
+	}
+	
+	/*
+	 * Does this item produce a dye from a shapeless recipe
+	 * OR
+	 * is it a dye item
+	 */
+	public boolean isSqueezable(ItemStack input) {
+		
+		if (isDye(input))
+			return true;
+		
+		if (getRecipe(input) != null)
+			return true;
+		
+		return false;
+	}
+	
+	/*
+	 * OreDictionary information
+	 */
+	private int[] dyeOreIds;
+	private String[] dyeOreNames = { "dyeBlack", "dyeRed", "dyeGreen", "dyeBrown", "dyeBlue", "dyePurple", "dyeCyan", "dyeLightGray",
+	        "dyeGray", "dyePink", "dyeLime", "dyeYellow", "dyeLightBlue", "dyeMagenta", "dyeOrange", "dyeWhite" };
+	
+	private void addDyeOreIds() {
+		
+		int c = 0;
+		dyeOreIds = new int[dyeOreNames.length];
+		
+		for (String s : dyeOreNames) {
+			int id = OreDictionary.getOreID(s);
+			if (id != -1) {
+				dyeOreIds[c] = id;
+				c++;
+			}
+		}	
+	}
 }

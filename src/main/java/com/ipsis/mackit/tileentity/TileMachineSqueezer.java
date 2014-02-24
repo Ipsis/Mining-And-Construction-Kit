@@ -8,8 +8,8 @@ import com.ipsis.mackit.fluid.ModFluids;
 import com.ipsis.mackit.helper.LogHelper;
 import com.ipsis.mackit.lib.GuiIds;
 import com.ipsis.mackit.manager.MKRegistry;
-import com.ipsis.mackit.manager.SqueezableRecipe;
 import com.ipsis.mackit.manager.SqueezerRecipe;
+import com.ipsis.mackit.manager.DyeRecipe;
 
 /*
  * Inventory of
@@ -26,7 +26,7 @@ public class TileMachineSqueezer extends TileMachinePowered implements IPoweredS
 	
 	/* Recipe */
 	private static final int RECIPE_RF_ENERGY = 1000;
-	private SqueezableRecipe recipe;
+	private SqueezerRecipe recipe;
 	
 	
 	/* Slots */
@@ -56,7 +56,7 @@ public class TileMachineSqueezer extends TileMachinePowered implements IPoweredS
 		if (getStackInSlot(SLOT_INPUT) == null)
 			return false;
 		
-		SqueezableRecipe r = MKRegistry.getSqueezableManager().getRecipe(getStackInSlot(SLOT_INPUT));
+		SqueezerRecipe r = MKRegistry.getSqueezableManager().getRecipe(getStackInSlot(SLOT_INPUT));
 		if (r == null)
 			return false;
 		
@@ -64,7 +64,7 @@ public class TileMachineSqueezer extends TileMachinePowered implements IPoweredS
 		if (tank.getFluid() == null)
 			return true;
 		
-		SqueezerRecipe sr = MKRegistry.getSqueezerManager().getRecipe(r.getDye());
+		DyeRecipe sr = MKRegistry.getSqueezerManager().getRecipe(r.getDye());
 		if (sr == null || !sr.isOutputFluid(tank.getFluid()))
 			return false;
 		
@@ -92,7 +92,7 @@ public class TileMachineSqueezer extends TileMachinePowered implements IPoweredS
 		if (recipe == null)
 			return;
 		
-		SqueezerRecipe sr = MKRegistry.getSqueezerManager().getRecipe(recipe.getDye());
+		DyeRecipe sr = MKRegistry.getSqueezerManager().getRecipe(recipe.getDye());
 		LogHelper.severe("produceOutput: " + sr);
 		return;
 		

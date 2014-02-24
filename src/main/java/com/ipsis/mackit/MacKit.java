@@ -15,7 +15,7 @@ import com.ipsis.mackit.helper.LogHelper;
 import com.ipsis.mackit.item.ModItems;
 import com.ipsis.mackit.lib.Reference;
 import com.ipsis.mackit.manager.MKRegistry;
-import com.ipsis.mackit.manager.SqueezableManager;
+import com.ipsis.mackit.manager.SqueezerManager;
 import com.ipsis.mackit.network.PacketHandler;
 import com.ipsis.mackit.proxy.CommonProxy;
 
