@@ -7,6 +7,7 @@ import cofh.api.energy.EnergyStorage;
 import cofh.api.energy.IEnergyHandler;
 
 import com.ipsis.mackit.helper.Helper;
+import com.ipsis.mackit.helper.LogHelper;
 import com.ipsis.mackit.network.PacketTypeHandler;
 import com.ipsis.mackit.network.packet.PacketTileUpdate;
 
@@ -33,7 +34,7 @@ public abstract class TileMachinePowered extends TileMachineInventory implements
 		this.rfPerTick = rfPerTick;
 		storage = new EnergyStorage(capacity);
 		currState = State.INIT;
-		inventoryChanged = false;
+		inventoryChanged = true;
 		facing = ForgeDirection.SOUTH;
 		
 		/* TODO fake fill for now */
@@ -169,13 +170,18 @@ public abstract class TileMachinePowered extends TileMachineInventory implements
 			currState = State.STOPPED;
 			break;
 		case STOPPED:
-			if (!isRsDisabled() && isMachineReady())
+			if (!isRsDisabled() && inventoryChanged && isMachineReady())
 				currState = State.READY;
+			inventoryChanged = false;
 			break;
 		case RUNNING:
-			if (inventoryChanged && !isMachineReady()) {
-				currState = State.STOPPED;
-				changedIsActive = setIsActive(false);
+			if (inventoryChanged) {
+				if (!isMachineReady()) {
+					currState = State.STOPPED;
+					changedIsActive = setIsActive(false);
+				}
+				
+				inventoryChanged = false;
 			} else if (energyConsumed >= getRecipeEnergy()) {
 				currState = State.PRODUCE;
 			} else if (energyConsumed < getRecipeEnergy() && storage.extractEnergy(rfPerTick, true) == rfPerTick) {

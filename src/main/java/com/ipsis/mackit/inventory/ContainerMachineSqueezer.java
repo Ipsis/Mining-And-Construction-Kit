@@ -44,11 +44,11 @@ public class ContainerMachineSqueezer extends ContainerPowered {
 	private void sendFluidStack(ICrafting iCrafting, FluidStack f) {
 		
 		if (f != null) {
-			iCrafting.sendProgressBarUpdate(this, GuiIds.GUI_UPD_TANK_FLUID_ID, f.fluidID);
-			iCrafting.sendProgressBarUpdate(this, GuiIds.GUI_UPD_TANK_FLUID_AMOUNT, f.amount);
+			iCrafting.sendProgressBarUpdate(this, GuiIds.GUI_UPD_TANK_0_FLUID_ID, f.fluidID);
+			iCrafting.sendProgressBarUpdate(this, GuiIds.GUI_UPD_TANK_0_FLUID_AMOUNT, f.amount);
 		} else {
-			iCrafting.sendProgressBarUpdate(this, GuiIds.GUI_UPD_TANK_FLUID_ID, 0);
-			iCrafting.sendProgressBarUpdate(this, GuiIds.GUI_UPD_TANK_FLUID_AMOUNT, 0);
+			iCrafting.sendProgressBarUpdate(this, GuiIds.GUI_UPD_TANK_0_FLUID_ID, 0);
+			iCrafting.sendProgressBarUpdate(this, GuiIds.GUI_UPD_TANK_0_FLUID_AMOUNT, 0);
 		}
 	}
 	
@@ -67,6 +67,7 @@ public class ContainerMachineSqueezer extends ContainerPowered {
 		
 		super.detectAndSendChanges();		
 		
+		boolean sent = false;
         for (Object crafter : this.crafters) {
             ICrafting icrafting = (ICrafting) crafter;
             
@@ -74,26 +75,31 @@ public class ContainerMachineSqueezer extends ContainerPowered {
             int fluidAmount;
             
             FluidStack f = squeezerTe.tank.getFluid();
-            if (f != null && (f.fluidID != lastFluidID || f.amount != lastFluidAmount))
+            if (f != null && (f.fluidID != lastFluidID || f.amount != lastFluidAmount)) {
                 sendFluidStack(icrafting, f);
-            else if (f == null && (lastFluidID != 0 || lastFluidAmount != 0))
-                sendFluidStack(icrafting, f); 
+                sent = true;
+            } else if (f == null && (lastFluidID != 0 || lastFluidAmount != 0)) {
+                sendFluidStack(icrafting, f);
+                sent = true;
+            }
         }
         
-        FluidStack f = squeezerTe.tank.getFluid();
-        lastFluidID = f != null ? f.fluidID : 0;
-        lastFluidAmount = f != null ? f.amount : 0;
+        if (sent == true) {
+        	FluidStack f = squeezerTe.tank.getFluid();
+        	lastFluidID = f != null ? f.fluidID : 0;
+        	lastFluidAmount = f != null ? f.amount : 0;
+        }
 
 	}
 	
 	@SideOnly(Side.CLIENT)
 	@Override
 	public void updateProgressBar(int id, int data) {
-			
+		
 		super.updateProgressBar(id, data);	
-		if (id == GuiIds.GUI_UPD_TANK_FLUID_ID)
+		if (id == GuiIds.GUI_UPD_TANK_0_FLUID_ID)
 			squeezerTe.setTankFluidID(data);
-		else if (id == GuiIds.GUI_UPD_TANK_FLUID_AMOUNT)
+		else if (id == GuiIds.GUI_UPD_TANK_0_FLUID_AMOUNT)
 			squeezerTe.setTankFluidAmount(data);
 	}
 	

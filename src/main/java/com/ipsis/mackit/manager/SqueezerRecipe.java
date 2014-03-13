@@ -17,4 +17,10 @@ public class SqueezerRecipe {
 		
 		return dye;
 	}
+	
+	@Override
+	public String toString() {
+
+		return String.format("SqueezerRecipe: source=%s dye=%s", source, dye);
+	}
 }

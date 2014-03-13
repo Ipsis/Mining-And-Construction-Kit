@@ -7,6 +7,7 @@ import com.ipsis.mackit.fluid.ModFluids;
 import com.ipsis.mackit.gui.ElementEnergyStored;
 import com.ipsis.mackit.gui.ElementFluidTank;
 import com.ipsis.mackit.gui.GuiBase;
+import com.ipsis.mackit.helper.LogHelper;
 import com.ipsis.mackit.inventory.ContainerMachineSqueezer;
 import com.ipsis.mackit.lib.Textures;
 import com.ipsis.mackit.tileentity.TileMachineSqueezer;

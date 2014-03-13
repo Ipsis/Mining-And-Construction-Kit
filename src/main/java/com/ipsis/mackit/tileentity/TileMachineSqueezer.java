@@ -56,7 +56,7 @@ public class TileMachineSqueezer extends TileMachinePowered implements IPoweredS
 		if (getStackInSlot(SLOT_INPUT) == null)
 			return false;
 		
-		SqueezerRecipe r = MKRegistry.getSqueezableManager().getRecipe(getStackInSlot(SLOT_INPUT));
+		SqueezerRecipe r = MKRegistry.getSqueezerManager().getRecipe(getStackInSlot(SLOT_INPUT));
 		if (r == null)
 			return false;
 		
@@ -64,7 +64,7 @@ public class TileMachineSqueezer extends TileMachinePowered implements IPoweredS
 		if (tank.getFluid() == null)
 			return true;
 		
-		DyeRecipe sr = MKRegistry.getSqueezerManager().getRecipe(r.getDye());
+		DyeRecipe sr = MKRegistry.getDyeManager().getRecipe(r.getDye());
 		if (sr == null || !sr.isOutputFluid(tank.getFluid()))
 			return false;
 		
@@ -81,7 +81,7 @@ public class TileMachineSqueezer extends TileMachinePowered implements IPoweredS
 	public void setRecipe() {
 		
 		LogHelper.severe("setRecipe");
-		recipe = MKRegistry.getSqueezableManager().getRecipe(getStackInSlot(SLOT_INPUT));
+		recipe = MKRegistry.getSqueezerManager().getRecipe(getStackInSlot(SLOT_INPUT));
 	}
 	
 	@Override
@@ -92,21 +92,18 @@ public class TileMachineSqueezer extends TileMachinePowered implements IPoweredS
 		if (recipe == null)
 			return;
 		
-		DyeRecipe sr = MKRegistry.getSqueezerManager().getRecipe(recipe.getDye());
+		DyeRecipe sr = MKRegistry.getDyeManager().getRecipe(recipe.getDye());
+		
 		LogHelper.severe("produceOutput: " + sr);
-		return;
 		
-		/*
 		for (int i = 0; i < recipe.getDye().stackSize; i++) {
-			if (tank.getFluid() == null) {
-				tank.fill(sr.getRandomOutput(), true);
-				
-			} else {
-				tank.fill(new FluidStack(tank.getFluid(), sr.getAmount(tank.getFluid())), true);
-			}			
+			FluidStack currFluid = tank.getFluid();
+			LogHelper.severe("produceOutput: " + sr.getOutputDefault());
+			if (currFluid == null)
+				tank.fill(sr.getOutputDefault(), true);				
+			else
+				tank.fill(new FluidStack(currFluid.fluidID, sr.getOutputAmount(currFluid)), true);
 		}
-		
-		tank.fill(new FluidStack(ModFluids.blueDye, 1000), true); */
 	}
 	
 	@Override
@@ -135,6 +132,8 @@ public class TileMachineSqueezer extends TileMachinePowered implements IPoweredS
 			f = new FluidStack(id, 0);
 		else
 			f.fluidID = id;
+		
+		tank.setFluid(f);
 	}
 	
 	public void setTankFluidAmount(int amount) {
@@ -144,5 +143,7 @@ public class TileMachineSqueezer extends TileMachinePowered implements IPoweredS
 			f = new FluidStack(ModFluids.blueDye, amount);
 		else
 			f.amount = amount;
+		
+		tank.setFluid(f);
 	}
 }
