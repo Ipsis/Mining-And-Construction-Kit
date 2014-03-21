@@ -21,11 +21,18 @@ public class TileMachineSqueezer extends TileMachinePowered implements IPoweredS
 
 	private static final int RF_CAPACITY = 32000;
 	private static final int TANK_CAPACITY = 10000;
+		
+	public FluidTank pureTank;
+	public FluidTank redTank;
+	public FluidTank yellowTank;
+	public FluidTank blueTank;
+	public FluidTank whiteTank;
 	
-	public FluidTank tank;
 	
 	/* Recipe */
 	private static final int RECIPE_RF_ENERGY = 1000;
+	private static final int DYE_MB = 192;
+	private static final int PURE_MB = 1000;
 	private SqueezerRecipe recipe;
 	
 	
@@ -35,9 +42,54 @@ public class TileMachineSqueezer extends TileMachinePowered implements IPoweredS
 	public TileMachineSqueezer() {
 		
 		super(RF_CAPACITY);
-		tank = new FluidTank(TANK_CAPACITY);
+		pureTank = new FluidTank(TANK_CAPACITY);
+		redTank = new FluidTank(TANK_CAPACITY);
+		yellowTank = new FluidTank(TANK_CAPACITY);
+		blueTank = new FluidTank(TANK_CAPACITY);
+		whiteTank = new FluidTank(TANK_CAPACITY);		
 	}
-
+	
+	private boolean canFillBufferTank(DyeRecipe r) {
+		
+		if (r.getRedFluid() != null && redTank.fill(r.getRedFluid(), false) != r.getRed())
+			return false;
+		
+		if (r.getYellowFluid() != null && yellowTank.fill(r.getYellowFluid(), false) != r.getYellow())
+			return false;
+			
+		if (r.getBlueFluid() != null && blueTank.fill(r.getBlueFluid(), false) != r.getBlue())
+			return false;
+		
+		if (r.getWhiteFluid() != null && whiteTank.fill(r.getWhiteFluid(), false) != r.getWhite())
+			return false;
+				
+		return true;
+	}
+	
+	private void fillBufferTanks(DyeRecipe r) {
+		
+		if (r.getRed() > 0)
+			redTank.fill(r.getRedFluid(), true);
+		
+		if (r.getYellow() > 0)
+			yellowTank.fill(r.getYellowFluid(), true);
+		
+		if (r.getBlue() > 0)
+			blueTank.fill(r.getBlueFluid(), true);
+		
+		if (r.getWhite() > 0)
+			whiteTank.fill(r.getWhiteFluid(), true);
+	}
+	
+	private boolean canFillOutput() {
+		
+		return redTank.getFluidAmount() >= DYE_MB
+				&& yellowTank.getFluidAmount() >= DYE_MB
+				&& blueTank.getFluidAmount() >= DYE_MB
+				&& whiteTank.getFluidAmount() >= DYE_MB
+				&& pureTank.fill(new FluidStack(ModFluids.pureDye, DYE_MB * 4), false) == DYE_MB * 4;
+	}
+	
 	@Override
 	public int getGuiID() {
 
@@ -60,12 +112,11 @@ public class TileMachineSqueezer extends TileMachinePowered implements IPoweredS
 		if (r == null)
 			return false;
 		
-		/* empty tank is always fillable */
-		if (tank.getFluid() == null)
-			return true;
-		
 		DyeRecipe sr = MKRegistry.getDyeManager().getRecipe(r.getDye());
-		if (sr == null || !sr.isOutputFluid(tank.getFluid()))
+		if (sr == null)
+			return false;
+		
+		if (!canFillBufferTank(sr))
 			return false;
 		
 		return true;
@@ -94,16 +145,26 @@ public class TileMachineSqueezer extends TileMachinePowered implements IPoweredS
 		
 		DyeRecipe sr = MKRegistry.getDyeManager().getRecipe(recipe.getDye());
 		
-		LogHelper.severe("produceOutput: " + sr);
+		LogHelper.severe("produceOutput: " + sr);		
+		for (int i = 0; i < recipe.getDye().stackSize; i++)
+			fillBufferTanks(sr);
 		
-		for (int i = 0; i < recipe.getDye().stackSize; i++) {
-			FluidStack currFluid = tank.getFluid();
-			LogHelper.severe("produceOutput: " + sr.getOutputDefault());
-			if (currFluid == null)
-				tank.fill(sr.getOutputDefault(), true);				
-			else
-				tank.fill(new FluidStack(currFluid.fluidID, sr.getOutputAmount(currFluid)), true);
-		}
+		LogHelper.severe("produceOutput: red=" + redTank.getFluidAmount() + " yellow=" + yellowTank.getFluidAmount() + " blue=" + blueTank.getFluidAmount() + " white=" + whiteTank.getFluidAmount());
+	}
+	
+	@Override
+	public void postSM() {
+		
+		/* need to check for energy */
+		if (!canFillOutput())
+			return;
+		
+		redTank.drain(DYE_MB, true);
+		yellowTank.drain(DYE_MB, true);
+		blueTank.drain(DYE_MB, true);
+		whiteTank.drain(DYE_MB, true);
+		pureTank.fill(new FluidStack(ModFluids.pureDye, DYE_MB * 4), true);
+		LogHelper.severe("postSM: pure=" + pureTank.getFluidAmount());
 	}
 	
 	@Override
@@ -127,23 +188,23 @@ public class TileMachineSqueezer extends TileMachinePowered implements IPoweredS
 	/* Gui Update */
 	public void setTankFluidID(int id) {
 		
-		FluidStack f = tank.getFluid();
+		FluidStack f = pureTank.getFluid();
 		if (f == null)
 			f = new FluidStack(id, 0);
 		else
 			f.fluidID = id;
 		
-		tank.setFluid(f);
+		pureTank.setFluid(f);
 	}
 	
 	public void setTankFluidAmount(int amount) {
 		
-		FluidStack f = tank.getFluid();
+		FluidStack f = pureTank.getFluid();
 		if (f == null)
 			f = new FluidStack(ModFluids.blueDye, amount);
 		else
 			f.amount = amount;
 		
-		tank.setFluid(f);
+		pureTank.setFluid(f);
 	}
 }

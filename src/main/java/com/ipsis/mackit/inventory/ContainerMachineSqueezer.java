@@ -56,7 +56,7 @@ public class ContainerMachineSqueezer extends ContainerPowered {
 	public void addCraftingToCrafters(ICrafting iCrafting) {
 		
 		super.addCraftingToCrafters(iCrafting);		
-		sendFluidStack(iCrafting, squeezerTe.tank.getFluid());
+		sendFluidStack(iCrafting, squeezerTe.pureTank.getFluid());
 	}
 	
 	private int lastFluidID;
@@ -74,7 +74,7 @@ public class ContainerMachineSqueezer extends ContainerPowered {
             int fluidID;
             int fluidAmount;
             
-            FluidStack f = squeezerTe.tank.getFluid();
+            FluidStack f = squeezerTe.pureTank.getFluid();
             if (f != null && (f.fluidID != lastFluidID || f.amount != lastFluidAmount)) {
                 sendFluidStack(icrafting, f);
                 sent = true;
@@ -85,7 +85,7 @@ public class ContainerMachineSqueezer extends ContainerPowered {
         }
         
         if (sent == true) {
-        	FluidStack f = squeezerTe.tank.getFluid();
+        	FluidStack f = squeezerTe.pureTank.getFluid();
         	lastFluidID = f != null ? f.fluidID : 0;
         	lastFluidAmount = f != null ? f.amount : 0;
         }

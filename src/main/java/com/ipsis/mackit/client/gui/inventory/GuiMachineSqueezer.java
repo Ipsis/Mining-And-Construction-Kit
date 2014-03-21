@@ -32,7 +32,7 @@ public class GuiMachineSqueezer extends GuiBase {
 		super.initGui();
 		
 		addElement(new ElementEnergyStored(this, 7, 22, this.te.storage));
-		addElement(new ElementFluidTank(this, 150, 12, this.te.tank));		
+		addElement(new ElementFluidTank(this, 150, 12, this.te.pureTank));		
 	}
 	
 	@Override

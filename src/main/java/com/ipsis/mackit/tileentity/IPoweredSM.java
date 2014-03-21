@@ -7,4 +7,5 @@ public interface IPoweredSM {
 	public abstract void setRecipe();
 	public abstract void produceOutput();
 	public abstract int getRecipeEnergy();
+	public abstract void postSM();
 }

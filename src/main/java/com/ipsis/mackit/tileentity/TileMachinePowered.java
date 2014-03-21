@@ -104,8 +104,9 @@ public abstract class TileMachinePowered extends TileMachineInventory implements
 	@Override
 	public void updateEntity() {
 						
-		if (!worldObj.isRemote)
+		if (!worldObj.isRemote) {
 			runSM();
+		}
 	}
 	
 	/*
@@ -228,6 +229,9 @@ public abstract class TileMachinePowered extends TileMachineInventory implements
 				break;
 			}
 		}
+		
+		if (!isRsDisabled())
+			postSM();
 	}
 	
 	/*
@@ -279,6 +283,10 @@ public abstract class TileMachinePowered extends TileMachineInventory implements
 	public int getRecipeEnergy() {
 		
 		return 1;
+	}
+	
+	public void postSM() {
+		
 	}
 	
 	

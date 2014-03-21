@@ -31,6 +31,10 @@ public class SqueezerManager {
 	
 	public SqueezerRecipe getRecipe(ItemStack source) {
 		
+		if (isDye(source)) {
+			return new SqueezerRecipe(source, source);
+		}
+		
 		int id = ItemHelper.getHashCode(source);
 		return recipes.get(id);
 	}

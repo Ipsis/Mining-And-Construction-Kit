@@ -56,6 +56,26 @@ public class DyeRecipe {
 		return white.amount;
 	}
 	
+	public FluidStack getRedFluid() {
+		
+		return red;
+	}
+	
+	public FluidStack getYellowFluid() {
+		
+		return yellow;
+	}
+	
+	public FluidStack getBlueFluid() {
+		
+		return blue;
+	}
+	
+	public FluidStack getWhiteFluid() {
+		
+		return white;
+	}
+	
 	public int getOutputAmount(FluidStack f) {
 		
 		if (f == null)
@@ -128,7 +148,7 @@ public class DyeRecipe {
 	@Override
 	public String toString() {
 
-		return String.format("DyeRecipe: red=%s yellow=%s blue=%s white=%s", red, yellow, blue, white);
+		return String.format("DyeRecipe: red=%s yellow=%s blue=%s white=%s", red.amount, yellow.amount, blue.amount, white.amount);
 	}
 	
 }
