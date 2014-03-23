@@ -59,6 +59,11 @@ public abstract class TileMachinePowered extends TileMachineInventory implements
 		return facing;
 	}
 	
+	public boolean getIsActive() {
+		
+		return isActive;
+	}
+	
 	/*
 	 * TileEntity
 	 */
@@ -282,11 +287,19 @@ public abstract class TileMachinePowered extends TileMachineInventory implements
 	
 	public int getRecipeEnergy() {
 		
-		return 1;
+		return 0;
 	}
 	
 	public void postSM() {
 		
+	}
+	
+	public int getScaledProgress(int scale) {
+		
+		if (isRsDisabled() || getRecipeEnergy() <= 0)
+			return 0;
+		
+		return (int)(scale * ((float)energyConsumed / getRecipeEnergy()));
 	}
 	
 	

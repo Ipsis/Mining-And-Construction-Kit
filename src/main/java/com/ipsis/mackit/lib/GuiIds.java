@@ -19,6 +19,12 @@ public class GuiIds {
 	public static final int GUI_UPD_TANK_0_FLUID_AMOUNT = 5;
 	public static final int GUI_UPD_TANK_1_FLUID_ID = 6;
 	public static final int GUI_UPD_TANK_1_FLUID_AMOUNT = 7;
+	public static final int GUI_UPD_TANK_2_FLUID_ID = 8;
+	public static final int GUI_UPD_TANK_2_FLUID_AMOUNT = 9;
+	public static final int GUI_UPD_TANK_3_FLUID_ID = 10;
+	public static final int GUI_UPD_TANK_3_FLUID_AMOUNT = 11;
+	public static final int GUI_UPD_TANK_4_FLUID_ID = 12;
+	public static final int GUI_UPD_TANK_4_FLUID_AMOUNT = 13;
 	
 	
 }

@@ -72,6 +72,7 @@ public abstract class ElementBase {
 		draw();
 	}
 	
+	/* Draw at x,y. Texture is at u,v on the file and we want to draw w,h */
 	public void drawTexturedModalRect(int x, int y, int u, int v, int width, int height) {
 		
 		gui.drawSizedTexturedModalRect(x, y, u, v, width, height, texW, texH);

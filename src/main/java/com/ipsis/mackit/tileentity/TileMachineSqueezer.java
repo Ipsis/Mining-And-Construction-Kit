@@ -1,15 +1,16 @@
 package com.ipsis.mackit.tileentity;
 
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTank;
 
 import com.ipsis.mackit.fluid.ModFluids;
 import com.ipsis.mackit.helper.LogHelper;
 import com.ipsis.mackit.lib.GuiIds;
+import com.ipsis.mackit.manager.DyeRecipe;
 import com.ipsis.mackit.manager.MKRegistry;
 import com.ipsis.mackit.manager.SqueezerRecipe;
-import com.ipsis.mackit.manager.DyeRecipe;
 
 /*
  * Inventory of
@@ -46,7 +47,22 @@ public class TileMachineSqueezer extends TileMachinePowered implements IPoweredS
 		redTank = new FluidTank(TANK_CAPACITY);
 		yellowTank = new FluidTank(TANK_CAPACITY);
 		blueTank = new FluidTank(TANK_CAPACITY);
-		whiteTank = new FluidTank(TANK_CAPACITY);		
+		whiteTank = new FluidTank(TANK_CAPACITY);	
+	}
+	
+	private Fluid getTankDefaultFluid(FluidTank t) {
+		
+		if (t == redTank)
+			return ModFluids.redDye;
+		else if (t == yellowTank)
+			return ModFluids.yellowDye;
+		else if (t == blueTank)
+			return ModFluids.blueDye;
+		else if (t == whiteTank)
+			return ModFluids.whiteDye;
+		else
+			return ModFluids.pureDye;
+		
 	}
 	
 	private boolean canFillBufferTank(DyeRecipe r) {
@@ -186,25 +202,47 @@ public class TileMachineSqueezer extends TileMachinePowered implements IPoweredS
 	}
 	
 	/* Gui Update */
-	public void setTankFluidID(int id) {
+	private void setTankFluidAmount(FluidTank t, int amount) {
 		
-		FluidStack f = pureTank.getFluid();
+		
+		if (amount == 0) {
+			t.setFluid(null);
+			return;
+		}
+		
+		FluidStack f = t.getFluid();
 		if (f == null)
-			f = new FluidStack(id, 0);
-		else
-			f.fluidID = id;
-		
-		pureTank.setFluid(f);
-	}
-	
-	public void setTankFluidAmount(int amount) {
-		
-		FluidStack f = pureTank.getFluid();
-		if (f == null)
-			f = new FluidStack(ModFluids.blueDye, amount);
+			f = new FluidStack(getTankDefaultFluid(t), amount);
 		else
 			f.amount = amount;
 		
-		pureTank.setFluid(f);
+		t.setFluid(f);
+	}
+	
+	public void setRedTankAmount(int amount) {
+		
+		setTankFluidAmount(redTank, amount);
+	}
+	
+	
+	public void setYellowTankAmount(int amount) {
+		
+		setTankFluidAmount(yellowTank, amount);
+	}
+	
+	
+	public void setBlueTankAmount(int amount) {
+		
+		setTankFluidAmount(blueTank, amount);
+	}
+	
+	public void setWhiteTankAmount(int amount) {
+		
+		setTankFluidAmount(whiteTank, amount);
+	}
+	
+	public void setPureTankAmount(int amount) {
+		
+		setTankFluidAmount(pureTank, amount);
 	}
 }

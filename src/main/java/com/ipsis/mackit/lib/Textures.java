@@ -13,4 +13,5 @@ public class Textures {
 	
 	public static final ResourceLocation GUI_ENERGY = new ResourceLocation(Reference.MOD_ID.toLowerCase(), GUI_SHEET_LOCATION + "energy.png");
 	public static final ResourceLocation GUI_FLUID_TANK = new ResourceLocation(Reference.MOD_ID.toLowerCase(), GUI_SHEET_LOCATION + "fluidTank.png");
+	public static final ResourceLocation GUI_PROGRESS = new ResourceLocation(Reference.MOD_ID.toLowerCase(), GUI_SHEET_LOCATION + "progress.png");
 }

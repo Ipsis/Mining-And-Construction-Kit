@@ -147,15 +147,15 @@ public class BlockMachine extends BlockContainer {
 			
 			TileEntity te = iblockaccess.getBlockTileEntity(x, y, z);
 			if (te != null && te instanceof TileMachinePowered) {
-				
+				TileMachinePowered tep = (TileMachinePowered)te;
 				if (side == 0) {
 					return bottomIcon;
 				} else if (side == 1) {
 					return topIcon;
 				} else  {
 					ForgeDirection curr = ForgeDirection.getOrientation(side);
-					if (curr == ((TileMachinePowered)te).getFacing())
-						return frontIconsInactive[metadata];
+					if (curr == tep.getFacing())
+						return tep.getIsActive() ? frontIconsActive[metadata] : frontIconsInactive[metadata];
 					else
 						return sideIcon;
 				}
