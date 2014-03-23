@@ -1,9 +1,12 @@
 package com.ipsis.mackit.tileentity;
 
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraftforge.common.ForgeDirection;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTank;
+import net.minecraftforge.fluids.FluidTankInfo;
+import net.minecraftforge.fluids.IFluidHandler;
 
 import com.ipsis.mackit.fluid.ModFluids;
 import com.ipsis.mackit.helper.LogHelper;
@@ -18,10 +21,11 @@ import com.ipsis.mackit.manager.SqueezerRecipe;
  * 1 output tank
  */
 
-public class TileMachineSqueezer extends TileMachinePowered implements IPoweredSM {
+public class TileMachineSqueezer extends TileMachinePowered implements IPoweredSM, IFluidHandler {
 
 	private static final int RF_CAPACITY = 32000;
-	private static final int TANK_CAPACITY = 10000;
+	private static final int TANK_CAPACITY = 2500;
+	private static final int PURE_TANK_CAPACITY = 10000;
 		
 	public FluidTank pureTank;
 	public FluidTank redTank;
@@ -43,7 +47,7 @@ public class TileMachineSqueezer extends TileMachinePowered implements IPoweredS
 	public TileMachineSqueezer() {
 		
 		super(RF_CAPACITY);
-		pureTank = new FluidTank(TANK_CAPACITY);
+		pureTank = new FluidTank(PURE_TANK_CAPACITY);
 		redTank = new FluidTank(TANK_CAPACITY);
 		yellowTank = new FluidTank(TANK_CAPACITY);
 		blueTank = new FluidTank(TANK_CAPACITY);
@@ -244,5 +248,43 @@ public class TileMachineSqueezer extends TileMachinePowered implements IPoweredS
 	public void setPureTankAmount(int amount) {
 		
 		setTankFluidAmount(pureTank, amount);
+	}
+
+	/* IFluidHandler */
+	
+	@Override
+	public int fill(ForgeDirection from, FluidStack resource, boolean doFill) {
+
+		return 0;
+	}
+
+	@Override
+	public FluidStack drain(ForgeDirection from, FluidStack resource, boolean doDrain) {
+
+		return pureTank.drain(resource.amount, doDrain);
+	}
+
+	@Override
+	public FluidStack drain(ForgeDirection from, int maxDrain, boolean doDrain) {
+		
+		return pureTank.drain(maxDrain, doDrain);
+	}
+
+	@Override
+	public boolean canFill(ForgeDirection from, Fluid fluid) {
+		
+		return false;
+	}
+
+	@Override
+	public boolean canDrain(ForgeDirection from, Fluid fluid) {
+
+		return true;
+	}
+
+	@Override
+	public FluidTankInfo[] getTankInfo(ForgeDirection from) {
+
+		return new FluidTankInfo[] {pureTank.getInfo()};
 	}
 }

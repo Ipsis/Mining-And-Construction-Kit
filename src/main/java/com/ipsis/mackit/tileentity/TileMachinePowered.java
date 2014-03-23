@@ -36,9 +36,6 @@ public abstract class TileMachinePowered extends TileMachineInventory implements
 		currState = State.INIT;
 		inventoryChanged = true;
 		facing = ForgeDirection.SOUTH;
-		
-		/* TODO fake fill for now */
-		storage.setEnergyStored(capacity);
 	}
 	
 	public int getEnergyConsumed() {

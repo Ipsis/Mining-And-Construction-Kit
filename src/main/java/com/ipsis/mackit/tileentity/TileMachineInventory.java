@@ -163,21 +163,18 @@ public abstract class TileMachineInventory extends TileEntity implements ISidedI
 	@Override
 	public int[] getAccessibleSlotsFromSide(int side) {
 		
-		// TODO Auto-generated method stub
-		return null;
+		return new int[] { 0 };
 	}
 
 	@Override
 	public boolean canInsertItem(int slot, ItemStack itemstack, int side) {
 		
-		// TODO Auto-generated method stub
-		return false;
+		return slot == 0 ? true : false;
 	}
 
 	@Override
 	public boolean canExtractItem(int slot, ItemStack itemstack, int side) {
 		
-		// TODO Auto-generated method stub
 		return false;
 	}
 }
