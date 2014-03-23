@@ -2,12 +2,12 @@ package com.ipsis.mackit.gui;
 
 import java.util.List;
 
-import com.ipsis.mackit.lib.Textures;
-
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fluids.IFluidTank;
+
+import com.ipsis.mackit.lib.Textures;
+import com.ipsis.mackit.util.StringHelper;
 
 public class ElementFluidTank extends ElementBase {
 
@@ -62,8 +62,7 @@ public class ElementFluidTank extends ElementBase {
 	public void addTooltip(List<String> list) {
 
 		if (tank.getFluid() != null && tank.getFluidAmount() > 0) {
-			list.add("New fluid");
-			//list.add(StringHelper.getFluidName(tank.getFluid()));
+			list.add(StringHelper.getFluidName(tank.getFluid()));
 		}
 		list.add("" + tank.getFluidAmount() + " / " + tank.getCapacity() + " mB");
 	}
