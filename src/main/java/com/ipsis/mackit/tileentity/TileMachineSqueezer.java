@@ -54,6 +54,12 @@ public class TileMachineSqueezer extends TileMachinePowered implements IPoweredS
 		whiteTank = new FluidTank(TANK_CAPACITY);	
 	}
 	
+	@Override
+	public int getSizeInventory() {
+		
+		return 1;
+	}
+	
 	private Fluid getTankDefaultFluid(FluidTank t) {
 		
 		if (t == redTank)
@@ -151,7 +157,6 @@ public class TileMachineSqueezer extends TileMachinePowered implements IPoweredS
 	@Override
 	public void setRecipe() {
 		
-		LogHelper.severe("setRecipe");
 		recipe = MKRegistry.getSqueezerManager().getRecipe(getStackInSlot(SLOT_INPUT));
 	}
 	
@@ -197,17 +202,28 @@ public class TileMachineSqueezer extends TileMachinePowered implements IPoweredS
 	public void readFromNBT(NBTTagCompound compound) {
 
 		super.readFromNBT(compound);
+		
+		redTank.readFromNBT(compound);
+		yellowTank.readFromNBT(compound);
+		blueTank.readFromNBT(compound);
+		whiteTank.readFromNBT(compound);
+		pureTank.readFromNBT(compound);
 	}
 	
 	@Override
 	public void writeToNBT(NBTTagCompound compound) {
 
 		super.writeToNBT(compound);
+		
+		redTank.writeToNBT(compound);
+		yellowTank.writeToNBT(compound);
+		blueTank.writeToNBT(compound);
+		whiteTank.writeToNBT(compound);
+		pureTank.writeToNBT(compound);
 	}
 	
 	/* Gui Update */
 	private void setTankFluidAmount(FluidTank t, int amount) {
-		
 		
 		if (amount == 0) {
 			t.setFluid(null);

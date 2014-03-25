@@ -21,6 +21,6 @@ public class SqueezerRecipe {
 	@Override
 	public String toString() {
 
-		return String.format("SqueezerRecipe: source=%s dye=%s", source, dye);
+		return String.format("SqueezerRecipe: source=%s %d dye=%s", source, dye.stackSize, dye);
 	}
 }

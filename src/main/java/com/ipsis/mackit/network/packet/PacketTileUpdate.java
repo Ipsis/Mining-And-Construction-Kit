@@ -8,6 +8,7 @@ import net.minecraft.network.INetworkManager;
 import net.minecraftforge.common.ForgeDirection;
 
 import com.ipsis.mackit.MacKit;
+import com.ipsis.mackit.helper.LogHelper;
 import com.ipsis.mackit.network.PacketTypeHandler;
 
 import cpw.mods.fml.common.network.Player;
@@ -43,7 +44,7 @@ public class PacketTileUpdate extends PacketMK {
 		this.z = z;
 		this.orientation = (byte)orientation.ordinal();
 		this.active = (byte)(active ? 1 : 0);
-		this.customName = customName;		
+		this.customName = customName;	
 	}
 	
 	@Override

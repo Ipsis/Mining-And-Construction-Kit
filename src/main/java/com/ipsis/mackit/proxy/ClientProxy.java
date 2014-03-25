@@ -20,6 +20,7 @@ public class ClientProxy extends CommonProxy {
 		
 		if (te != null && te instanceof TileMachinePowered) {
 			((TileMachinePowered)te).setFacing(orientation);
+			((TileMachinePowered)te).setIsActive(active);
 		}
 	}
 

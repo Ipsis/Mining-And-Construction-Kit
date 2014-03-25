@@ -1,10 +1,14 @@
 package com.ipsis.mackit.manager;
 
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.CraftingManager;
+import net.minecraft.item.crafting.FurnaceRecipes;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.item.crafting.ShapelessRecipes;
 import net.minecraftforge.oredict.OreDictionary;
@@ -21,7 +25,7 @@ public class SqueezerManager {
 		recipes = new HashMap<Integer, SqueezerRecipe>();
 		
 		addDyeOreIds();
-		addVanilla();
+		addRecipes();
 	}
 	
 	private void addRecipe(ItemStack source, ItemStack dye) {
@@ -41,9 +45,9 @@ public class SqueezerManager {
 	
 	
 	/*
-	 * Add the vanilla item->dye recipes
+	 * Add the item->dye recipes
 	 */
-	private void addVanilla() {
+	private void addRecipes() {
 		
 		/* Shapeless recipes */
 		List<IRecipe> allrecipes = CraftingManager.getInstance().getRecipeList();
@@ -68,13 +72,26 @@ public class SqueezerManager {
 			}
 		}
 		
-		/* Manually add cactus as it is smelted! */
-		
+		/* dont like this but dont know of a better way! */
+		Map allsmelting = FurnaceRecipes.smelting().getSmeltingList();
+		Iterator i = allsmelting.entrySet().iterator();
+		while (i.hasNext()) {
+			Map.Entry pairs = (Map.Entry)i.next();
+			
+			Integer itemId = (Integer)pairs.getKey();
+			if (itemId < Item.itemsList.length) {
+			
+				ItemStack in = new ItemStack(Item.itemsList[itemId]);
+				ItemStack out = (ItemStack)pairs.getValue();
+				if (isDye(out)) {
+					
+					LogHelper.severe("Add smelting In: " + in + " Out: " + out);
+					addRecipe(in, out);
+				}		
+			}
+		}		
 	}
 	
-	private void addMod() {
-		
-	}
 	
 	/* Is the itemstack a dye */
 	private boolean isDye(ItemStack input) {
@@ -91,7 +108,7 @@ public class SqueezerManager {
 	}
 	
 	/*
-	 * Does this item produce a dye from a shapeless recipe
+	 * Does this item produce a dye
 	 * OR
 	 * is it a dye item
 	 */

@@ -36,6 +36,8 @@ public abstract class TileMachinePowered extends TileMachineInventory implements
 		currState = State.INIT;
 		inventoryChanged = true;
 		facing = ForgeDirection.SOUTH;
+		
+		storage.setEnergyStored(capacity);
 	}
 	
 	public int getEnergyConsumed() {
@@ -152,7 +154,7 @@ public abstract class TileMachinePowered extends TileMachineInventory implements
 	/*
 	 * Returns true if the value changed
 	 */
-	private boolean setIsActive(boolean isActive) {
+	public boolean setIsActive(boolean isActive) {
 		
 		boolean changed = false;
 		if (this.isActive != isActive) {
@@ -234,6 +236,10 @@ public abstract class TileMachinePowered extends TileMachineInventory implements
 		
 		if (!isRsDisabled())
 			postSM();
+		
+		if (changedIsActive && worldObj != null) {
+			worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
+		}
 	}
 	
 	/*

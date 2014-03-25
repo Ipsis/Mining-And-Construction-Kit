@@ -22,6 +22,7 @@ import com.ipsis.mackit.lib.Strings;
 import com.ipsis.mackit.tileentity.TileMachineBBBuilder;
 import com.ipsis.mackit.tileentity.TileMachinePowered;
 import com.ipsis.mackit.tileentity.TileMachineSqueezer;
+import com.ipsis.mackit.tileentity.TileMachineStamper;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -192,10 +193,9 @@ public class BlockMachine extends BlockContainer {
 			break;
 		case 3:
 			return new TileMachinePainter();
-			break;
+			break; */
 		case 4:
 			return new TileMachineStamper();
-			break; */
 		default:
 			return null;
 		}
