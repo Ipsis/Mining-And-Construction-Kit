@@ -23,6 +23,7 @@ public class Strings {
 	/* Item name constants */
 	public static final String FIXER_FOAM_GUN_NAME = "fixerFoamGun";
 	public static final String FIXER_FOAM_PELLET_NAME = "fixerFoamPellet";
+	public static final String DYE_BLANK_NAME = "dyeBlank";
 	
 	/* TileEntity name constants */
 	public static final String TE_ENCHANTER_NAME = "tileEnchanter";

@@ -8,12 +8,12 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.Container;
 import net.minecraft.network.INetworkManager;
 
-import com.ipsis.mackit.MacKit;
-import com.ipsis.mackit.helper.LogHelper;
 import com.ipsis.mackit.inventory.ContainerEnchanter;
+import com.ipsis.mackit.inventory.ContainerMachineStamper;
 import com.ipsis.mackit.lib.GuiIds;
 import com.ipsis.mackit.network.PacketTypeHandler;
 import com.ipsis.mackit.tileentity.TileEnchanter;
+import com.ipsis.mackit.tileentity.TileMachineStamper;
 
 import cpw.mods.fml.common.network.Player;
 
@@ -70,6 +70,11 @@ public class PacketGui extends PacketMK {
 				TileEnchanter te = ((ContainerEnchanter)container).getTileEntity();
 				if (te != null)
 					te.handleInterfacePacket(ctrlType, ctrlId, ctrlData, player);
+			} else if (guiId == GuiIds.STAMPER && container instanceof ContainerMachineStamper) {
+				TileMachineStamper te = ((ContainerMachineStamper)container).getTileEntity();
+				if (te != null)
+					te.handleInterfacePacket(ctrlType, ctrlId, ctrlData, player);
+				
 			}
 		}	
 	}

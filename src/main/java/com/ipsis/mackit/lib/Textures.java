@@ -8,8 +8,7 @@ public class Textures {
 	
 	public static final ResourceLocation GUI_ENCHANTER = new ResourceLocation(Reference.MOD_ID.toLowerCase(), GUI_SHEET_LOCATION + "enchanter.png");
 	public static final ResourceLocation GUI_MACHINE_BBBUILDER = new ResourceLocation(Reference.MOD_ID.toLowerCase(), GUI_SHEET_LOCATION + "machineBBBuilder.png");
-	public static final ResourceLocation GUI_MACHINE_SQUEEZER = new ResourceLocation(Reference.MOD_ID.toLowerCase(), GUI_SHEET_LOCATION + "machineSqueezer.png");
-			
+	public static final ResourceLocation GUI_MACHINE_SQUEEZER = new ResourceLocation(Reference.MOD_ID.toLowerCase(), GUI_SHEET_LOCATION + "machineSqueezer.png");public static final ResourceLocation GUI_MACHINE_STAMPER = new ResourceLocation(Reference.MOD_ID.toLowerCase(), GUI_SHEET_LOCATION + "machineStamper.png");			
 	
 	public static final ResourceLocation GUI_ENERGY = new ResourceLocation(Reference.MOD_ID.toLowerCase(), GUI_SHEET_LOCATION + "energy.png");
 	public static final ResourceLocation GUI_FLUID_TANK = new ResourceLocation(Reference.MOD_ID.toLowerCase(), GUI_SHEET_LOCATION + "fluidTank.png");

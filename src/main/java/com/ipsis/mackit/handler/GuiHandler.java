@@ -6,13 +6,16 @@ import net.minecraft.world.World;
 import com.ipsis.mackit.client.gui.inventory.GuiEnchanter;
 import com.ipsis.mackit.client.gui.inventory.GuiMachineBBBuilder;
 import com.ipsis.mackit.client.gui.inventory.GuiMachineSqueezer;
+import com.ipsis.mackit.client.gui.inventory.GuiMachineStamper;
 import com.ipsis.mackit.inventory.ContainerEnchanter;
 import com.ipsis.mackit.inventory.ContainerMachineBBBuilder;
 import com.ipsis.mackit.inventory.ContainerMachineSqueezer;
+import com.ipsis.mackit.inventory.ContainerMachineStamper;
 import com.ipsis.mackit.lib.GuiIds;
 import com.ipsis.mackit.tileentity.TileEnchanter;
 import com.ipsis.mackit.tileentity.TileMachineBBBuilder;
 import com.ipsis.mackit.tileentity.TileMachineSqueezer;
+import com.ipsis.mackit.tileentity.TileMachineStamper;
 
 import cpw.mods.fml.common.network.IGuiHandler;
 
@@ -30,6 +33,9 @@ public class GuiHandler implements IGuiHandler {
 		} else if (ID == GuiIds.SQUEEZER) {
 			TileMachineSqueezer te = (TileMachineSqueezer)world.getBlockTileEntity(x, y, z);
 			return new ContainerMachineSqueezer(player.inventory, te);
+		} else if (ID == GuiIds.STAMPER) {
+			TileMachineStamper te = (TileMachineStamper)world.getBlockTileEntity(x, y, z);
+			return new ContainerMachineStamper(player.inventory, te);
 		}
 		
 		return null;
@@ -47,6 +53,9 @@ public class GuiHandler implements IGuiHandler {
 		} else if (ID == GuiIds.SQUEEZER) {
 			TileMachineSqueezer te = (TileMachineSqueezer)world.getBlockTileEntity(x, y,  z);
 			return new GuiMachineSqueezer(player.inventory, te);						
+		} else if (ID == GuiIds.STAMPER) {
+			TileMachineStamper te = (TileMachineStamper)world.getBlockTileEntity(x, y, z);
+			return new GuiMachineStamper(player.inventory, te);
 		}
 		
 		return null;

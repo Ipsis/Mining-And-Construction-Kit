@@ -18,6 +18,8 @@ public abstract class ElementBase {
 	public int texW = 256;
 	public int texH = 256;
 	
+	protected String name;
+	
 	public ElementBase(GuiBase gui, int posX, int posY) {
 		
 		this.gui = gui;
@@ -44,6 +46,12 @@ public abstract class ElementBase {
 
 		this.sizeX = sizeX;
 		this.sizeY = sizeY;
+		return this;
+	}
+	
+	public ElementBase setName(String name) {
+
+		this.name = name;
 		return this;
 	}
 	
@@ -76,5 +84,15 @@ public abstract class ElementBase {
 	public void drawTexturedModalRect(int x, int y, int u, int v, int width, int height) {
 		
 		gui.drawSizedTexturedModalRect(x, y, u, v, width, height, texW, texH);
+	}
+	
+	public String getName() {
+
+		return name;
+	}
+	
+	public boolean handleMouseClicked(int x, int y, int mouseButton) {
+
+		return false;
 	}
 }

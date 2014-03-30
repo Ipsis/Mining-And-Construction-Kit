@@ -1,13 +1,19 @@
 package com.ipsis.mackit.tileentity;
 
-import com.ipsis.mackit.lib.GuiIds;
-
+import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.ForgeDirection;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTank;
 import net.minecraftforge.fluids.FluidTankInfo;
 import net.minecraftforge.fluids.IFluidHandler;
+
+import com.ipsis.mackit.client.gui.inventory.GuiMachineStamper;
+import com.ipsis.mackit.lib.GuiIds;
+import com.ipsis.mackit.manager.MKRegistry;
+import com.ipsis.mackit.network.packet.PacketGui;
+
+import cpw.mods.fml.common.network.Player;
 
 /*
  * Inventory of
@@ -21,6 +27,7 @@ public class TileMachineStamper extends TileMachinePowered implements IPoweredSM
 	private static final int TANK_CAPACITY = 10000;
 	
 	public FluidTank pureTank;
+	private int selected;
 	
 	/* Recipe */
 	private static final int RECIPE_RF_ENERGY = 1000;
@@ -34,6 +41,7 @@ public class TileMachineStamper extends TileMachinePowered implements IPoweredSM
 		
 		super(RF_CAPACITY);
 		pureTank = new FluidTank(TANK_CAPACITY);
+		selected = 0;
 	}
 	
 	@Override
@@ -94,8 +102,24 @@ public class TileMachineStamper extends TileMachinePowered implements IPoweredSM
 	
 	@Override
 	public boolean isMachineReady() {
-
-		return false;
+		
+		ItemStack output = MKRegistry.getStamperManager().getOutput(selected);
+				
+		if (output == null)
+			return false;
+		
+		if (getStackInSlot(SLOT_INPUT) == null)
+			return false;
+		
+		/* check pure dye */
+		
+		if (getStackInSlot(SLOT_OUTPUT) == null)
+			return true;
+		
+		if (!output.isItemEqual(getStackInSlot(SLOT_OUTPUT)))
+			return false;
+		
+		return true;
 	}
 	
 	@Override
@@ -110,6 +134,22 @@ public class TileMachineStamper extends TileMachinePowered implements IPoweredSM
 	@Override
 	public void produceOutput() {
 		
+		/* consume the inputs */
+		pureTank.drain(DYE_MB, true);
+		decrStackSize(SLOT_INPUT, 1);
+		
+		ItemStack output = MKRegistry.getStamperManager().getOutput(selected);
+		
+		if (output == null)
+			return;
+		
+		
+		if (getStackInSlot(SLOT_OUTPUT) == null)
+			setInventorySlotContents(SLOT_OUTPUT, output);
+		else
+			getStackInSlot(SLOT_OUTPUT).stackSize++;
+		
+		
 	}
 	
 	@Override
@@ -118,6 +158,33 @@ public class TileMachineStamper extends TileMachinePowered implements IPoweredSM
 		return RECIPE_RF_ENERGY;
 	}
 	
+	public void handleInterfacePacket(int ctrlType, int ctrlId, int ctrlDat, Player player) {
+		
+		if (ctrlType == PacketGui.CTRL_BUTTON) {
+			if (ctrlId == GuiMachineStamper.GUI_BUTTON_INCR)
+				nextOutput();
+			else if (ctrlId == GuiMachineStamper.GUI_BUTTON_DECR)
+				prevOutput();
+		}
+	}
 	
+	public void nextOutput() {
+		selected = MKRegistry.getStamperManager().getNext(selected);
+	}
 	
+	public void prevOutput() {
+		selected = MKRegistry.getStamperManager().getPrev(selected);
+	}
+	
+	/* 0 - 15 representing the colours */
+	public int getSelectedIndex() {
+		
+		return selected;
+	}
+	
+	public void setSelectedIndex(int idx) {
+	
+		selected = idx;
+	}
+
 }

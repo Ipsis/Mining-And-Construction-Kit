@@ -5,10 +5,12 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
+import net.minecraft.block.Block;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.inventory.Container;
+import net.minecraft.item.Item;
 import net.minecraft.util.Icon;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fluids.FluidStack;
@@ -16,6 +18,8 @@ import net.minecraftforge.fluids.FluidStack;
 import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
+
+import com.ipsis.mackit.util.RenderHelper;
 
 /**
  * 
@@ -87,6 +91,18 @@ public abstract class GuiBase extends GuiContainer {
 		super.handleMouseInput();
 	}
 	
+	public void drawIcon(Icon icon, int x, int y, int spriteSheet) {
+
+		if (spriteSheet == 0) {
+			RenderHelper.setBlockTextureSheet();
+		} else {
+			RenderHelper.setItemTextureSheet();
+		}
+		
+		GL11.glColor4f(1.0f, 1.0f, 1.0f, 1.0F);
+		drawTexturedModelRectFromIcon(x, y, icon, 16, 16);
+	}
+	
 	public void drawFluid(int x, int y, FluidStack fluid, int width, int height) {
 
 		if (fluid == null || fluid.getFluid() == null) {
@@ -117,7 +133,7 @@ public abstract class GuiBase extends GuiContainer {
 		}
 		GL11.glColor4f(1.0f, 1.0f, 1.0f, 1.0F);
 	}
-	
+		
 	public void drawScaledTexturedModelRectFromIcon(int x, int y, Icon icon, int width, int height) {
 
 		if (icon == null) {
@@ -249,9 +265,23 @@ public abstract class GuiBase extends GuiContainer {
 		
 		return guiTop;
 	}
+	
+	public int getMouseX() {
+
+		return mouseX;
+	}
+
+	public int getMouseY() {
+
+		return mouseY;
+	}
 
 	protected void updateElements() {
 		
+	}
+	
+	public void handleElementButtonClick(String buttonName, int mouseButton) {
+
 	}
 	
 }

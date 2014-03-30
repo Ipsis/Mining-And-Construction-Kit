@@ -20,7 +20,9 @@ public class ItemConfiguration {
 		try {
 			itemConfig.load();
 			
-			ItemIds.FIXER_FOAM_GUN = itemConfig.getItem(Strings.FIXER_FOAM_GUN_NAME, ItemIds.FIXER_FOAM_GUN_DEFAULT).getInt(ItemIds.FIXER_FOAM_GUN_DEFAULT);		
+			ItemIds.FIXER_FOAM_GUN = itemConfig.getItem(Strings.FIXER_FOAM_GUN_NAME, ItemIds.FIXER_FOAM_GUN_DEFAULT).getInt(ItemIds.FIXER_FOAM_GUN_DEFAULT);
+			ItemIds.FIXER_FOAM_PELLET = itemConfig.getItem(Strings.FIXER_FOAM_PELLET_NAME, ItemIds.FIXER_FOAM_PELLET_DEFAULT).getInt(ItemIds.FIXER_FOAM_PELLET_DEFAULT);
+			ItemIds.DYE_BLANK = itemConfig.getItem(Strings.DYE_BLANK_NAME, ItemIds.DYE_BLANK_DEFAULT).getInt(ItemIds.DYE_BLANK_DEFAULT);
 		}
 		catch (Exception e) {
 			FMLLog.log(Level.SEVERE, e, Reference.MOD_NAME + " had a problem loading its item configuration");
