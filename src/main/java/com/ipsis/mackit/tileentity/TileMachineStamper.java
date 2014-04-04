@@ -111,7 +111,10 @@ public class TileMachineStamper extends TileMachinePowered implements IPoweredSM
 		if (getStackInSlot(SLOT_INPUT) == null)
 			return false;
 		
-		/* check pure dye */
+		/*
+		FluidStack f = pureTank.drain(DYE_MB, false);
+		if (f == null || f.amount < DYE_MB)
+			return false; */
 		
 		if (getStackInSlot(SLOT_OUTPUT) == null)
 			return true;
@@ -142,13 +145,11 @@ public class TileMachineStamper extends TileMachinePowered implements IPoweredSM
 		
 		if (output == null)
 			return;
-		
-		
+				
 		if (getStackInSlot(SLOT_OUTPUT) == null)
 			setInventorySlotContents(SLOT_OUTPUT, output);
 		else
 			getStackInSlot(SLOT_OUTPUT).stackSize++;
-		
 		
 	}
 	

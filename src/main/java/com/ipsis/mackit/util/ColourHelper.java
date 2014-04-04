@@ -26,6 +26,7 @@ public class ColourHelper {
 	public static final int DYE_MAGENTA = 0xE57FD8;
 	public static final int DYE_ORANGE = 0xF2B233;
 	public static final int DYE_WHITE = 0xFFFFFF;
+
 	
 	public static final int[] DYE_COLOURS = { DYE_BLACK, DYE_RED, DYE_GREEN, DYE_BROWN, DYE_BLUE, DYE_PURPLE, DYE_CYAN, DYE_LIGHT_GRAY, DYE_GRAY, DYE_PINK,
 	DYE_LIME, DYE_YELLOW, DYE_LIGHT_BLUE, DYE_MAGENTA, DYE_ORANGE, DYE_WHITE };
@@ -33,5 +34,15 @@ public class ColourHelper {
 	public static int getDyeColour(int colour) {
 	
 		return colour < 0 || colour > 15 ? 0xFFFFFF : DYE_COLOURS[colour];
+	}
+	
+	public static int getDyeDamage(int dye) {
+		
+		for (int i = 0; i < DYE_COLOURS.length; i++) {
+			if (dye == DYE_COLOURS[i])
+				return i;
+		}
+		
+		return 0;
 	}
 }

@@ -77,27 +77,31 @@ public class ItemFixerFoamGun extends ItemMK {
     	
     	ForgeDirection facing = getFacing(player);
     	
-    	int xPos, zPos;
+    	int xPos, zPos, yPos;
+    	
     	if (facing == ForgeDirection.NORTH) {
-    		for (zPos = z; zPos >= z - 2; zPos--) {
+    		for (zPos = z; zPos >= z - 2; zPos--)
     			for (xPos = x - 1; xPos <= x + 1; xPos++)
-    				changeBlock(world, xPos, y, zPos);
-    		}
+    				for (yPos = y - 1; yPos <= y + 1; yPos++)
+    					changeBlock(world, xPos, yPos, zPos);
+    		
     	} else if (facing == ForgeDirection.SOUTH) {
-    		for (zPos = z; zPos <= z + 2; zPos++) {
+    		for (zPos = z; zPos <= z + 2; zPos++)
     			for (xPos = x - 1; xPos <= x + 1; xPos++)
-    				changeBlock(world, xPos, y, zPos);
-    		}
-    	} else if (facing == ForgeDirection.WEST) {
-    		for (xPos = x; xPos >= x - 2; xPos--) {
-    			for (zPos = z - 1; zPos <= z + 1; zPos++)
-    				changeBlock(world, xPos, y, zPos);
-    		}
+    				for (yPos = y - 1; yPos <= y + 1; yPos++)
+    					changeBlock(world, xPos, yPos, zPos);
+    		
     	} else if (facing == ForgeDirection.EAST) {
-    		for (xPos = x; xPos <= x + 2; xPos++) {
+    		for (xPos = x; xPos <= x + 2; xPos++)
     			for (zPos = z - 1; zPos <= z + 1; zPos++)
-    				changeBlock(world, xPos, y, zPos);
-    		}
+    				for (yPos = y - 1; yPos <= y + 1; yPos++)
+    					changeBlock(world, xPos, yPos, zPos);
+    		
+    	} else if (facing == ForgeDirection.WEST) {
+    		for (xPos = x; xPos >= x - 2; xPos--)
+    			for (zPos = z - 1; zPos <= z + 1; zPos++)
+    				for (yPos = y - 1; yPos <= y + 1; yPos++)
+    					changeBlock(world, xPos, yPos, zPos);
     	}
     }
 	
@@ -112,10 +116,8 @@ public class ItemFixerFoamGun extends ItemMK {
 				if (player.inventory.hasItem(ItemIds.FIXER_FOAM_PELLET_DEFAULT) || player.capabilities.isCreativeMode) {
 					player.inventory.consumeInventoryItem(ItemIds.FIXER_FOAM_PELLET_DEFAULT);
 					
-					if (isHorizontalMode(itemStack))
-						applyFoamHorizontal(player, world, x, y, z);
-					else
-						applyFoamVertical(player, world, x, y, z);
+					/* horizontal only */
+					applyFoamHorizontal(player, world, x, y, z);
 				}
 			}
 			

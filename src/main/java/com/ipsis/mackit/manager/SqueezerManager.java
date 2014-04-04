@@ -10,6 +10,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.CraftingManager;
 import net.minecraft.item.crafting.FurnaceRecipes;
 import net.minecraft.item.crafting.IRecipe;
+import net.minecraft.item.crafting.ShapedRecipes;
 import net.minecraft.item.crafting.ShapelessRecipes;
 import net.minecraftforge.oredict.OreDictionary;
 
@@ -89,7 +90,31 @@ public class SqueezerManager {
 					addRecipe(in, out);
 				}		
 			}
-		}		
+		}	
+		
+		/* test painter recipe */
+		allrecipes = CraftingManager.getInstance().getRecipeList();
+		for (IRecipe irecipe : allrecipes) {
+				
+			if (irecipe instanceof ShapelessRecipes) {
+				
+				ShapelessRecipes r = (ShapelessRecipes)irecipe;
+				
+				
+			} else if (irecipe instanceof ShapedRecipes) {
+				
+				ShapedRecipes r = (ShapedRecipes)irecipe;
+				
+				ItemStack out = irecipe.getRecipeOutput();
+				for (ItemStack in : r.recipeItems) {
+					if (isDye(in)) {
+						
+						LogHelper.severe("Recipe uses dye input " + in + " = " + out);
+					}
+				}
+			}
+		}
+		
 	}
 	
 	

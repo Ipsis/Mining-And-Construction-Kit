@@ -12,5 +12,6 @@ public class ConfigurationHandler {
 
 		BlockConfiguration.init(new File(configPath + "block.properties"));
 		ItemConfiguration.init(new File(configPath + "item.properties"));
+		ModConfiguration.init(new File(configPath + "mod.properties"));
 	}
 }
