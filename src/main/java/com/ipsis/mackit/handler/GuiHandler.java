@@ -14,6 +14,7 @@ import com.ipsis.mackit.inventory.ContainerMachineStamper;
 import com.ipsis.mackit.lib.GuiIds;
 import com.ipsis.mackit.tileentity.TileEnchanter;
 import com.ipsis.mackit.tileentity.TileMachineBBBuilder;
+import com.ipsis.mackit.tileentity.TileMachinePainter;
 import com.ipsis.mackit.tileentity.TileMachineSqueezer;
 import com.ipsis.mackit.tileentity.TileMachineStamper;
 
@@ -36,6 +37,9 @@ public class GuiHandler implements IGuiHandler {
 		} else if (ID == GuiIds.STAMPER) {
 			TileMachineStamper te = (TileMachineStamper)world.getBlockTileEntity(x, y, z);
 			return new ContainerMachineStamper(player.inventory, te);
+		} else if (ID == GuiIds.PAINTER) {
+			TileMachinePainter te = (TileMachinePainter)world.getBlockTileEntity(x, y, z);
+			return new ContainerMachinePainter(player.inventory, te);
 		}
 		
 		return null;
@@ -56,6 +60,9 @@ public class GuiHandler implements IGuiHandler {
 		} else if (ID == GuiIds.STAMPER) {
 			TileMachineStamper te = (TileMachineStamper)world.getBlockTileEntity(x, y, z);
 			return new GuiMachineStamper(player.inventory, te);
+		} else if (ID == GuiIds.PAINTER) {
+			TileMachinePainter te = (TileMachinePainter)world.getBlockTileEneity(x, t, z);
+			return new GuiMachinePainter(player.inventory, te);
 		}
 		
 		return null;

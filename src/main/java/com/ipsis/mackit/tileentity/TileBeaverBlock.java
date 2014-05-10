@@ -48,6 +48,8 @@ public class TileBeaverBlock extends TileEntity {
 		}
 		
 		worldObj.setBlock(x, y, z, Block.dirt.blockID);
+		
+		/* Probably a better way of doing this */
 		worldObj.playSoundEffect((double)((float)x + 0.5F), (double)((float)y + 0.5F), (double)((float)z + 0.5F), Block.dirt.stepSound.getPlaceSound(), (Block.dirt.stepSound.getVolume() + 1.0F) / 2.0F, Block.dirt.stepSound.getPitch() * 0.8F);
 	}
 	
