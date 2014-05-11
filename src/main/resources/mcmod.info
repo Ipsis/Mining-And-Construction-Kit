@@ -1,0 +1,16 @@
+[
+{
+  "modid": "mackit",
+  "name": "Mining And Construction Kit",
+  "description": "A helping hand for some of those tedious tasks",
+  "version": "${version}",
+  "mcversion": "${mcversion}",
+  "url": "http://www.github.com/ipsis/Mining-And-Construction-Kit/",
+  "updateUrl": "",
+  "authors": ["Ipsis"],
+  "credits": "",
+  "logoFile": "",
+  "screenshots": [],
+  "dependencies": []
+}
+]
