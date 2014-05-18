@@ -14,7 +14,7 @@ import com.ipsis.mackit.reference.Reference;
  */
 public class BlockMK extends Block {
 	
-	private String iconName;
+	protected String iconName;
 	
 	public BlockMK(Material material) {
 			

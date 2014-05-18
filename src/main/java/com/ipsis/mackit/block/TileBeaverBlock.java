@@ -15,6 +15,7 @@ import net.minecraft.tileentity.TileEntity;
 
 import com.ipsis.mackit.helper.LogHelper;
 import com.ipsis.mackit.helper.Point;
+import com.ipsis.mackit.manager.MKManagers;
 
 public class TileBeaverBlock extends TileEntity {
 
@@ -66,35 +67,11 @@ public class TileBeaverBlock extends TileEntity {
 		if (!running)
 			setMode((mode + 1) % 3);	
 	}
-	
-	private void changeBlockAtPoint(Point p) {
-		
-		worldObj.setBlock(p.x, p.y, p.z, Blocks.dirt);
-	}
-	
-	private void changeLiquidBlockAtPoint(Point p) {
-		
-		Block b = worldObj.getBlock(p.x, p.y, p.z);
-		if (!isValidLiquidBlock(b))
-			return;
-		
-		changeBlockAtPoint(p);
-	}
-			
-	private boolean isValidLiquidBlock(Block b) {
-		
-		if (true) return true;
-		
-		if (b == Blocks.flowing_water || b == Blocks.water)
-			return true;
-		
-		return false;
-	}
-	
+					
 	private void tryAddPoint(Point p) {
 		
 		Block b = worldObj.getBlock(p.x, p.y, p.z);
-		if (isValidLiquidBlock(b))
+		if (MKManagers.bbMgr.isValid(b))
 			surfaceBlocks.add(p);
 	}
 	
@@ -130,25 +107,6 @@ public class TileBeaverBlock extends TileEntity {
 		Collections.shuffle(surfaceBlocks);
 	}
 	
-	private void runSurface() {
-		
-		Iterator<Point> iter = surfaceBlocks.iterator();
-
-		int c = BLOCKS_PER_UPDATE;
-		while (iter.hasNext() && c != 0) {
-			
-			Point p = iter.next();
-			iter.remove();
-			changeLiquidBlockAtPoint(p);
-			c--;
-		}
-	
-		if (surfaceBlocks.isEmpty()) {
-			running = false;
-			changeBlockAtPoint(new Point(this.xCoord, this.yCoord, this.zCoord));
-		}
-	}
-	
 	/************************
 	 * Cube Mode
 	 ************************/
@@ -168,30 +126,6 @@ public class TileBeaverBlock extends TileEntity {
 		}
 			
 		Collections.shuffle(surfaceBlocks);					
-	}
-	
-	private void runCube() {
-		
-		Iterator<Point> iter = surfaceBlocks.iterator();
-
-		int c = BLOCKS_PER_UPDATE;
-		while (iter.hasNext() && c != 0) {
-			
-			Point p = iter.next();
-			iter.remove();
-			changeLiquidBlockAtPoint(p);
-			c--;
-		}
-		
-		if (surfaceBlocks.isEmpty()) {
-			if (currLevel == 0) {
-				running = false;
-				changeBlockAtPoint(new Point(this.xCoord, this.yCoord, this.zCoord));
-			} else {
-				currLevel--;
-				createCubeBlockList();
-			}
-		}		
 	}
 	
 	/************************
@@ -215,30 +149,7 @@ public class TileBeaverBlock extends TileEntity {
 		Collections.shuffle(surfaceBlocks);
 	}
 	
-	private void runTower() {
-		
-		Iterator<Point> iter = surfaceBlocks.iterator();
 
-		int c = BLOCKS_PER_UPDATE;
-		while (iter.hasNext() && c != 0) {
-			
-			Point p = iter.next();
-			iter.remove();
-			changeLiquidBlockAtPoint(p);
-			c--;
-		}
-		
-		if (surfaceBlocks.isEmpty()) {
-			if (currLevel == 0) {
-				running = false;
-				changeBlockAtPoint(new Point(this.xCoord, this.yCoord, this.zCoord));
-			} else {
-				currLevel--;
-				createTowerBlockList();
-			}
-		}	
-	}
-	
 	private void runMode() {
 		
 		Iterator<Point> iter = surfaceBlocks.iterator();
@@ -248,7 +159,7 @@ public class TileBeaverBlock extends TileEntity {
 			
 			Point p = iter.next();
 			iter.remove();
-			changeLiquidBlockAtPoint(p);
+			worldObj.setBlock(p.x, p.y, p.z, Blocks.dirt);;
 			c--;
 		}
 		
@@ -256,14 +167,14 @@ public class TileBeaverBlock extends TileEntity {
 			
 			if (surfaceBlocks.isEmpty()) {
 				running = false;
-				changeBlockAtPoint(new Point(this.xCoord, this.yCoord, this.zCoord));
+				worldObj.setBlock(this.xCoord, this.yCoord, this.zCoord, Blocks.dirt);
 			}
 		} else {
 			
 			if (surfaceBlocks.isEmpty()) {
 				if (currLevel == 0) {
 					running = false;
-					changeBlockAtPoint(new Point(this.xCoord, this.yCoord, this.zCoord));
+					worldObj.setBlock(this.xCoord, this.yCoord, this.zCoord, Blocks.dirt);
 				} else {
 					currLevel--;
 					if (mode == MODE_CUBE)
@@ -289,15 +200,6 @@ public class TileBeaverBlock extends TileEntity {
 		}
 	}
 	
-	private void runMode2() {
-		
-		if (mode == MODE_SURFACE)
-			runSurface();
-		else if (mode == MODE_CUBE)
-			runCube();
-		else if (mode == MODE_TOWER)
-			runTower();
-	}
 	
 	@Override
 	public void updateEntity() {
@@ -326,6 +228,7 @@ public class TileBeaverBlock extends TileEntity {
 		
 		mode = tags.getInteger("Mode");
 		running = tags.getBoolean("Running");
+		currLevel = tags.getInteger("Level");
 		
 		/*
 		if (surfaceBlocks != null) {
@@ -346,6 +249,7 @@ public class TileBeaverBlock extends TileEntity {
 
 		tags.setInteger("Mode", mode);
 		tags.setBoolean("Running", running);
+		tags.setInteger("Level", currLevel);
 		super.writeToNBT(tags);
 	}
 	
@@ -355,6 +259,7 @@ public class TileBeaverBlock extends TileEntity {
 	@Override
 	public Packet getDescriptionPacket() {
 		
+		/* We only sync the mode and running */
 		NBTTagCompound tags = new NBTTagCompound();
 		tags.setInteger("Mode", mode);
 		tags.setBoolean("Running", running);
@@ -366,7 +271,8 @@ public class TileBeaverBlock extends TileEntity {
 	public void onDataPacket(NetworkManager net, S35PacketUpdateTileEntity pkt) {
 
 		mode = pkt.func_148857_g().getInteger("Mode");
-		running = pkt.func_148857_g().getBoolean("Running");	
+		running = pkt.func_148857_g().getBoolean("Running");
+		super.readFromNBT(pkt.func_148857_g());
 		worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
 	}
 

@@ -10,12 +10,14 @@ public class MKBlocks {
 		
 		fixedSand = new BlockFixedEarth(Material.ground, "fixedSand");
 		fixedGravel = new BlockFixedEarth(Material.ground, "fixedGravel");
+		beaverBlock = new BlockBeaverBlock("beaverBlock");
 		
 		GameRegistry.registerBlock(fixedSand, "block.fixedSand");
 		GameRegistry.registerBlock(fixedGravel, "block.fixedGravel");
+		GameRegistry.registerBlock(beaverBlock, "beaverBlock");
 	}
 	
-	public static void initialize() {
+	public static void initialise() {
 		
 	}
 	
@@ -26,4 +28,5 @@ public class MKBlocks {
 	
 	public static Block fixedSand;
 	public static Block fixedGravel;
+	public static Block beaverBlock;
 }
