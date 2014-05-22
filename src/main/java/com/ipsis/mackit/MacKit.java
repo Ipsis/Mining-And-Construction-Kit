@@ -1,6 +1,7 @@
 package com.ipsis.mackit;
 import com.ipsis.mackit.block.MKBlocks;
 import com.ipsis.mackit.block.TileBeaverBlock;
+import com.ipsis.mackit.block.TilePortaChant;
 import com.ipsis.mackit.item.MKItems;
 import com.ipsis.mackit.manager.MKManagers;
 import com.ipsis.mackit.reference.Reference;
@@ -48,6 +49,7 @@ public class MacKit
     	MKManagers.initialise();
     	
     	GameRegistry.registerTileEntity(TileBeaverBlock.class, "tile.beaverBlock");
+    	GameRegistry.registerTileEntity(TilePortaChant.class, "tile.portaChant");
     	
     	pp.initalise();
     	NetworkRegistry.INSTANCE.registerGuiHandler(instance, proxy);

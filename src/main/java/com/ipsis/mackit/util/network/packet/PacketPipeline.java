@@ -18,6 +18,7 @@ import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.network.INetHandler;
 import net.minecraft.network.NetHandlerPlayServer;
 
+import com.ipsis.mackit.util.network.packet.types.PacketGui;
 import com.ipsis.mackit.util.network.packet.types.PacketUpdateTileEntity;
 
 import cpw.mods.fml.common.FMLCommonHandler;
@@ -134,13 +135,8 @@ public class PacketPipeline extends
 	}
 
 	public void registerPackets() {
-		/*registerPacket(PacketDoubleJump.class);
-		registerPacket(PacketExtendedInventory.class);
-		registerPacket(PacketSmeltery.class);
-		registerPacket(PacketStencilTable.class);
-		registerPacket(PacketToolStation.class);
-		registerPacket(PacketUpdateTE.class); */
 		registerPacket(PacketUpdateTileEntity.class);
+		registerPacket(PacketGui.class);
 	}
 
 	// Method to call from FMLPostInitializationEvent

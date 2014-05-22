@@ -11,7 +11,7 @@ import net.minecraft.world.World;
 
 import com.ipsis.mackit.MacKit;
 import com.ipsis.mackit.creativetab.CreativeTab;
-import com.ipsis.mackit.reference.GuiIds;
+import com.ipsis.mackit.reference.Gui;
 import com.ipsis.mackit.reference.Reference;
 
 import cpw.mods.fml.relauncher.Side;
@@ -71,7 +71,7 @@ public class BlockPortaChant extends BlockContainer {
 			return false;
 		
 		if (!world.isRemote && world.getTileEntity(x, y, z) instanceof TilePortaChant)			
-			player.openGui(MacKit.instance, GuiIds.GUI_PORTA_CHANT, world, x, y, z);
+			player.openGui(MacKit.instance, Gui.PORTA_CHANT, world, x, y, z);
 		
 		return true;
 	}
