@@ -6,6 +6,6 @@ public class PlayerHelper {
 
 	public static boolean canInteractWithPlayer(EntityPlayer entityPlayer, int xCoord, int yCoord, int zCoord) {
 		
-		return entityPlayer.getDistanceSq(xCoord + 0.5, yCoord + 0.5, zCoord + 0.5)  < 64;
+		return entityPlayer.getDistanceSq((double)xCoord + 0.5D, (double)yCoord + 0.5D, (double)zCoord + 0.5D) <= 64.0D;
 	}
 }

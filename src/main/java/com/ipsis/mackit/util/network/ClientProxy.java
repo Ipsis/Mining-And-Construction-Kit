@@ -18,7 +18,6 @@ public class ClientProxy extends CommonProxy {
 		if (te != null) {
 		
 			if (te instanceof TilePortaChant) {
-				LogHelper.error("getClientGuiElement");
 				return new GuiPortaChant(player.inventory, (TilePortaChant)te);
 			} else {
 				return null;				

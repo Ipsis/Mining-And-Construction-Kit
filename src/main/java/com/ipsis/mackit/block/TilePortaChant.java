@@ -1,14 +1,14 @@
 package com.ipsis.mackit.block;
 
-import java.util.List;
 import java.util.Random;
 
-import net.minecraft.enchantment.EnchantmentData;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Items;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.network.NetworkManager;
+import net.minecraft.network.Packet;
+import net.minecraft.network.play.server.S35PacketUpdateTileEntity;
 import net.minecraftforge.common.util.ForgeDirection;
 
 import com.ipsis.cofhlib.inventory.IInventoryManager;
@@ -20,13 +20,14 @@ import com.ipsis.mackit.util.network.packet.AbstractPacket;
 import com.ipsis.mackit.util.network.packet.IPacketGuiHandler;
 import com.ipsis.mackit.util.network.packet.types.PacketGui;
 
-public class TilePortaChant extends TileEntityInventoryMK implements IPacketGuiHandler {
+public class TilePortaChant extends TileEntityInventoryMK implements IPacketGuiHandler, IFacing {
 
 	public static final int MAX_ENCHANT = 30;
 	public static final int MIN_ENCHANT = 1;
 	private byte enchantLevel;
 	private IInventoryManager invMgr;
 	private Random rand = new Random();	
+	private ForgeDirection facing;
 	
 	public static final int INPUT_SLOT = 0;
 	public static final int OUTPUT_SLOT = 1;
@@ -35,9 +36,21 @@ public class TilePortaChant extends TileEntityInventoryMK implements IPacketGuiH
 	public TilePortaChant() {
 		
 		/* 0 input and 1 output */
-		inventory = new ItemStack[7];
+		inventory = new ItemStack[2];
 		enchantLevel = MIN_ENCHANT;
 		invMgr = InventoryManager.create(this, ForgeDirection.UNKNOWN);
+		facing = ForgeDirection.EAST;
+	}
+	
+	public void setFacing(ForgeDirection facing) {
+		
+		this.facing = facing;
+		worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
+	}
+	
+	public ForgeDirection getFacing() {
+		
+		return facing;
 	}
 	
 	public byte getEnchantLevel() {
@@ -107,6 +120,41 @@ public class TilePortaChant extends TileEntityInventoryMK implements IPacketGuiH
 		}
 	}
 	
+	/*****
+	 * NBT
+	 *****/
+	@Override
+	public void writeToNBT(NBTTagCompound nbttagcompound) {
+
+		super.writeToNBT(nbttagcompound);
+		nbttagcompound.setByte("Facing", (byte)facing.ordinal());
+	}
+	
+	@Override
+	public void readFromNBT(NBTTagCompound nbttagcompound) {
+
+		super.readFromNBT(nbttagcompound);
+		facing = ForgeDirection.getOrientation((int)nbttagcompound.getByte("Facing"));
+	}
+	
+	/************
+	 * Packets
+	 ************/
+	@Override
+	public Packet getDescriptionPacket() {
+
+		NBTTagCompound nbttagcompound = new NBTTagCompound();
+		nbttagcompound.setByte("Facing", (byte)facing.ordinal());
+		return new S35PacketUpdateTileEntity(xCoord, yCoord, zCoord, 1, nbttagcompound);
+	}
+	
+	@Override
+	public void onDataPacket(NetworkManager net, S35PacketUpdateTileEntity pkt) {
+	
+		facing = ForgeDirection.getOrientation((int)pkt.func_148857_g().getByte("Facing"));
+		worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
+	}
+	
 	/****************
 	 * Processing
 	 ****************/
@@ -129,9 +177,8 @@ public class TilePortaChant extends TileEntityInventoryMK implements IPacketGuiH
 		if (in == null || out != null)
 			return;
 		
-		EntityPlayer player = getEnchantingPlayer();
-		
-		if ( player.experienceLevel < enchantLevel && ! player.capabilities.isCreativeMode)
+		EntityPlayer player = getEnchantingPlayer();		
+		if (player == null || player.experienceLevel < enchantLevel && !player.capabilities.isCreativeMode)
 			return;
 		
 		/* We only want one */

@@ -25,7 +25,6 @@ public class CommonProxy implements IGuiHandler {
 		if (te != null) {
 		
 			if (te instanceof TilePortaChant) {
-				LogHelper.error("getServerGuiElement");
 				TilePortaChant cte = (TilePortaChant)te;
 				return new ContainerPortaChant(player.inventory, cte);
 			} else {

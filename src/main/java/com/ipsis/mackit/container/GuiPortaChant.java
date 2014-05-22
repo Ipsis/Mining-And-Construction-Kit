@@ -37,7 +37,7 @@ public class GuiPortaChant extends GuiBase {
 		super.initGui();
 		
 		up = ((ElementButton)addElement(new ElementButton(this, 68, 20, BTN_UP_STR, 176, 0, 176, 16, 176, 32, 16, 16, TEXTURE_STR)));
-		down = ((ElementButton)addElement(new ElementButton(this, 68, 50, BTN_DN_STR, 176, 46, 176, 62, 176, 78, 16, 16, TEXTURE_STR)));
+		down = ((ElementButton)addElement(new ElementButton(this, 68, 50, BTN_DN_STR, 192, 0, 192, 16, 192, 32, 16, 16, TEXTURE_STR)));
 		
 		
 		//addTab(new TabInfo(this, "A portable enchanting table\n\nUse your levels before you plunge into lava.", 1));
