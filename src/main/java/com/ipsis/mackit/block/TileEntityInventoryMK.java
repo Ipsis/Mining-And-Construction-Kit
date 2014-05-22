@@ -1,5 +1,7 @@
 package com.ipsis.mackit.block;
 
+import com.ipsis.mackit.helper.LogHelper;
+
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
@@ -17,13 +19,13 @@ public abstract class TileEntityInventoryMK extends TileEntity implements IInven
 	public void readFromNBT(NBTTagCompound nbttagcompound) {
 
 		super.readFromNBT(nbttagcompound);
-
+		
 		NBTTagList nbttaglist = nbttagcompound.getTagList("Items", Constants.NBT.TAG_COMPOUND);
 		for (int i = 0; i < nbttaglist.tagCount(); i++) {
-			NBTTagCompound nbttagcompound1 = (NBTTagCompound) nbttaglist.getCompoundTagAt(i);
-			int slot = nbttagcompound.getByte("Slot");
+			NBTTagCompound nbttagcompound1 = nbttaglist.getCompoundTagAt(i);
+			int slot = nbttagcompound1.getByte("Slot") & 0xff;
 			if (slot >= 0 && slot < inventory.length) {
-				setInventorySlotContents(slot, ItemStack.loadItemStackFromNBT(nbttagcompound));
+				setInventorySlotContents(slot, ItemStack.loadItemStackFromNBT(nbttagcompound1));
 			}
 		}
 	}
@@ -33,7 +35,7 @@ public abstract class TileEntityInventoryMK extends TileEntity implements IInven
 
 		super.writeToNBT(nbttagcompound);
 
-		NBTTagList nbttaglist  = new NBTTagList();
+		NBTTagList nbttaglist = new NBTTagList();
 		for (int i = 0; i < inventory.length; i++) {
 			ItemStack stack = getStackInSlot(i);
 
@@ -41,12 +43,11 @@ public abstract class TileEntityInventoryMK extends TileEntity implements IInven
 				NBTTagCompound nbttagcompound1 = new NBTTagCompound();
 				nbttagcompound1.setByte("Slot", (byte) i);
 				stack.writeToNBT(nbttagcompound1);
-				nbttaglist .appendTag(nbttagcompound1);
-
+				nbttaglist.appendTag(nbttagcompound1);
 			}
 		}
 
-		nbttagcompound.setTag("Items", nbttaglist );
+		nbttagcompound.setTag("Items", nbttaglist);
 	}
 	
 	@Override
