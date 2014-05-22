@@ -5,14 +5,17 @@ import java.util.Collections;
 import java.util.Iterator;
 
 import net.minecraft.block.Block;
-import net.minecraft.client.Minecraft;
 import net.minecraft.init.Blocks;
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagList;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.Packet;
 import net.minecraft.network.play.server.S35PacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraftforge.common.util.Constants;
 
+import com.ipsis.cofhlib.util.BlockCoord;
 import com.ipsis.mackit.helper.LogHelper;
 import com.ipsis.mackit.helper.Point;
 import com.ipsis.mackit.manager.MKManagers;
@@ -20,7 +23,7 @@ import com.ipsis.mackit.manager.MKManagers;
 public class TileBeaverBlock extends TileEntity {
 
 	private boolean running;
-	private ArrayList<Point> surfaceBlocks;
+	private ArrayList<BlockCoord> surfaceBlocks;
 	private int currTicks = 0;
 	private int mode;
 	private int currLevel = 0; /* cube or tower mode depth */
@@ -68,7 +71,7 @@ public class TileBeaverBlock extends TileEntity {
 			setMode((mode + 1) % 3);	
 	}
 					
-	private void tryAddPoint(Point p) {
+	private void tryAddBlock(BlockCoord p) {
 		
 		Block b = worldObj.getBlock(p.x, p.y, p.z);
 		if (MKManagers.bbMgr.isValid(b))
@@ -81,9 +84,9 @@ public class TileBeaverBlock extends TileEntity {
 	 ************************/
 	private void createSurfaceBlockList() {
 		
-		surfaceBlocks = new ArrayList<Point>();
+		surfaceBlocks = new ArrayList<BlockCoord>();
 		
-		Point p = new Point(this.xCoord, this.yCoord, this.zCoord);
+		BlockCoord p = new BlockCoord(this);
 		
 		int xRange = SURFACE_RANGE;
 		int zRange;
@@ -94,10 +97,14 @@ public class TileBeaverBlock extends TileEntity {
 			for (int tx = 0; tx <= xRange; tx++) {
 				for (int tz = (zRange * -1) ; tz <= zRange; tz++) {
 					
-					Point np = new Point(p.x, p.y, p.z);
-					np.translate(tx * (l == 0 ? -1 : 1), 0, tz);
+					/* Translate the block position in both x and z */
+					BlockCoord np = p.copy();
+					np.x += (tx * (l == 0 ? -1 : 1));
+					np.y += 0;
+					np.z += tz;
+
 					if (!np.equals(p))
-						tryAddPoint(np);
+						tryAddBlock(np);
 				}
 				
 				zRange -= 1;
@@ -112,16 +119,16 @@ public class TileBeaverBlock extends TileEntity {
 	 ************************/
 	private void createCubeBlockList() {
 		
-		surfaceBlocks = new ArrayList<Point>();
+		surfaceBlocks = new ArrayList<BlockCoord>();
 		
-		Point p = new Point(this.xCoord, this.yCoord, this.zCoord);
+		BlockCoord p = new BlockCoord(this);
 		
 		for (int xOffset = -3; xOffset <= 3; xOffset++) {
 			for (int zOffset = -3; zOffset <= 3; zOffset++) {
 				
-				Point np = new Point(p.x + xOffset, p.y - currLevel, p.z + zOffset);
+				BlockCoord np = new BlockCoord(p.x + xOffset, p.y - currLevel, p.z + zOffset);
 				if (!np.equals(p))
-					tryAddPoint(np);
+					tryAddBlock(np);
 			}
 		}
 			
@@ -133,16 +140,16 @@ public class TileBeaverBlock extends TileEntity {
 	 ************************/
 	private void createTowerBlockList() {
 		
-		surfaceBlocks = new ArrayList<Point>();
+		surfaceBlocks = new ArrayList<BlockCoord>();
 		
-		Point p = new Point(this.xCoord, this.yCoord, this.zCoord);
+		BlockCoord p = new BlockCoord(this);
 		
 		for (int xOffset = -1; xOffset <= 1; xOffset++) {
 			for (int zOffset = -1; zOffset <= 1; zOffset++) {
 				
-				Point np = new Point(p.x + xOffset, p.y - currLevel, p.z + zOffset);
+				BlockCoord np = new BlockCoord(p.x + xOffset, p.y - currLevel, p.z + zOffset);
 				if (!np.equals(p))
-					tryAddPoint(np);
+					tryAddBlock(np);
 			}
 		}
 			
@@ -152,12 +159,12 @@ public class TileBeaverBlock extends TileEntity {
 
 	private void runMode() {
 		
-		Iterator<Point> iter = surfaceBlocks.iterator();
+		Iterator<BlockCoord> iter = surfaceBlocks.iterator();
 
 		int c = BLOCKS_PER_UPDATE;
 		while (iter.hasNext() && c != 0) {
 			
-			Point p = iter.next();
+			BlockCoord p = iter.next();
 			iter.remove();
 			worldObj.setBlock(p.x, p.y, p.z, Blocks.dirt);;
 			c--;
@@ -224,33 +231,58 @@ public class TileBeaverBlock extends TileEntity {
 	 * NBT
 	 ************************/
 	@Override
-	public void readFromNBT(NBTTagCompound tags) {
-		
-		mode = tags.getInteger("Mode");
-		running = tags.getBoolean("Running");
-		currLevel = tags.getInteger("Level");
-		
-		/*
-		if (surfaceBlocks != null) {
-			Iterator<Point> iter = surfaceBlocks.iterator();
-
-			int c = 5;
-			while (iter.hasNext() && c != 0) {				
-				Point p = iter.next();
+	public void readFromNBT(NBTTagCompound nbttagcompound) {
 				
-			}			
-		} */
+		super.readFromNBT(nbttagcompound);
 		
-		super.readFromNBT(tags);
+		mode = nbttagcompound.getInteger("Mode");
+		running = nbttagcompound.getBoolean("Running");
+		currLevel = nbttagcompound.getInteger("Level");
+
+		NBTTagList nbttaglist = nbttagcompound.getTagList("Blocks", Constants.NBT.TAG_COMPOUND);
+		
+		if (nbttaglist.tagCount() > 0) {
+			surfaceBlocks = new ArrayList<BlockCoord>();
+		
+			for (int i = 0; i < nbttaglist.tagCount(); i++) {
+				NBTTagCompound nbttagcompound1 = (NBTTagCompound) nbttaglist
+						.getCompoundTagAt(i);
+				int x = nbttagcompound.getInteger("xCoord");
+				int y = nbttagcompound.getInteger("yCoord");
+				int z = nbttagcompound.getInteger("zCoord");
+
+				surfaceBlocks.add(new BlockCoord(x, y, z));
+			}
+		}
 	}
 	
 	@Override
-	public void writeToNBT(NBTTagCompound tags) {
+	public void writeToNBT(NBTTagCompound nbttagcompound) {
+		
+		super.writeToNBT(nbttagcompound);
 
-		tags.setInteger("Mode", mode);
-		tags.setBoolean("Running", running);
-		tags.setInteger("Level", currLevel);
-		super.writeToNBT(tags);
+		nbttagcompound.setInteger("Mode", mode);
+		nbttagcompound.setBoolean("Running", running);
+		nbttagcompound.setInteger("Level", currLevel);
+		
+		NBTTagList nbttaglist = new NBTTagList();
+
+		if (surfaceBlocks != null) {
+			Iterator<BlockCoord> iter = surfaceBlocks.iterator();
+
+			while (iter.hasNext()) {
+
+				BlockCoord p = iter.next();
+
+				NBTTagCompound nbttagcompound1 = new NBTTagCompound();
+				nbttagcompound1.setInteger("xCoord", p.x);
+				nbttagcompound1.setInteger("yCoord", p.y);
+				nbttagcompound1.setInteger("zCoord", p.z);
+				nbttaglist.appendTag(nbttagcompound1);
+			}
+		}
+
+		nbttagcompound.setTag("Blocks", nbttaglist);
 	}
 	
 	/************************
