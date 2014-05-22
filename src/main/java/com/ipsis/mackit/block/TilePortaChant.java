@@ -4,6 +4,7 @@ import java.util.Random;
 
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.NetworkManager;
@@ -20,12 +21,11 @@ import com.ipsis.mackit.util.network.packet.AbstractPacket;
 import com.ipsis.mackit.util.network.packet.IPacketGuiHandler;
 import com.ipsis.mackit.util.network.packet.types.PacketGui;
 
-public class TilePortaChant extends TileEntityInventoryMK implements IPacketGuiHandler, IFacing {
+public class TilePortaChant extends TileEntityInventoryMK implements IPacketGuiHandler, IFacing, ISidedInventory {
 
 	public static final int MAX_ENCHANT = 30;
 	public static final int MIN_ENCHANT = 1;
 	private byte enchantLevel;
-	private IInventoryManager invMgr;
 	private Random rand = new Random();	
 	private ForgeDirection facing;
 	
@@ -38,7 +38,6 @@ public class TilePortaChant extends TileEntityInventoryMK implements IPacketGuiH
 		/* 0 input and 1 output */
 		inventory = new ItemStack[2];
 		enchantLevel = MIN_ENCHANT;
-		invMgr = InventoryManager.create(this, ForgeDirection.UNKNOWN);
 		facing = ForgeDirection.EAST;
 	}
 	
@@ -170,23 +169,48 @@ public class TilePortaChant extends TileEntityInventoryMK implements IPacketGuiH
 		if (worldObj.isRemote)
 			return;
 		
-		ItemStack out = invMgr.getSlotContents(OUTPUT_SLOT);
-		ItemStack in = invMgr.getSlotContents(INPUT_SLOT);
+		ItemStack out = getStackInSlot(OUTPUT_SLOT);
+		ItemStack in = getStackInSlot(INPUT_SLOT);
 		
 		/* Enchanted items do not stack */
-		if (in == null || out != null)
+		if (in == null || out != null || in.stackSize < 1)
 			return;
 		
-		EntityPlayer player = getEnchantingPlayer();		
+		EntityPlayer player = getEnchantingPlayer();	
 		if (player == null || player.experienceLevel < enchantLevel && !player.capabilities.isCreativeMode)
 			return;
 		
 		/* We only want one */
-		ItemStack src = invMgr.removeItem(1, invMgr.getSlotContents(INPUT_SLOT));
-		if (src == null)
-			return;
+		ItemStack src = decrStackSize(INPUT_SLOT, 1);
 		
 		ItemStack enchanted = EnchantmentHelper.addRandomEnchantment(this.rand, src, enchantLevel);
 		setInventorySlotContents(OUTPUT_SLOT, enchanted);
+	}
+
+	private static final int[] accessSlots = new int[]{ INPUT_SLOT, OUTPUT_SLOT };
+	
+	@Override
+	public int[] getAccessibleSlotsFromSide(int side) {
+
+		return accessSlots;
+	}
+
+	@Override
+	public boolean canInsertItem(int slot, ItemStack itemStack, int side) {
+		
+		if (slot != INPUT_SLOT)
+			return false;
+		
+		return isItemValidForSlot(slot, itemStack);
+	}
+
+	@Override
+	public boolean canExtractItem(int slot, ItemStack var2, int side) {
+
+		if (slot != OUTPUT_SLOT)
+			return false;
+		
+		/* You can remove anything from the output slot */
+		return true;
 	}
 }
