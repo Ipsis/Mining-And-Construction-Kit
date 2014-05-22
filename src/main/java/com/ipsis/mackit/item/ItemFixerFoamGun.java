@@ -9,10 +9,9 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 
+import com.ipsis.cofhlib.util.BlockCoord;
 import com.ipsis.cofhlib.util.EntityHelper;
 import com.ipsis.mackit.block.MKBlocks;
-import com.ipsis.mackit.helper.LogHelper;
-import com.ipsis.mackit.helper.Point;
 import com.ipsis.mackit.helper.RotateHelper;
 
 import cpw.mods.fml.relauncher.Side;
@@ -21,18 +20,18 @@ import cpw.mods.fml.relauncher.SideOnly;
 public class ItemFixerFoamGun extends ItemMK {
 
 	/* Blocks to change when facing east (+x, +z) */
-	private static Point points[] = {
-		new Point(0, 1, -1), new Point(0, 1, 0), new Point(0, 1, 1),
-		new Point(0, 0, -1), new Point(0, 0, 0), new Point(0, 0, 1),
-		new Point(0, -1, -1), new Point(0, -1, 0), new Point(0, -1, 1),
+	private static BlockCoord blocks[] = {
+		new BlockCoord(0, 1, -1), new BlockCoord(0, 1, 0), new BlockCoord(0, 1, 1),
+		new BlockCoord(0, 0, -1), new BlockCoord(0, 0, 0), new BlockCoord(0, 0, 1),
+		new BlockCoord(0, -1, -1), new BlockCoord(0, -1, 0), new BlockCoord(0, -1, 1),
 		
-		new Point(1, 1, -1), new Point(1, 1, 0), new Point(1, 1, 1),
-		new Point(1, 0, -1), new Point(1, 0, 0), new Point(1, 0, 1),
-		new Point(1, -1, -1), new Point(1, -1, 0), new Point(1, -1, 1),
+		new BlockCoord(1, 1, -1), new BlockCoord(1, 1, 0), new BlockCoord(1, 1, 1),
+		new BlockCoord(1, 0, -1), new BlockCoord(1, 0, 0), new BlockCoord(1, 0, 1),
+		new BlockCoord(1, -1, -1), new BlockCoord(1, -1, 0), new BlockCoord(1, -1, 1),
 		
-		new Point(2, 1, -1), new Point(2, 1, 0), new Point(2, 1, 1),
-		new Point(2, 0, -1), new Point(2, 0, 0), new Point(2, 0, 1),
-		new Point(2, -1, -1), new Point(2, -1, 0), new Point(2, -1, 1),
+		new BlockCoord(2, 1, -1), new BlockCoord(2, 1, 0), new BlockCoord(2, 1, 1),
+		new BlockCoord(2, 0, -1), new BlockCoord(2, 0, 0), new BlockCoord(2, 0, 1),
+		new BlockCoord(2, -1, -1), new BlockCoord(2, -1, 0), new BlockCoord(2, -1, 1),
 	};
 	
 	public ItemFixerFoamGun()  {
@@ -74,17 +73,17 @@ public class ItemFixerFoamGun extends ItemMK {
 		info.add("Charges Left " + (itemStack.getMaxDamage() - itemStack.getItemDamage()));
 	}
 	
-	private void changeBlock(World world, int x, int y, int z) {
+	private void changeBlock(World world, BlockCoord p) {
 	
-		Block b = world.getBlock(x, y, z);
+		Block b = world.getBlock(p.x, p.y, p.z);
 		
 		if (b == null)
 			return;
 		
 		if (b == Blocks.sand)
-			world.setBlock(x, y, z, MKBlocks.fixedSand);
+			world.setBlock(p.x, p.y, p.z, MKBlocks.fixedSand);
 		else if (b == Blocks.gravel)
-			world.setBlock(x, y, z, MKBlocks.fixedGravel);
+			world.setBlock(p.x, p.y, p.z, MKBlocks.fixedGravel);
 	}
 	
 	private void applyFoam(EntityPlayer entityPlayer, World world, int x, int y, int z) {
@@ -96,9 +95,9 @@ public class ItemFixerFoamGun extends ItemMK {
 		 * Modify a 3x3x3 area in the direction the player is facing
 		 */
 		
-		for (Point p : points) {
-			Point tp = RotateHelper.rotatePointXZ(ForgeDirection.EAST, d, p);
-			changeBlock(world, tp.x + x, tp.y + y, tp.z + z);
+		for (BlockCoord p : blocks) {
+			BlockCoord tp = RotateHelper.rotatePointXZ(ForgeDirection.EAST, d, p);
+			changeBlock(world, new BlockCoord(x + tp.x, y + tp.y, z + tp.z));
 		}
 		
 		return;

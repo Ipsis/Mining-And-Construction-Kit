@@ -6,7 +6,6 @@ import java.util.Iterator;
 
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
-import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.network.NetworkManager;
@@ -16,8 +15,6 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.common.util.Constants;
 
 import com.ipsis.cofhlib.util.BlockCoord;
-import com.ipsis.mackit.helper.LogHelper;
-import com.ipsis.mackit.helper.Point;
 import com.ipsis.mackit.manager.MKManagers;
 
 public class TileBeaverBlock extends TileEntity {

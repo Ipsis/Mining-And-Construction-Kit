@@ -2,6 +2,8 @@ package com.ipsis.mackit.helper;
 
 import net.minecraftforge.common.util.ForgeDirection;
 
+import com.ipsis.cofhlib.util.BlockCoord;
+
 /**
  * Not sure about all this.
  * I get the feeling I don't know what I'm doing :)
@@ -51,7 +53,7 @@ public class RotateHelper {
 		return angles[dirToIdx(src)][dirToIdx(dst)];
 	}
 	
-	private static QUAD getSrcQuadrant(Point p) {
+	private static QUAD getSrcQuadrant(BlockCoord p) {
 		
 		if (p.x >= 0 && p.z >= 0)
 			return QUAD.Q1;
@@ -101,9 +103,9 @@ public class RotateHelper {
 		return dstQ[srcQ.ordinal()][angleToIdx(angle)];
 	}
 	
-	public static Point rotatePointXZ(ForgeDirection src, ForgeDirection dst, Point p) {
+	public static BlockCoord rotatePointXZ(ForgeDirection src, ForgeDirection dst, BlockCoord p) {
 	
-		Point newP = new Point(p.x, p.y, p.z);
+		BlockCoord newP = p.copy();
 		int angle = getRotationAngle(src, dst);
 		QUAD srcQ = getSrcQuadrant(p);
 		QUAD dstQ = getDstQuadrant(srcQ, angle);

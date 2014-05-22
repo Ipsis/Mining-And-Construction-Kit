@@ -1,14 +1,9 @@
 package com.ipsis.mackit.item;
 
-import java.util.Iterator;
 import java.util.List;
-
-import com.ipsis.mackit.helper.LogHelper;
-import com.ipsis.mackit.helper.Point;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.monster.EntityMob;
-import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.World;
