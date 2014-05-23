@@ -50,7 +50,9 @@ public class DyeManager {
 
 	public DyeRecipe getRecipe(ItemStack dye) {
 
-		int id = ItemHelper.getHashCode(dye);	
-		return recipes.get(id);
+		if (dye == null)
+			return null;
+		
+		return recipes.get(ItemHelper.getHashCode(dye));
 	}
 }

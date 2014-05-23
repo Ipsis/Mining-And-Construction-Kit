@@ -35,8 +35,6 @@ public class SqueezerManager {
 	private void addRecipe(ItemStack source, ItemStack dye) {
 
 		/* Only add recipes where the dye is valid */
-		
-		LogHelper.error("addRecipe " + source.getUnlocalizedName() + "->" + dye.getUnlocalizedName() + " : " + MKManagers.dyeMgr.getRecipe(dye) + " " + ItemHelper.getHashCode(source));
 		if (MKManagers.dyeMgr.getRecipe(dye) != null)
 			recipes.put(ItemHelper.getHashCode(source), new SqueezerRecipe(source, dye));
 	}
@@ -45,11 +43,8 @@ public class SqueezerManager {
 
 		if (source == null)
 			return null;
-
+				
 		int id = ItemHelper.getHashCode(source);
-		
-		if (recipes.get(id) == null)
-			LogHelper.error("getRecipe: no recipe for " + source + " " + id);
 		return recipes.get(id);
 	}
 
@@ -59,22 +54,22 @@ public class SqueezerManager {
 	private void addRecipes() {
 		
 		/* Dye->Dye */
-		addRecipe(new ItemStack(Items.dye, 0, 0), new ItemStack(Items.dye, 0, 0));
-		addRecipe(new ItemStack(Items.dye, 0, 1), new ItemStack(Items.dye, 0, 1));
-		addRecipe(new ItemStack(Items.dye, 0, 2), new ItemStack(Items.dye, 0, 2));
-		addRecipe(new ItemStack(Items.dye, 0, 3), new ItemStack(Items.dye, 0, 3));
-		addRecipe(new ItemStack(Items.dye, 0, 4), new ItemStack(Items.dye, 0, 4));
-		addRecipe(new ItemStack(Items.dye, 0, 5), new ItemStack(Items.dye, 0, 5));
-		addRecipe(new ItemStack(Items.dye, 0, 6), new ItemStack(Items.dye, 0, 6));
-		addRecipe(new ItemStack(Items.dye, 0, 7), new ItemStack(Items.dye, 0, 7));
-		addRecipe(new ItemStack(Items.dye, 0, 8), new ItemStack(Items.dye, 0, 8));
-		addRecipe(new ItemStack(Items.dye, 0, 9), new ItemStack(Items.dye, 0, 9));
-		addRecipe(new ItemStack(Items.dye, 0, 10), new ItemStack(Items.dye, 0, 10));
-		addRecipe(new ItemStack(Items.dye, 0, 11), new ItemStack(Items.dye, 0, 11));
-		addRecipe(new ItemStack(Items.dye, 0, 12), new ItemStack(Items.dye, 0, 12));
-		addRecipe(new ItemStack(Items.dye, 0, 13), new ItemStack(Items.dye, 0, 13));
-		addRecipe(new ItemStack(Items.dye, 0, 14), new ItemStack(Items.dye, 0, 14));
-		addRecipe(new ItemStack(Items.dye, 0, 15), new ItemStack(Items.dye, 0, 15));
+		addRecipe(new ItemStack(Items.dye, 1, 0), new ItemStack(Items.dye, 1, 0));
+		addRecipe(new ItemStack(Items.dye, 1, 1), new ItemStack(Items.dye, 1, 1));
+		addRecipe(new ItemStack(Items.dye, 1, 2), new ItemStack(Items.dye, 1, 2));
+		addRecipe(new ItemStack(Items.dye, 1, 3), new ItemStack(Items.dye, 1, 3));
+		addRecipe(new ItemStack(Items.dye, 1, 4), new ItemStack(Items.dye, 1, 4));
+		addRecipe(new ItemStack(Items.dye, 1, 5), new ItemStack(Items.dye, 1, 5));
+		addRecipe(new ItemStack(Items.dye, 1, 6), new ItemStack(Items.dye, 1, 6));
+		addRecipe(new ItemStack(Items.dye, 1, 7), new ItemStack(Items.dye, 1, 7));
+		addRecipe(new ItemStack(Items.dye, 1, 8), new ItemStack(Items.dye, 1, 8));
+		addRecipe(new ItemStack(Items.dye, 1, 9), new ItemStack(Items.dye, 1, 9));
+		addRecipe(new ItemStack(Items.dye, 1, 10), new ItemStack(Items.dye, 1, 10));
+		addRecipe(new ItemStack(Items.dye, 1, 11), new ItemStack(Items.dye, 1, 11));
+		addRecipe(new ItemStack(Items.dye, 1, 12), new ItemStack(Items.dye, 1, 12));
+		addRecipe(new ItemStack(Items.dye, 1, 13), new ItemStack(Items.dye, 1, 13));
+		addRecipe(new ItemStack(Items.dye, 1, 14), new ItemStack(Items.dye, 1, 14));
+		addRecipe(new ItemStack(Items.dye, 1, 15), new ItemStack(Items.dye, 1, 15));
 		
 
 		/* Shapeless recipes */
@@ -105,12 +100,21 @@ public class SqueezerManager {
 		while (i.hasNext()) {
 			Map.Entry pairs = (Map.Entry) i.next();
 
-			ItemStack in = ((ItemStack)pairs.getKey()).copy();
+			/**
+			 * If the source item is actually a block eg. cactus
+			 * then the damage value may not be correct.
+			 * We therefore create a new stack using the item for the block.
+			 * We are using the damage value as part of the hashmap, so this
+			 * makes sure a lookup will work.
+			 */
+			
+			ItemStack in = ((ItemStack)pairs.getKey());			
+			ItemStack cleanItem = new ItemStack(in.getItem());
 			ItemStack out = ((ItemStack)pairs.getValue()).copy();
 			
 			if (isDye(out)) {
 
-				addRecipe(in, out);
+				addRecipe(cleanItem, out);
 			}
 		}
 
