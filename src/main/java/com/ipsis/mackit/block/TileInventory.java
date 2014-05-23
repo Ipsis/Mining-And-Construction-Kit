@@ -10,7 +10,7 @@ import net.minecraft.nbt.NBTTagList;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.common.util.Constants;
 
-public abstract class TileEntityInventoryMK extends TileEntity implements IInventory {
+public abstract class TileInventory extends TileEntity implements IInventory {
 
 	/* exists, but has no items in it */
 	public ItemStack[] inventory = new ItemStack[0];

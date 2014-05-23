@@ -3,7 +3,14 @@ package com.ipsis.mackit.item;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemBucket;
 import net.minecraft.item.ItemStack;
+import net.minecraftforge.fluids.FluidContainerRegistry;
+
+import com.ipsis.mackit.block.MKBlocks;
+import com.ipsis.mackit.creativetab.CreativeTab;
+import com.ipsis.mackit.fluid.MKFluids;
+
 import cpw.mods.fml.common.registry.GameRegistry;
 
 public class MKItems {
@@ -11,8 +18,14 @@ public class MKItems {
 
 	public static void preInit() {
 		
+		/* buckets */
+		//itemBucket = (ItemBucket) new ItemBucket("thermalfoundation").setUnlocalizedName("bucket").setCreativeTab(CreativeTab.MK_TAB);
+
+		//bucketDyeRed = itemBucket.addItem(0, "bucketDyeRed", 1);
+		
+		
 		itemFixerFoamGun = new ItemFixerFoamGun().setUnlocalizedName("fixerFoamGun");
-		itemFixerFoamRefill = new ItemFixerFoamRefill().setUnlocalizedName("fixerFoamPellet");
+		itemFixerFoamRefill = new ItemFixerFoamRefill().setUnlocalizedName("fixerFoamRefill");
 		itemMews = new ItemMews().setUnlocalizedName("mews");
 		
 		GameRegistry.registerItem(itemFixerFoamGun, "item.fixerFoamGun");
@@ -22,13 +35,11 @@ public class MKItems {
 	
 	public static void initialise() {
 		
-		loadItems();
+		//BucketHandler.registerBucket(MKBlocks.blockFluidDyeRed, 0, bucketDyeRed);
+		
+		//FluidContainerRegistry.registerFluidContainer(MKFluids.fluidDyeRed, bucketDyeRed, FluidContainerRegistry.EMPTY_BUCKET);
 	}
 	
-	private static void loadItems() {
-		
-		
-	}
 	
 	public static void postInit() {
 		
@@ -44,4 +55,8 @@ public class MKItems {
 	public static Item itemFixerFoamGun;
 	public static Item itemFixerFoamRefill;
 	public static Item itemMews;
+	
+	/* buckets */
+	public static ItemBucket itemBucket;
+	public static ItemStack bucketDyeRed;
 }

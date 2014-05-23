@@ -21,7 +21,7 @@ import com.ipsis.mackit.util.network.packet.AbstractPacket;
 import com.ipsis.mackit.util.network.packet.IPacketGuiHandler;
 import com.ipsis.mackit.util.network.packet.types.PacketGui;
 
-public class TilePortaChant extends TileEntityInventoryMK implements IPacketGuiHandler, IFacing, ISidedInventory {
+public class TilePortaChant extends TileInventory implements IPacketGuiHandler, IFacing, ISidedInventory {
 
 	public static final int MAX_ENCHANT = 30;
 	public static final int MIN_ENCHANT = 1;
@@ -41,12 +41,14 @@ public class TilePortaChant extends TileEntityInventoryMK implements IPacketGuiH
 		facing = ForgeDirection.EAST;
 	}
 	
+	@Override
 	public void setFacing(ForgeDirection facing) {
 		
 		this.facing = facing;
 		worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
 	}
 	
+	@Override
 	public ForgeDirection getFacing() {
 		
 		return facing;

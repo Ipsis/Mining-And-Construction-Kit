@@ -71,7 +71,7 @@ public class TileBeaverBlock extends TileEntity {
 	private void tryAddBlock(BlockCoord p) {
 		
 		Block b = worldObj.getBlock(p.x, p.y, p.z);
-		if (MKManagers.bbMgr.isValid(b))
+		if (MKManagers.beaverBlockMgr.isValid(b))
 			surfaceBlocks.add(p);
 	}
 	

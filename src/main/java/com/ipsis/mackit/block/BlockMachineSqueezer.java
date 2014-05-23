@@ -8,11 +8,11 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 
-public class BlockPortaChant extends BlockFaced {
+public class BlockMachineSqueezer extends BlockFaced {
 	
-	public BlockPortaChant(String name) {
+	public BlockMachineSqueezer(String name) {
 		
-		super(Material.iron, name, new String[]{ "", "_top", "_front", "", "", "" } );
+		super(Material.iron, name, new String[]{ "_bottom", "_top", "_front", "_side", "_side", "_side" } );
 	}
 	
 	@Override
@@ -21,8 +21,8 @@ public class BlockPortaChant extends BlockFaced {
 		if (player.isSneaking())
 			return false;
 		
-		if (!world.isRemote && world.getTileEntity(x, y, z) instanceof TilePortaChant)			
-			player.openGui(MacKit.instance, Gui.PORTA_CHANT, world, x, y, z);
+		if (!world.isRemote && world.getTileEntity(x, y, z) instanceof TileMachineSqueezer)			
+			player.openGui(MacKit.instance, Gui.SQUEEZER, world, x, y, z);
 		
 		return true;
 	}
@@ -30,7 +30,7 @@ public class BlockPortaChant extends BlockFaced {
 	@Override
 	public TileEntity createNewTileEntity(World var1, int var2) {
 
-		return new TilePortaChant();
+		return new TileMachineSqueezer();
 	}
 
 }

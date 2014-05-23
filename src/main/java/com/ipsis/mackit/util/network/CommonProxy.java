@@ -3,12 +3,17 @@ package com.ipsis.mackit.util.network;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
+import net.minecraftforge.client.event.TextureStitchEvent;
 
+import com.ipsis.mackit.block.TileMachineSqueezer;
 import com.ipsis.mackit.block.TilePortaChant;
+import com.ipsis.mackit.container.ContainerMachineSqueezer;
 import com.ipsis.mackit.container.ContainerPortaChant;
-import com.ipsis.mackit.helper.LogHelper;
 
+import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.network.IGuiHandler;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 public class CommonProxy implements IGuiHandler {
 
@@ -25,14 +30,27 @@ public class CommonProxy implements IGuiHandler {
 		if (te != null) {
 		
 			if (te instanceof TilePortaChant) {
-				TilePortaChant cte = (TilePortaChant)te;
-				return new ContainerPortaChant(player.inventory, cte);
+				return new ContainerPortaChant(player.inventory, (TilePortaChant)te);
+			} else if (te instanceof TileMachineSqueezer) {
+				return new ContainerMachineSqueezer(player.inventory, (TileMachineSqueezer)te);
 			} else {
 				return null;
 			}			
 		} else {
 			return null;
 		}
+	}
+	
+	@SideOnly(Side.CLIENT)
+	@SubscribeEvent
+	public void registerIcons(TextureStitchEvent.Pre event) {
+
+	}
+
+	@SideOnly(Side.CLIENT)
+	@SubscribeEvent
+	public void initializeIcons(TextureStitchEvent.Post event) {
+
 	}
 
 	

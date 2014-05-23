@@ -119,7 +119,7 @@ public class BlockBeaverBlock extends BlockContainer {
 	public boolean canPlaceBlockAt(World world, int x, int y, int z) {
 		
 		Block b = world.getBlock(x, y, z);
-		if (MKManagers.bbMgr.isValid(b))
+		if (MKManagers.beaverBlockMgr.isValid(b))
 			return true;
 		
 		return true; /* TODO return false! */
