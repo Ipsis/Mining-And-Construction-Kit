@@ -5,6 +5,8 @@ import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.item.EntityItem;
+import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.IIcon;
@@ -15,7 +17,6 @@ import net.minecraftforge.common.util.ForgeDirection;
 import com.ipsis.cofhlib.util.BlockHelper;
 import com.ipsis.cofhlib.util.EntityHelper;
 import com.ipsis.mackit.creativetab.CreativeTab;
-import com.ipsis.mackit.helper.LogHelper;
 import com.ipsis.mackit.reference.Reference;
 
 import cpw.mods.fml.relauncher.Side;
@@ -55,7 +56,7 @@ public class BlockFaced extends BlockContainer {
 
 		if (sides == null || sides.length != 6) {
 			this.iconSides = defaultIconSides;
-		} else {			
+		} else {				
 			this.iconSides = new String[6];
 			System.arraycopy(sides, 0, this.iconSides, 0, sides.length);
 		}
@@ -78,7 +79,10 @@ public class BlockFaced extends BlockContainer {
 		icons = new IIcon[6];
 		
 		for (int i = 0; i < iconSides.length; i++) {
-			icons[i] = iconRegister.registerIcon(Reference.MOD_ID + ":" + baseName + iconSides[i]);
+			if (iconSides[i].equals("") || iconSides[i].startsWith("_"))
+				icons[i] = iconRegister.registerIcon(Reference.MOD_ID + ":" + baseName + iconSides[i]);
+			else
+				icons[i] = iconRegister.registerIcon(Reference.MOD_ID + ":" + iconSides[i]);
 		}	
 	}
 	
@@ -142,6 +146,39 @@ public class BlockFaced extends BlockContainer {
 		TileEntity te = world.getTileEntity(x, y, z);
 		if (te != null && te instanceof IFacing)
 			((IFacing)te).setFacing(d);
+	}
+	
+	@Override
+	public void breakBlock(World world, int x, int y, int z, Block b, int meta) {
+
+		TileEntity te = world.getTileEntity(x, y, z);
+		if (te != null && te instanceof IInventory) {
+
+			IInventory inventory = (IInventory) te;
+
+			for (int i = 0; i < inventory.getSizeInventory(); i++) {
+
+				/* Vswe tutorial break block code */
+				ItemStack stack = inventory.getStackInSlotOnClosing(i);
+				if (stack != null) {
+					float spawnX = x + world.rand.nextFloat();
+					float spawnY = y + world.rand.nextFloat();
+					float spawnZ = z + world.rand.nextFloat();
+					
+					EntityItem droppedItem = new EntityItem(world, spawnX, spawnY, spawnZ, stack);
+					
+					float mult = 0.05F;
+					
+					droppedItem.motionX = (-0.5F + world.rand.nextFloat()) * mult;
+					droppedItem.motionY = (4 + world.rand.nextFloat()) * mult;
+					droppedItem.motionZ = (-0.5F + world.rand.nextFloat()) * mult;
+					
+					world.spawnEntityInWorld(droppedItem);
+				}
+			}
+		}
+
+		super.breakBlock(world, x, y, z, b, meta);
 	}
 	
 
