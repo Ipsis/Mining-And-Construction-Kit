@@ -8,9 +8,11 @@ import net.minecraftforge.client.event.TextureStitchEvent;
 import net.minecraftforge.fluids.Fluid;
 
 import com.ipsis.mackit.block.MKBlocks;
+import com.ipsis.mackit.block.TileMachinePainter;
 import com.ipsis.mackit.block.TileMachineSqueezer;
 import com.ipsis.mackit.block.TileMachineStamper;
 import com.ipsis.mackit.block.TilePortaChant;
+import com.ipsis.mackit.container.GuiMachinePainter;
 import com.ipsis.mackit.container.GuiMachineSqueezer;
 import com.ipsis.mackit.container.GuiMachineStamper;
 import com.ipsis.mackit.container.GuiPortaChant;
@@ -32,7 +34,9 @@ public class ClientProxy extends CommonProxy {
 			} else if (te instanceof TileMachineSqueezer) {				
 				return new GuiMachineSqueezer(player.inventory, (TileMachineSqueezer)te);				
 			} else if (te instanceof TileMachineStamper) {				
-				return new GuiMachineStamper(player.inventory, (TileMachineStamper)te);				
+				return new GuiMachineStamper(player.inventory, (TileMachineStamper)te);		
+			} else if (te instanceof TileMachinePainter) {				
+				return new GuiMachinePainter(player.inventory, (TileMachinePainter)te);	
 			} else {
 				return null;
 			}

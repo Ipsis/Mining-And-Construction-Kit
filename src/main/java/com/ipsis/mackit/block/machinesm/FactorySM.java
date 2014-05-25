@@ -37,7 +37,6 @@ public class FactorySM {
 		if (runningRecipe == null)
 			return false;
 		
-		//System.out.println("isFinished? " + machine.getConsumedEnergy() + " - " + runningRecipe.getEnergy());
 		if (machine.getConsumedEnergy() >= runningRecipe.getEnergy())
 				return true;
 		
@@ -46,19 +45,14 @@ public class FactorySM {
 	
 	public void run() {
 		
-		//System.out.println("Run: " + runningRecipe + " " + this.running);
-
 		IMachineRecipe currRecipe = machine.getRecipe();
 		
 		if (currRecipe == null) {
 			resetSM();
-			//System.out.println("No recipe");
 			return;
 		}
 		
-		//System.out.println(currRecipe + " " + runningRecipe);
 		if (runningRecipe != null && currRecipe != runningRecipe) {
-		//if (currRecipe.equals(runningRecipe)) {
 			resetSM();
 			return;
 		}
@@ -86,7 +80,10 @@ public class FactorySM {
 		machine.consumeInputs(runningRecipe);
 		machine.createOutputs(runningRecipe);
 		
-		/* reset progress but dont update the running state */
+		/**
+		 *  Reset progress but dont update the running state
+		 *  This should stop the flickering on/off effect
+		 */
 		currRecipe = null;
 		runningRecipe = null;
 		recipeEnergy = 0;

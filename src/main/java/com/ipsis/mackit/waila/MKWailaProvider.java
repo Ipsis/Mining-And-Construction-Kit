@@ -10,6 +10,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.IFluidTank;
 
 import com.ipsis.mackit.block.TileBeaverBlock;
+import com.ipsis.mackit.block.TileMachinePainter;
 import com.ipsis.mackit.block.TileMachineSqueezer;
 import com.ipsis.mackit.block.TileMachineStamper;
 
@@ -46,9 +47,13 @@ public class MKWailaProvider implements IWailaDataProvider {
 			
 			TileBeaverBlock te = (TileBeaverBlock)accessor.getTileEntity();
 			int mode = te.getMode();
-			currenttip.add("Mode : " + (mode == te.MODE_CUBE ? "Mode" : mode == te.MODE_SURFACE ? "Surface" : "Tower"));
+			currenttip.add("Mode : " + (mode == te.MODE_CUBE ? "Mode" : mode == te.MODE_SURFACE ? "Surface" : "Tower"));			
+		} else if (accessor.getTileEntity() instanceof TileMachinePainter) {
 			
+			TileMachinePainter te = (TileMachinePainter)accessor.getTileEntity();
+			addTankInfo(currenttip, "Pure  ", te.tankMgr.getTank(te.PURE_TANK));			
 		}
+		
 		return currenttip;
 	}
  
@@ -67,6 +72,7 @@ public class MKWailaProvider implements IWailaDataProvider {
 		
 		registrar.registerBodyProvider(new MKWailaProvider(), TileMachineSqueezer.class);
 		registrar.registerBodyProvider(new MKWailaProvider(), TileMachineStamper.class);
+		registrar.registerBodyProvider(new MKWailaProvider(), TileMachinePainter.class);
 		registrar.registerBodyProvider(new MKWailaProvider(), TileBeaverBlock.class);
 	}
 
