@@ -9,53 +9,50 @@ import net.minecraft.network.play.server.S35PacketUpdateTileEntity;
 import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fluids.FluidTank;
 import net.minecraftforge.fluids.FluidTankInfo;
 import net.minecraftforge.fluids.IFluidHandler;
 
+import com.ipsis.mackit.MacKit;
 import com.ipsis.mackit.block.machinesm.FactorySM;
 import com.ipsis.mackit.block.machinesm.IFactorySM;
 import com.ipsis.mackit.block.machinesm.IMachineRecipe;
 import com.ipsis.mackit.block.machinesm.IRecipeManager;
-import com.ipsis.mackit.fluid.MKFluids;
-import com.ipsis.mackit.manager.DyeRecipe;
+import com.ipsis.mackit.item.MKItems;
 import com.ipsis.mackit.manager.MKManagers;
-import com.ipsis.mackit.manager.SqueezerRecipe;
+import com.ipsis.mackit.manager.StamperRecipe;
 import com.ipsis.mackit.manager.TankManager;
+import com.ipsis.mackit.reference.Gui;
+import com.ipsis.mackit.util.network.packet.AbstractPacket;
+import com.ipsis.mackit.util.network.packet.IPacketGuiHandler;
+import com.ipsis.mackit.util.network.packet.types.PacketGui;
 
-public class TileMachineSqueezer extends TileMachine implements IFactorySM, IFacing, IRecipeManager, ISidedInventory, IFluidHandler {
-	
+public class TileMachineStamper extends TileMachine implements IFactorySM, IFacing, IRecipeManager, IPacketGuiHandler, IFluidHandler, ISidedInventory {
+
 	private FactorySM sm;
 	private ForgeDirection facing;
 	private int consumedEnergy;
 	public TankManager tankMgr;
+	private int selected;
 	
 	private static final int TANK_SIZE = 5000;
-	private static final int PURE_FLUID_AMOUNT = 100;
 	private static final int ENERGY_STORAGE_SIZE = 32000;
-	
+		
 	public static final int INPUT_SLOT = 0;
+	public static final int OUTPUT_SLOT = 1;
 	
-	public static final String RED_TANK = "red";
-	public static final String YELLOW_TANK = "yellow";
-	public static final String BLUE_TANK = "blue";
-	public static final String WHITE_TANK = "white";
 	public static final String PURE_TANK = "pure";
 	
-	private static FluidStack PURE = new FluidStack(MKFluids.fluidDyePure, PURE_FLUID_AMOUNT);
-	
-	public TileMachineSqueezer() {
+	public TileMachineStamper() {
 		
 		super(ENERGY_STORAGE_SIZE);
 		sm = new FactorySM(this);
-		inventory = new ItemStack[1];
+		inventory = new ItemStack[2];
 		facing = ForgeDirection.EAST;
 		consumedEnergy = 0;
+		selected = 0;
 		
 		tankMgr = new TankManager();
-		tankMgr.addTank(RED_TANK, TANK_SIZE);
-		tankMgr.addTank(YELLOW_TANK, TANK_SIZE);
-		tankMgr.addTank(BLUE_TANK, TANK_SIZE);
-		tankMgr.addTank(WHITE_TANK, TANK_SIZE);
 		tankMgr.addTank(PURE_TANK, TANK_SIZE);
 	}
 	
@@ -72,6 +69,64 @@ public class TileMachineSqueezer extends TileMachine implements IFactorySM, IFac
 		return facing;
 	}
 	
+	public int getSelected() {
+		
+		return selected;
+	}
+	
+	public void setSelected(int v) {
+		
+		selected = v;
+	}
+		
+	public void incSelected() {
+
+		selected = MKManagers.stamperMgr.getNextIdx(selected);
+		
+		if (worldObj.isRemote) {
+			AbstractPacket p = new PacketGui(
+					xCoord, yCoord, zCoord,
+					(byte)Gui.STAMPER,
+					(byte)Gui.TYPE_BUTTON, 
+					(byte)Gui.STAMPER_SELECTED_UP, 
+					0, 0);
+			MacKit.pp.sendToServer(p);
+		}
+	}
+
+	public void decSelected() {
+
+		selected = MKManagers.stamperMgr.getPrevIdx(selected);
+		
+		if (worldObj.isRemote) {
+			AbstractPacket p = new PacketGui(
+					xCoord, yCoord, zCoord,
+					(byte)Gui.STAMPER,
+					(byte)Gui.TYPE_BUTTON, 
+					(byte)Gui.STAMPER_SELECTED_DN, 
+					0, 0);
+			MacKit.pp.sendToServer(p);
+		}
+	}
+	
+	/*******************
+	 * IPacketGuiHandler
+	 *******************/
+	@Override
+	public void handlePacketGui(PacketGui packet) {
+
+		if (packet.guiId != Gui.STAMPER)
+			return;
+		
+		if (packet.ctrlType == Gui.TYPE_BUTTON) {
+			if (packet.ctrlId == Gui.STAMPER_SELECTED_DN) {
+				decSelected();				
+			} else if (packet.ctrlId == Gui.STAMPER_SELECTED_UP) {
+				incSelected();
+			}
+		}
+	}
+	
 	@Override
 	public void updateEntity() {
 
@@ -82,41 +137,22 @@ public class TileMachineSqueezer extends TileMachine implements IFactorySM, IFac
 	}
 	
 	public int getScaledProgress(int scale) {
-	
+		
 		return sm.getScaledProgress(scale);
 	}
-
+	
 	/************
 	 * IFactorySM
-	 ************/	
+	 ************/
 	@Override
 	public boolean isOutputValid(IMachineRecipe recipe) {
 
-		SqueezerRecipe r = (SqueezerRecipe)recipe;
-		DyeRecipe d = r.getDyeRecipe();
-		
-		/* Output is valid if at least 1 of the dyes that will be produced will fit into an internal tank.
-		 * Anything else will be lost.
-		 */
-		
-		int amount;
-		amount = d.getRed().amount;
-		if (amount != 0 && tankMgr.getTank(RED_TANK).fill(d.getRed(), false) == amount)
+		ItemStack out = getStackInSlot(OUTPUT_SLOT);
+		if (out == null)
 			return true;
 		
-		amount = d.getYellow().amount;
-		if (amount != 0 && tankMgr.getTank(YELLOW_TANK).fill(d.getYellow(), false) == amount)
-			return true;
-		
-		amount = d.getBlue().amount;
-		if (amount != 0 && tankMgr.getTank(BLUE_TANK).fill(d.getBlue(), false) == amount)
-			return true;
-		
-		amount = d.getWhite().amount;
-		if (amount != 0 && tankMgr.getTank(WHITE_TANK).fill(d.getWhite(), false) == amount)
-			return true;
-		
-		return false;
+		ItemStack produces = MKManagers.stamperMgr.getOutput(selected);
+		return out.isItemEqual(produces);
 	}
 
 	@Override
@@ -129,53 +165,19 @@ public class TileMachineSqueezer extends TileMachine implements IFactorySM, IFac
 	public void consumeInputs(IMachineRecipe recipe) {
 
 		decrStackSize(INPUT_SLOT, 1);
-	}
-	
-	private boolean checkAmountForPure() {
-		
-		int level = 30;
-		
-		if (tankMgr.getTank(RED_TANK).getFluidAmount() < level)
-			return false;
-		if (tankMgr.getTank(YELLOW_TANK).getFluidAmount() < level)
-			return false;
-		if (tankMgr.getTank(BLUE_TANK).getFluidAmount() < level)
-			return false;
-		if (tankMgr.getTank(WHITE_TANK).getFluidAmount() < level)
-			return false;
-		
-		return true;
-		
-	}
-	
-	private void tryCreatePure() {
-		
-		while (checkAmountForPure()) {
-		
-			if (tankMgr.getTank(PURE_TANK).fill(PURE, false) != 100)
-				return;
-							
-			tankMgr.getTank(RED_TANK).drain(30, true);
-			tankMgr.getTank(YELLOW_TANK).drain(30, true);
-			tankMgr.getTank(BLUE_TANK).drain(30, true);
-			tankMgr.getTank(WHITE_TANK).drain(30, true);
-			tankMgr.getTank(PURE_TANK).fill(PURE, true);
-		}
-		
+		tankMgr.getTank(PURE_TANK).drain(StamperRecipe.RECIPE.getPureDyeAmount(), true);
 	}
 
 	@Override
 	public void createOutputs(IMachineRecipe recipe) {
-		
-		SqueezerRecipe r = (SqueezerRecipe)recipe;
-		DyeRecipe d = r.getDyeRecipe();
-		
-		tankMgr.getTank(RED_TANK).fill(d.getRed(), true);
-		tankMgr.getTank(YELLOW_TANK).fill(d.getYellow(), true);
-		tankMgr.getTank(BLUE_TANK).fill(d.getBlue(), true);
-		tankMgr.getTank(WHITE_TANK).fill(d.getWhite(), true);
-		
-		tryCreatePure();
+
+		ItemStack c = getStackInSlot(OUTPUT_SLOT);
+		if (c == null) {
+			setInventorySlotContents(OUTPUT_SLOT, MKManagers.stamperMgr.getOutput(selected));
+		} else {
+			c.stackSize++;
+			setInventorySlotContents(OUTPUT_SLOT, c);
+		}
 	}
 
 	@Override
@@ -225,7 +227,19 @@ public class TileMachineSqueezer extends TileMachine implements IFactorySM, IFac
 	@Override
 	public IMachineRecipe getRecipe() {
 
-		return MKManagers.squeezerMgr.getRecipe(inventory[INPUT_SLOT]);
+		ItemStack in = getStackInSlot(INPUT_SLOT);
+		if (in == null)
+			return null;
+		
+		if (in.getItem() != MKItems.itemDyeBlank)
+			return null;
+		
+		FluidStack t = tankMgr.getTank(PURE_TANK).drain(StamperRecipe.RECIPE.getPureDyeAmount(), false);
+		if (t == null || t.amount != StamperRecipe.RECIPE.getPureDyeAmount())
+			return null;
+
+
+		return StamperRecipe.RECIPE;
 	}
 	
 	/*****
@@ -267,42 +281,16 @@ public class TileMachineSqueezer extends TileMachine implements IFactorySM, IFac
 		worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
 	}
 	
-	/*****************
-	 * ISidedInventory
-	 *****************/
-
-	private static final int[] accessSlots = new int[]{ INPUT_SLOT };
-	
-	@Override
-	public int[] getAccessibleSlotsFromSide(int side) {
-
-		return accessSlots;
-	}
-
-	@Override
-	public boolean canInsertItem(int slot, ItemStack itemStack, int side) {
-		
-		if (slot != INPUT_SLOT)
-			return false;
-		
-		return MKManagers.squeezerMgr.isSqueezable(itemStack);		
-	}
-
-	@Override
-	public boolean canExtractItem(int slot, ItemStack itemStack, int side) {
-
-		return false;
-	}
-	
 	/***************
 	 * IFluidHandler
 	 * 
-	 * Can only drain the pure tank
-	 */
+	 * Can only fill the pure tank
+	 ***************/
+
 	@Override
 	public int fill(ForgeDirection from, FluidStack resource, boolean doFill) {
 
-		return 0;
+		return tankMgr.getTank(PURE_TANK).fill(resource, doFill);
 	}
 
 	@Override
@@ -314,25 +302,54 @@ public class TileMachineSqueezer extends TileMachine implements IFactorySM, IFac
 	@Override
 	public FluidStack drain(ForgeDirection from, int maxDrain, boolean doDrain) {
 
-		return tankMgr.getTank(PURE_TANK).drain(maxDrain, doDrain);
+		return null;
 	}
 
 	@Override
 	public boolean canFill(ForgeDirection from, Fluid fluid) {
 
-		return false;
+		return true;
 	}
 
 	@Override
 	public boolean canDrain(ForgeDirection from, Fluid fluid) {
 
-		return true;
+		return false;
 	}
 
 	@Override
 	public FluidTankInfo[] getTankInfo(ForgeDirection from) {
-		
+
 		return tankMgr.getTankInfo(from);
 	}
+	
+	/*****************
+	 * ISidedInventory
+	 *****************/
+	
+	private static final int[] accessSlots = new int[]{ INPUT_SLOT, OUTPUT_SLOT };
 
+	@Override
+	public int[] getAccessibleSlotsFromSide(int slot) {
+
+		return accessSlots;
+	}
+
+	@Override
+	public boolean canInsertItem(int slot, ItemStack itemStack, int side) {
+
+		if (slot != INPUT_SLOT)
+			return false;
+		
+		return itemStack.getItem() == MKItems.itemDyeBlank;
+	}
+
+	@Override
+	public boolean canExtractItem(int slot, ItemStack itemStack, int side) {
+
+		if (slot != OUTPUT_SLOT)
+			return false;
+		
+		return true;
+	}	
 }

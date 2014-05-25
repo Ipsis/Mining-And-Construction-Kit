@@ -27,9 +27,6 @@ public class SqueezerManager {
 	public SqueezerManager() {
 
 		recipes = new HashMap<Integer, SqueezerRecipe>();
-
-		addDyeOreIds();
-		addRecipes();
 	}
 
 	private void addRecipe(ItemStack source, ItemStack dye) {
@@ -47,11 +44,22 @@ public class SqueezerManager {
 		int id = ItemHelper.getHashCode(source);
 		return recipes.get(id);
 	}
+	
+	public boolean isSqueezable(ItemStack input) {
+
+		if (MKManagers.dyeHelper.isDye(input))
+			return true;
+
+		if (getRecipe(input) != null)
+			return true;
+
+		return false;
+	}
 
 	/*
 	 * Add the item->dye recipes
 	 */
-	private void addRecipes() {
+	public void addRecipes() {
 		
 		/* Dye->Dye */
 		addRecipe(new ItemStack(Items.dye, 1, 0), new ItemStack(Items.dye, 1, 0));
@@ -86,7 +94,7 @@ public class SqueezerManager {
 					ItemStack out = irecipe.getRecipeOutput();
 					ItemStack in = (ItemStack) (r.recipeItems.get(0));
 
-					if (isDye(out)) {
+					if (MKManagers.dyeHelper.isDye(out)) {
 
 						addRecipe(in, out);
 					}
@@ -112,74 +120,10 @@ public class SqueezerManager {
 			ItemStack cleanItem = new ItemStack(in.getItem());
 			ItemStack out = ((ItemStack)pairs.getValue()).copy();
 			
-			if (isDye(out)) {
+			if (MKManagers.dyeHelper.isDye(out)) {
 
 				addRecipe(cleanItem, out);
 			}
 		}
-
-		/* test painter recipe */
-		/*
-		allrecipes = CraftingManager.getInstance().getRecipeList();
-		for (IRecipe irecipe : allrecipes) {
-
-			if (irecipe instanceof ShapelessRecipes) {
-
-				ShapelessRecipes r = (ShapelessRecipes) irecipe;
-
-			} else if (irecipe instanceof ShapedRecipes) {
-
-				ShapedRecipes r = (ShapedRecipes) irecipe;
-
-				ItemStack out = irecipe.getRecipeOutput();
-				for (ItemStack in : r.recipeItems) {
-					if (isDye(in)) {
-
-						LogHelper.error("Recipe uses dye input " + in + " = " + out);
-					}
-				}
-			}
-		} */
-
 	}
-
-	/* Is the itemstack a dye */
-	private boolean isDye(ItemStack input) {
-		
-		if (input == null)
-			return false;
-
-		int id = OreDictionary.getOreID(input);
-		if (id == -1)
-			return false;
-
-		for (int i : dyeOreIds)
-			if (i == id)
-				return true;
-
-		return false;
-	}
-
-	/*
-	 * OreDictionary information
-	 */
-	private int[] dyeOreIds;
-	private String[] dyeOreNames = { "dyeBlack", "dyeRed", "dyeGreen",
-			"dyeBrown", "dyeBlue", "dyePurple", "dyeCyan", "dyeLightGray",
-			"dyeGray", "dyePink", "dyeLime", "dyeYellow", "dyeLightBlue",
-			"dyeMagenta", "dyeOrange", "dyeWhite" };
-
-	private void addDyeOreIds() {
-
-		int c = 0;
-		dyeOreIds = new int[dyeOreNames.length];
-
-		for (String s : dyeOreNames) {
-			int id = OreDictionary.getOreID(s);
-			if (id != -1) {
-				dyeOreIds[c] = id;
-				c++;
-			}
-		}
-	}				
 }

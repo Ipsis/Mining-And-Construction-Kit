@@ -6,8 +6,10 @@ import net.minecraft.world.World;
 import net.minecraftforge.client.event.TextureStitchEvent;
 
 import com.ipsis.mackit.block.TileMachineSqueezer;
+import com.ipsis.mackit.block.TileMachineStamper;
 import com.ipsis.mackit.block.TilePortaChant;
 import com.ipsis.mackit.container.ContainerMachineSqueezer;
+import com.ipsis.mackit.container.ContainerMachineStamper;
 import com.ipsis.mackit.container.ContainerPortaChant;
 
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
@@ -33,6 +35,8 @@ public class CommonProxy implements IGuiHandler {
 				return new ContainerPortaChant(player.inventory, (TilePortaChant)te);
 			} else if (te instanceof TileMachineSqueezer) {
 				return new ContainerMachineSqueezer(player.inventory, (TileMachineSqueezer)te);
+			} else if (te instanceof TileMachineStamper) {
+				return new ContainerMachineStamper(player.inventory, (TileMachineStamper)te);
 			} else {
 				return null;
 			}			

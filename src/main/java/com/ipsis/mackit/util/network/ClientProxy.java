@@ -1,7 +1,6 @@
 package com.ipsis.mackit.util.network;
 
 import net.minecraft.block.Block;
-import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
@@ -10,8 +9,10 @@ import net.minecraftforge.fluids.Fluid;
 
 import com.ipsis.mackit.block.MKBlocks;
 import com.ipsis.mackit.block.TileMachineSqueezer;
+import com.ipsis.mackit.block.TileMachineStamper;
 import com.ipsis.mackit.block.TilePortaChant;
 import com.ipsis.mackit.container.GuiMachineSqueezer;
+import com.ipsis.mackit.container.GuiMachineStamper;
 import com.ipsis.mackit.container.GuiPortaChant;
 import com.ipsis.mackit.fluid.MKFluids;
 
@@ -30,6 +31,8 @@ public class ClientProxy extends CommonProxy {
 				return new GuiPortaChant(player.inventory, (TilePortaChant)te);
 			} else if (te instanceof TileMachineSqueezer) {				
 				return new GuiMachineSqueezer(player.inventory, (TileMachineSqueezer)te);				
+			} else if (te instanceof TileMachineStamper) {				
+				return new GuiMachineStamper(player.inventory, (TileMachineStamper)te);				
 			} else {
 				return null;
 			}

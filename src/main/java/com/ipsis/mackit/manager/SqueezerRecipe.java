@@ -8,6 +8,8 @@ public class SqueezerRecipe implements IMachineRecipe {
 
 	private ItemStack source;
 	private ItemStack dye;
+	
+	private static final int RECIPE_ENERGY = 1000;
 
 	public SqueezerRecipe(ItemStack source, ItemStack dye) {
 
@@ -34,12 +36,7 @@ public class SqueezerRecipe implements IMachineRecipe {
 	@Override
 	public int getEnergy() {
 
-		return 1000;
+		return RECIPE_ENERGY;
 	}
 	
-	@Override
-	public int getEnergyTick() {
-
-		return 10;
-	}
 }

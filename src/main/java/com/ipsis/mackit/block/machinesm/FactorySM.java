@@ -71,13 +71,13 @@ public class FactorySM {
 			return;
 		}
 		
-		if (!machine.isEnergyAvailable(runningRecipe.getEnergyTick())) {
+		if (!machine.isEnergyAvailable(machine.getEnergyTick())) {
 			setRunning(false);		
 			return;
 		}
 		
 		setRunning(true);
-		machine.consumeEnergy(runningRecipe.getEnergyTick());
+		machine.consumeEnergy(machine.getEnergyTick());
 		
 		if (!isFinished())
 			return;

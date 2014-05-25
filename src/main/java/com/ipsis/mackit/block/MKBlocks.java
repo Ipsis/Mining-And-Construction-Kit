@@ -17,6 +17,8 @@ public class MKBlocks {
 		beaverBlock = new BlockBeaverBlock("beaverBlock");
 		portaChant = new BlockPortaChant("portaChant");
 		machineSqueezer = new BlockMachineSqueezer("machineSqueezer");
+		machineStamper = new BlockMachineStamper("machineStamper");
+		machinePainter = new BlockMachinePainter("machinePainter");
 		
 		powerBlock = new BlockPowerBlock("powerBlock");
 		
@@ -34,6 +36,8 @@ public class MKBlocks {
 		GameRegistry.registerBlock(beaverBlock, "block.beaverBlock");
 		GameRegistry.registerBlock(portaChant, "block.portaChant");
 		GameRegistry.registerBlock(machineSqueezer, "block.machineSqueezer");
+		GameRegistry.registerBlock(machineStamper, "block.machineStamper");
+		GameRegistry.registerBlock(machinePainter, "block.machinePainter");
 		
 		GameRegistry.registerBlock(blockFluidDyeRed, "block.redDye");
 		GameRegistry.registerBlock(blockFluidDyeYellow, "block.yellowDye");
@@ -60,6 +64,8 @@ public class MKBlocks {
 	public static Block beaverBlock;
 	public static Block portaChant;
 	public static Block machineSqueezer;
+	public static Block machineStamper;
+	public static Block machinePainter;
 	public static Block powerBlock;
 	
 	public static BlockFluidDye blockFluidDyeRed;

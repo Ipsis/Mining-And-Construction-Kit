@@ -19,7 +19,6 @@ import net.minecraft.network.INetHandler;
 import net.minecraft.network.NetHandlerPlayServer;
 
 import com.ipsis.mackit.util.network.packet.types.PacketGui;
-import com.ipsis.mackit.util.network.packet.types.PacketUpdateTileEntity;
 
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.network.FMLEmbeddedChannel;
@@ -135,7 +134,7 @@ public class PacketPipeline extends
 	}
 
 	public void registerPackets() {
-		registerPacket(PacketUpdateTileEntity.class);
+
 		registerPacket(PacketGui.class);
 	}
 

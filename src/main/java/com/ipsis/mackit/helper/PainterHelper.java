@@ -26,7 +26,7 @@ public class PainterHelper {
 	
 	public boolean verify(ItemStack currItem) {
 		
-		if (MKManagers.squeezerMgr.isDye(currItem)) {
+		if (MKManagers.dyeHelper.isDye(currItem)) {
 			
 			if (inputDye == null) 
 				inputDye = currItem;

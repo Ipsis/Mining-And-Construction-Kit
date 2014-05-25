@@ -24,7 +24,7 @@ public class ContainerPortaChant extends Container {
 		this.te = te;
 		
 		this.addSlotToContainer(new SlotEnchantable(te, te.INPUT_SLOT, 24, 35));
-		this.addSlotToContainer(new SlotOutput(te, te.OUTPUT_SLOT, 114, 35));
+		this.addSlotToContainer(new SlotOutput(te, te.OUTPUT_SLOT, 132, 35));
 		
 		/* Player inventory */
 		for (int y = 0; y < 3; y++) {

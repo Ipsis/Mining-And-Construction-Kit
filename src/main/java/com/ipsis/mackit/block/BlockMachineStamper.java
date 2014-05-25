@@ -1,18 +1,16 @@
 package com.ipsis.mackit.block;
 
-import net.minecraft.block.Block;
-import net.minecraft.block.material.Material;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.IInventory;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.world.World;
-
 import com.ipsis.mackit.MacKit;
 import com.ipsis.mackit.reference.Gui;
 
-public class BlockMachineSqueezer extends BlockFaced {
+import net.minecraft.block.material.Material;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.world.World;
+
+public class BlockMachineStamper extends BlockFaced {
 	
-	public BlockMachineSqueezer(String name) {
+	public BlockMachineStamper(String name) {
 		
 		super(Material.iron, name, new String[]{ "machine_bottom", "machine_top", "_front", "machine_side", "machine_side", "machine_side" } );
 	}
@@ -23,8 +21,8 @@ public class BlockMachineSqueezer extends BlockFaced {
 		if (player.isSneaking())
 			return false;
 		
-		if (!world.isRemote && world.getTileEntity(x, y, z) instanceof TileMachineSqueezer)			
-			player.openGui(MacKit.instance, Gui.SQUEEZER, world, x, y, z);
+		if (!world.isRemote && world.getTileEntity(x, y, z) instanceof TileMachineStamper)			
+			player.openGui(MacKit.instance, Gui.STAMPER, world, x, y, z);
 		
 		return true;
 	}
@@ -32,7 +30,6 @@ public class BlockMachineSqueezer extends BlockFaced {
 	@Override
 	public TileEntity createNewTileEntity(World var1, int var2) {
 
-		return new TileMachineSqueezer();
+		return new TileMachineStamper();
 	}
-
 }

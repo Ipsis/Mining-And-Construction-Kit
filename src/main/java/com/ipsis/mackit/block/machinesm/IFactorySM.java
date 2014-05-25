@@ -12,5 +12,7 @@ public interface IFactorySM {
 	public int getConsumedEnergy();
 	public void resetConsumedEnergy();
 	
+	public int getEnergyTick();
+	
 	public IMachineRecipe getRecipe();
 }

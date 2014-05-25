@@ -50,7 +50,7 @@ public class PainterManager {
 		helper.reset();
 		
 		/* Ignore recipes that produce dyes */
-		if (MKManagers.squeezerMgr.isDye(r.getRecipeOutput()) == true)
+		if (MKManagers.dyeHelper.isDye(r.getRecipeOutput()) == true)
 				return;
 		
 		Iterator iter = r.recipeItems.iterator();
@@ -74,7 +74,7 @@ public class PainterManager {
 		helper.reset();
 		
 		/* Ignore recipes that produce dyes */
-		if (MKManagers.squeezerMgr.isDye(r.getRecipeOutput()) == true)
+		if (MKManagers.dyeHelper.isDye(r.getRecipeOutput()) == true)
 				return;
 		
 		for (ItemStack currIn : r.recipeItems) {
@@ -99,7 +99,7 @@ public class PainterManager {
 		helper.reset();
 		
 		/* Ignore recipes that produce dyes */
-		if (MKManagers.squeezerMgr.isDye(r.getRecipeOutput()) == true)
+		if (MKManagers.dyeHelper.isDye(r.getRecipeOutput()) == true)
 				return;
 		
 		List recipeInput = r.getInput();
@@ -140,7 +140,7 @@ public class PainterManager {
 		helper.reset();		
 		
 		/* Ignore recipes that produce dyes */
-		if (MKManagers.squeezerMgr.isDye(r.getRecipeOutput()) == true)
+		if (MKManagers.dyeHelper.isDye(r.getRecipeOutput()) == true)
 				return;
 		
 		Object[] recipeInput = r.getInput();

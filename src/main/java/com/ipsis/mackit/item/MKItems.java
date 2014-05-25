@@ -27,10 +27,12 @@ public class MKItems {
 		itemFixerFoamGun = new ItemFixerFoamGun().setUnlocalizedName("fixerFoamGun");
 		itemFixerFoamRefill = new ItemFixerFoamRefill().setUnlocalizedName("fixerFoamRefill");
 		itemMews = new ItemMews().setUnlocalizedName("mews");
+		itemDyeBlank = new ItemDyeBlank().setUnlocalizedName("dyeBlank");
 		
 		GameRegistry.registerItem(itemFixerFoamGun, "item.fixerFoamGun");
 		GameRegistry.registerItem(itemFixerFoamRefill, "item.fixerFoamPellet");
 		GameRegistry.registerItem(itemMews, "item.mews");
+		GameRegistry.registerItem(itemDyeBlank,  "item.dyeBlank");;
 	}
 	
 	public static void initialise() {
@@ -55,6 +57,7 @@ public class MKItems {
 	public static Item itemFixerFoamGun;
 	public static Item itemFixerFoamRefill;
 	public static Item itemMews;
+	public static Item itemDyeBlank;
 	
 	/* buckets */
 	public static ItemBucket itemBucket;

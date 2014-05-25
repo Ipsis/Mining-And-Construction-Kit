@@ -1,0 +1,19 @@
+tile.MacKit:fixedSand.name=Fixed Sand
+tile.MacKit:fixedGravel.name=Fixed Gravel
+
+tile.MacKit:beaverBlock.name=Beaver Block
+tile.MacKit:portaChant.name=Porta-chant
+
+tile.MacKit:machineSqueezer.name=Squeezer
+tile.MacKit:machinePainter.name=Painter
+tile.MacKit:machineStamper.name=Stamper
+
+tile.MacKit:redDye.name=Red Liquid Dye
+tile.MacKit:yellowDye.name=Yellow Liquid Dye
+tile.MacKit:blueDye.name=Blue Liquid Dye
+tile.MacKit:whiteDye.name=White Liquid Dye
+tile.MacKit:pureDye.name=Pure Liquid Dye
+
+item.MacKit:fixerFoamGun.name=Fixer Foam Gun
+item.MacKit:fixerFoamRefill.name=Fixer Foam Refill
+item.MacKit:mews.name=Mob Early Warning System

@@ -7,9 +7,11 @@ import java.util.Map;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraftforge.common.util.Constants;
+import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTank;
+import net.minecraftforge.fluids.FluidTankInfo;
 
 public class TankManager {
 	
@@ -17,7 +19,7 @@ public class TankManager {
 	
 	public TankManager() {
 		
-		tanks = new HashMap<String, FluidTank>();		
+		tanks = new HashMap<String, FluidTank>();	
 	}
 	
 	public void addTank(String name, int capacity) {
@@ -29,6 +31,20 @@ public class TankManager {
 	public FluidTank getTank(String name) {
 		
 		return tanks.get(name);
+	}
+	
+	public FluidTankInfo[] getTankInfo(ForgeDirection from) {
+		
+		FluidTankInfo[] tankInfo = new FluidTankInfo[tanks.size()];
+
+		int x = 0;
+		for (FluidTank t : tanks.values()) {
+			
+			tankInfo[x] = t.getInfo();
+			x++;
+		}
+		
+		return tankInfo;
 	}
 	
 	/* Server->Client sync only */
