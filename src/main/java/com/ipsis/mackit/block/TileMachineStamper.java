@@ -250,7 +250,8 @@ public class TileMachineStamper extends TileMachine implements IFactorySM, IFaci
 
 		super.writeToNBT(nbttagcompound);
 		nbttagcompound.setByte("Facing", (byte)facing.ordinal());
-		nbttagcompound.setInteger("Energy", consumedEnergy);
+		nbttagcompound.setInteger("ConsumedEnergy", consumedEnergy);
+		nbttagcompound.setByte("Selected",  (byte)selected);
 		tankMgr.writeToNBT(nbttagcompound);
 	}
 	
@@ -259,7 +260,8 @@ public class TileMachineStamper extends TileMachine implements IFactorySM, IFaci
 
 		super.readFromNBT(nbttagcompound);
 		facing = ForgeDirection.getOrientation((int)nbttagcompound.getByte("Facing"));
-		consumedEnergy = nbttagcompound.getInteger("Energy");
+		consumedEnergy = nbttagcompound.getInteger("ConsumedEnergy");
+		selected = nbttagcompound.getByte("Selected");
 		tankMgr.readFromNBT(nbttagcompound);
 	}
 	

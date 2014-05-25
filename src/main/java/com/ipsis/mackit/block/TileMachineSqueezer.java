@@ -236,7 +236,7 @@ public class TileMachineSqueezer extends TileMachine implements IFactorySM, IFac
 
 		super.writeToNBT(nbttagcompound);
 		nbttagcompound.setByte("Facing", (byte)facing.ordinal());
-		nbttagcompound.setInteger("Energy", consumedEnergy);
+		nbttagcompound.setInteger("ConsumedEnergy", consumedEnergy);
 		tankMgr.writeToNBT(nbttagcompound);
 	}
 	
@@ -245,7 +245,7 @@ public class TileMachineSqueezer extends TileMachine implements IFactorySM, IFac
 
 		super.readFromNBT(nbttagcompound);
 		facing = ForgeDirection.getOrientation((int)nbttagcompound.getByte("Facing"));
-		consumedEnergy = nbttagcompound.getInteger("Energy");
+		consumedEnergy = nbttagcompound.getInteger("ConsumedEnergy");
 		tankMgr.readFromNBT(nbttagcompound);
 	}
 	
