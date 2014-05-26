@@ -18,22 +18,22 @@ public class StamperManager {
 		/**
 		 * TODO disables the dyes we dont want eg. Lapis
 		 */
-		outputs.add(new ItemStack(Items.dye, 1, 0));
-		outputs.add(new ItemStack(Items.dye, 1, 1));
-		outputs.add(new ItemStack(Items.dye, 1, 2));
-		outputs.add(new ItemStack(Items.dye, 1, 3));
-		outputs.add(new ItemStack(Items.dye, 1, 4));
-		outputs.add(new ItemStack(Items.dye, 1, 5));
-		outputs.add(new ItemStack(Items.dye, 1, 6));
-		outputs.add(new ItemStack(Items.dye, 1, 7));
-		outputs.add(new ItemStack(Items.dye, 1, 8));
-		outputs.add(new ItemStack(Items.dye, 1, 9));
-		outputs.add(new ItemStack(Items.dye, 1, 10));
-		outputs.add(new ItemStack(Items.dye, 1, 11));
-		outputs.add(new ItemStack(Items.dye, 1, 12));
-		outputs.add(new ItemStack(Items.dye, 1, 13));
-		outputs.add(new ItemStack(Items.dye, 1, 14));
-		outputs.add(new ItemStack(Items.dye, 1, 15));		
+		outputs.add(new ItemStack(Items.dye, 1, 0));	// black
+		outputs.add(new ItemStack(Items.dye, 1, 1));	// red
+		outputs.add(new ItemStack(Items.dye, 1, 2));	// green
+		outputs.add(new ItemStack(Items.dye, 1, 3));	// brown
+		outputs.add(new ItemStack(Items.dye, 1, 4));	// blue
+		outputs.add(new ItemStack(Items.dye, 1, 5));	// purple
+		outputs.add(new ItemStack(Items.dye, 1, 6));	// cyan
+		outputs.add(new ItemStack(Items.dye, 1, 7));	// silver
+		outputs.add(new ItemStack(Items.dye, 1, 8));	// gray
+		outputs.add(new ItemStack(Items.dye, 1, 9));	// pink
+		outputs.add(new ItemStack(Items.dye, 1, 10));	// lime
+		outputs.add(new ItemStack(Items.dye, 1, 11));	// yellow
+		outputs.add(new ItemStack(Items.dye, 1, 12));	// lightBlue
+		outputs.add(new ItemStack(Items.dye, 1, 13));	// magenta
+		outputs.add(new ItemStack(Items.dye, 1, 14));	// orange
+		outputs.add(new ItemStack(Items.dye, 1, 15));	// white
 	}
 	
 	public ItemStack getOutput(int idx) {
@@ -49,7 +49,7 @@ public class StamperManager {
 		if (idx < 0 || idx >= outputs.size())
 			return null;
 		
-		return outputs.get(idx).getIconIndex();
+		return Items.dye.getIconFromDamage(idx);
 	}
 	
 	public int getFirstIdx() {
@@ -90,6 +90,5 @@ public class StamperManager {
 			return outputs.size() - 1;
 		
 		return prev;		
-	}
-	
+	}	
 }

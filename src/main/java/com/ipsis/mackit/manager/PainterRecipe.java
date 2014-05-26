@@ -2,22 +2,34 @@ package com.ipsis.mackit.manager;
 
 import net.minecraft.item.ItemStack;
 
-public class PainterRecipe {
+import com.ipsis.mackit.block.machinesm.IMachineRecipe;
 
-	private ItemStack src;
+public class PainterRecipe implements IMachineRecipe {
+	
+	private static final int PURE_FLUID_AMOUNT = 100;
+	private static final int RECIPE_ENERGY = 40;
+
+	private ItemStack srcDye;
+	private ItemStack srcItem;
 	private ItemStack output;
 	private int srcCount;
 	
-	public PainterRecipe(ItemStack src, int srcCount, ItemStack output) {
+	public PainterRecipe(ItemStack srcDye, ItemStack srcItem, int srcCount, ItemStack output) {
 		
-		this.src = src;
+		this.srcDye = srcDye;
+		this.srcItem = srcItem;
 		this.srcCount = srcCount;
 		this.output = output;
 	}
 	
-	public ItemStack getSrc() {
+	public ItemStack getSrcDye() {
 		
-		return src;
+		return srcDye;
+	}
+	
+	public ItemStack getSrcItem() {
+		
+		return srcItem;
 	}
 	
 	public ItemStack getOutput() {
@@ -28,5 +40,11 @@ public class PainterRecipe {
 	public int getSrcCount() {
 		
 		return srcCount;
+	}
+
+	@Override
+	public int getEnergy() {
+
+		return RECIPE_ENERGY;
 	}
 }

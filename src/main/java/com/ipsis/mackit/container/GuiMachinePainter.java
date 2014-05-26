@@ -14,6 +14,7 @@ import com.ipsis.mackit.block.TileMachineStamper;
 import com.ipsis.mackit.gui.element.ElementIcon;
 import com.ipsis.mackit.gui.element.TabEnergy;
 import com.ipsis.mackit.gui.element.TabInfo;
+import com.ipsis.mackit.manager.MKManagers;
 import com.ipsis.mackit.reference.Reference;
 
 public class GuiMachinePainter extends GuiBase {
@@ -22,9 +23,15 @@ public class GuiMachinePainter extends GuiBase {
 	private static final String PROGRESS_TEXTURE_STR = Reference.MOD_ID.toLowerCase() + ":textures/gui/progress.png";
 	private static final ResourceLocation TEXTURE = new ResourceLocation(Reference.MOD_ID.toLowerCase(), "textures/gui/" + "machinePainter.png");
 	
+	private static final String BTN_UP_STR = "Up";
+	private static final String BTN_DN_STR  = "Down";
+	
 	private TileMachinePainter te;
 	private InventoryPlayer invPlayer;
 	private ElementDualScaled progress;
+	private ElementButton up;
+	private ElementButton down;
+	private ElementIcon selected;
 	
 	public GuiMachinePainter(InventoryPlayer invPlayer, TileMachinePainter te) {
 		
@@ -49,8 +56,32 @@ public class GuiMachinePainter extends GuiBase {
 		this.progress = ((ElementDualScaled)addElement(new ElementDualScaled(this, 71, 35).setMode(1).setBackground(false).setSize(24, 16).setTexture(PROGRESS_TEXTURE_STR, 64, 64)));
 		addElement(progress);
 		
+		this.selected = ((ElementIcon)addElement(new ElementIcon(this, 78, 62).setIcon(Items.bone.getIconFromDamage(0))));
+		addElement(selected);
+		
+		/* buttons */
+		addElement(new ElementButton(this, 60, 62, BTN_DN_STR, 176, 0, 176, 16, 176, 32, 16, 16, TEXTURE_STR));
+		addElement(new ElementButton(this, 96, 62, BTN_UP_STR, 192, 0, 192, 16, 192, 32, 16, 16, TEXTURE_STR));
+		
 		addTab(new TabEnergy(this, this.te));
 		addTab(new TabInfo(this, "Paint your blocks on the cheap"));
+	}
+	
+	@Override
+	protected void updateElements() {
+
+		this.progress.setQuantity(this.te.getScaledProgress(24));
+		this.selected.setIcon(te.getIcon(te.getSelected()));
+	}
+	
+	@Override
+	public void handleElementButtonClick(String buttonName, int mouseButton) {
+		
+		if (buttonName.equals(BTN_UP_STR)) {
+			te.incSelected();
+		} else if (buttonName.equals(BTN_DN_STR)) {
+			te.decSelected();
+		}
 	}
 	
 }

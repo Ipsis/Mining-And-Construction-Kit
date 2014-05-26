@@ -73,7 +73,7 @@ public class MKWailaProvider implements IWailaDataProvider {
 		registrar.registerBodyProvider(new MKWailaProvider(), TileMachineSqueezer.class);
 		registrar.registerBodyProvider(new MKWailaProvider(), TileMachineStamper.class);
 		registrar.registerBodyProvider(new MKWailaProvider(), TileMachinePainter.class);
-		registrar.registerBodyProvider(new MKWailaProvider(), TileBeaverBlock.class);
+		registrar.registerBodyProvider(new MKWailaProvider(), TileBeaverBlock.class);		
 	}
 
 }

@@ -5,11 +5,13 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 
+import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.CraftingManager;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.item.crafting.ShapedRecipes;
 import net.minecraft.item.crafting.ShapelessRecipes;
+import net.minecraft.util.IIcon;
 import net.minecraftforge.oredict.ShapedOreRecipe;
 import net.minecraftforge.oredict.ShapelessOreRecipe;
 
@@ -26,7 +28,6 @@ import com.ipsis.mackit.helper.PainterHelper;
  * A recipe that only contains 2 item type
  * A recipe that uses only 1 dye.
  *
- * TODO probably need to store the dye as well!
  */
 public class PainterManager {
 	
@@ -37,10 +38,24 @@ public class PainterManager {
 		recipes = new HashMap<Integer, PainterRecipe>();
 	}
 	
-	private void addRecipe(ItemStack src, int srcCount, ItemStack output) {
+	public PainterRecipe getRecipe(ItemStack src) {
+		
+		if (src == null)
+			return null;
+		
+		return recipes.get(ItemHelper.getHashCode(src));
+	}
+	
+	private void addRecipe(ItemStack srcDye, ItemStack src, int srcCount, ItemStack output) {
 
 		LogHelper.error("PainterManager: addRecipe " + src + ":" + srcCount + "->" + output);
-		recipes.put(ItemHelper.getHashCode(src), new PainterRecipe(src, srcCount, output));
+		recipes.put(ItemHelper.getHashCode(src), new PainterRecipe(srcDye, src, srcCount, output));
+		
+		/**
+		 * The added recipe takes a dye and an item and produces a dyed item
+		 * This means that the output is also a valid input ....
+		 */
+		
 	}
 	
 	private void handleShapelessRecipe(ShapelessRecipes r) {
@@ -64,7 +79,7 @@ public class PainterManager {
 		}
 		
 		if (valid && helper.getInputDye() != null && helper.getInputItem() != null && helper.getItemCount() > 0)
-			addRecipe(helper.getInputItem(), helper.getItemCount(), r.getRecipeOutput());			
+			addRecipe(helper.getInputDye(), helper.getInputItem(), helper.getItemCount(), r.getRecipeOutput());			
 	}
 	
 	private void handleShapedRecipe(ShapedRecipes r) {
@@ -89,7 +104,7 @@ public class PainterManager {
 		}
 		
 		if (valid && helper.getInputDye() != null && helper.getInputItem() != null && helper.getItemCount() > 0)
-			addRecipe(helper.getInputItem(), helper.getItemCount(), r.getRecipeOutput());
+			addRecipe(helper.getInputDye(), helper.getInputItem(), helper.getItemCount(), r.getRecipeOutput());	
 	}
 	
 	private void handleShapelessOreRecipe(ShapelessOreRecipe r) {
@@ -130,7 +145,7 @@ public class PainterManager {
 		}
 		
 		if (valid && helper.getInputDye() != null && helper.getInputItem() != null && helper.getItemCount() > 0)
-			addRecipe(helper.getInputItem(), helper.getItemCount(), r.getRecipeOutput());
+			addRecipe(helper.getInputDye(), helper.getInputItem(), helper.getItemCount(), r.getRecipeOutput());	
 	}
 	
 	private void handleShapedOreRecipe(ShapedOreRecipe r) {
@@ -171,7 +186,7 @@ public class PainterManager {
 		}
 		
 		if (valid && helper.getInputDye() != null && helper.getInputItem() != null && helper.getItemCount() > 0)
-			addRecipe(helper.getInputItem(), helper.getItemCount(), r.getRecipeOutput());	
+			addRecipe(helper.getInputDye(), helper.getInputItem(), helper.getItemCount(), r.getRecipeOutput());	
 	}
 	
 	public void loadRecipes() {
@@ -194,5 +209,43 @@ public class PainterManager {
 			}
 		}
 	}
+	
+	/**
+	 * Dye selections
+	 */
+	
+	/*
+	private static List<ItemStack> outputs;
+	
+	private void addDyes() {
+		
+		outputs = new ArrayList<ItemStack>();
+		
+		outputs.add(new ItemStack(Items.dye, 1, 0));
+		outputs.add(new ItemStack(Items.dye, 1, 1));
+		outputs.add(new ItemStack(Items.dye, 1, 2));
+		outputs.add(new ItemStack(Items.dye, 1, 3));
+		outputs.add(new ItemStack(Items.dye, 1, 4));
+		outputs.add(new ItemStack(Items.dye, 1, 5));
+		outputs.add(new ItemStack(Items.dye, 1, 6));
+		outputs.add(new ItemStack(Items.dye, 1, 7));
+		outputs.add(new ItemStack(Items.dye, 1, 8));
+		outputs.add(new ItemStack(Items.dye, 1, 9));
+		outputs.add(new ItemStack(Items.dye, 1, 10));
+		outputs.add(new ItemStack(Items.dye, 1, 11));
+		outputs.add(new ItemStack(Items.dye, 1, 12));
+		outputs.add(new ItemStack(Items.dye, 1, 13));
+		outputs.add(new ItemStack(Items.dye, 1, 14));
+		outputs.add(new ItemStack(Items.dye, 1, 15));		
+	}
+	
+	public ItemStack getOutput(int idx) {
+		
+		if (idx < 0 || idx >= outputs.size())
+			return null;
+		
+		return outputs.get(idx).copy();
+	} */
+	
 
 }

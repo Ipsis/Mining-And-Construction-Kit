@@ -15,4 +15,7 @@ public class Gui {
 	
 	public static final int STAMPER_SELECTED_UP = 0;
 	public static final int STAMPER_SELECTED_DN = 1;
+	
+	public static final int PAINTER_SELECTED_UP = 0;
+	public static final int PAINTER_SELECTED_DN = 1;
 }

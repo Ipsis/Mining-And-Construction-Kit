@@ -125,8 +125,9 @@ public class ContainerMachineStamper extends Container {
 			te.setRecipeEnergy(data);
 		} else if (id == PURE_TANK_ID) {
 			te.tankMgr.setTank(te.PURE_TANK, MKFluids.fluidDyePure, data);
-		} else if (id == SELECTED_ID)
+		} else if (id == SELECTED_ID) {
 			te.setSelected(data);
+		}
 	}
 	
 	@Override
