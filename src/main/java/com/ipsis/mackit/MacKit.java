@@ -3,6 +3,7 @@ import net.minecraftforge.common.MinecraftForge;
 
 import com.ipsis.mackit.block.MKBlocks;
 import com.ipsis.mackit.block.TileBeaverBlock;
+import com.ipsis.mackit.block.TileMachineDyeFiller;
 import com.ipsis.mackit.block.TileMachinePainter;
 import com.ipsis.mackit.block.TileMachineSqueezer;
 import com.ipsis.mackit.block.TileMachineStamper;
@@ -66,6 +67,7 @@ public class MacKit
     	GameRegistry.registerTileEntity(TileMachineSqueezer.class, "tile.machineSqueezer");
     	GameRegistry.registerTileEntity(TileMachineStamper.class, "tile.machineStamper");
     	GameRegistry.registerTileEntity(TileMachinePainter.class, "tile.machinePainter");
+    	GameRegistry.registerTileEntity(TileMachineDyeFiller.class, "tile.machineDyeFiller");
     	    	
     	GameRegistry.registerTileEntity(TilePowerBlock.class, "tile.powerBlock");
     	
