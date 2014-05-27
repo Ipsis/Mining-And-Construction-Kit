@@ -209,43 +209,4 @@ public class PainterManager {
 			}
 		}
 	}
-	
-	/**
-	 * Dye selections
-	 */
-	
-	/*
-	private static List<ItemStack> outputs;
-	
-	private void addDyes() {
-		
-		outputs = new ArrayList<ItemStack>();
-		
-		outputs.add(new ItemStack(Items.dye, 1, 0));
-		outputs.add(new ItemStack(Items.dye, 1, 1));
-		outputs.add(new ItemStack(Items.dye, 1, 2));
-		outputs.add(new ItemStack(Items.dye, 1, 3));
-		outputs.add(new ItemStack(Items.dye, 1, 4));
-		outputs.add(new ItemStack(Items.dye, 1, 5));
-		outputs.add(new ItemStack(Items.dye, 1, 6));
-		outputs.add(new ItemStack(Items.dye, 1, 7));
-		outputs.add(new ItemStack(Items.dye, 1, 8));
-		outputs.add(new ItemStack(Items.dye, 1, 9));
-		outputs.add(new ItemStack(Items.dye, 1, 10));
-		outputs.add(new ItemStack(Items.dye, 1, 11));
-		outputs.add(new ItemStack(Items.dye, 1, 12));
-		outputs.add(new ItemStack(Items.dye, 1, 13));
-		outputs.add(new ItemStack(Items.dye, 1, 14));
-		outputs.add(new ItemStack(Items.dye, 1, 15));		
-	}
-	
-	public ItemStack getOutput(int idx) {
-		
-		if (idx < 0 || idx >= outputs.size())
-			return null;
-		
-		return outputs.get(idx).copy();
-	} */
-	
-
 }
