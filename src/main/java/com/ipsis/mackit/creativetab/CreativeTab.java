@@ -2,6 +2,7 @@ package com.ipsis.mackit.creativetab;
 
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
+import net.minecraft.util.StatCollector;
 
 import com.ipsis.mackit.item.MKItems;
 import com.ipsis.mackit.reference.Reference;
@@ -23,7 +24,7 @@ public class CreativeTab {
 		@SideOnly(Side.CLIENT)
 		public String getTranslatedTabLabel() {
 			
-			return "Mining & Construction Kit";
+			return StatCollector.translateToLocal("key.categories.MacKit");
 		}
 	};
 }

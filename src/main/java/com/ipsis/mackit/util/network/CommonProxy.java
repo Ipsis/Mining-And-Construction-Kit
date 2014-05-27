@@ -5,10 +5,12 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import net.minecraftforge.client.event.TextureStitchEvent;
 
+import com.ipsis.mackit.block.TileMachineDyeFiller;
 import com.ipsis.mackit.block.TileMachinePainter;
 import com.ipsis.mackit.block.TileMachineSqueezer;
 import com.ipsis.mackit.block.TileMachineStamper;
 import com.ipsis.mackit.block.TilePortaChant;
+import com.ipsis.mackit.container.ContainerMachineDyeFiller;
 import com.ipsis.mackit.container.ContainerMachinePainter;
 import com.ipsis.mackit.container.ContainerMachineSqueezer;
 import com.ipsis.mackit.container.ContainerMachineStamper;
@@ -41,6 +43,8 @@ public class CommonProxy implements IGuiHandler {
 				return new ContainerMachineStamper(player.inventory, (TileMachineStamper)te);
 			} else if (te instanceof TileMachinePainter) {
 				return new ContainerMachinePainter(player.inventory, (TileMachinePainter)te);
+			} else if (te instanceof TileMachineDyeFiller) {
+				return new ContainerMachineDyeFiller(player.inventory, (TileMachineDyeFiller)te);
 			} else {
 				return null;
 			}			

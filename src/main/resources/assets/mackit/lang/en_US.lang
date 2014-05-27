@@ -1,3 +1,5 @@
+key.categories.MacKit=Mining & Construction Kit
+
 tile.MacKit:fixedSand.name=Fixed Sand
 tile.MacKit:fixedGravel.name=Fixed Gravel
 
@@ -7,6 +9,7 @@ tile.MacKit:portaChant.name=Porta-chant
 tile.MacKit:machineSqueezer.name=Squeezer
 tile.MacKit:machinePainter.name=Painter
 tile.MacKit:machineStamper.name=Stamper
+tile.MacKit:machineDyeFiller.name=Filler
 
 tile.MacKit:redDye.name=Red Liquid Dye
 tile.MacKit:yellowDye.name=Yellow Liquid Dye
@@ -17,3 +20,5 @@ tile.MacKit:pureDye.name=Pure Liquid Dye
 item.MacKit:fixerFoamGun.name=Fixer Foam Gun
 item.MacKit:fixerFoamRefill.name=Fixer Foam Refill
 item.MacKit:mews.name=Mob Early Warning System
+item.MacKit:dyeBlank.name=Dye Blank
+item.MacKit:dyeGun.name=Dye Gun

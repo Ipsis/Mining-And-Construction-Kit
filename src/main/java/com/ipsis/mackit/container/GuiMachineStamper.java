@@ -82,5 +82,4 @@ public class GuiMachineStamper extends GuiBase {
 			te.decSelected();
 		}
 	}
-	
 }
