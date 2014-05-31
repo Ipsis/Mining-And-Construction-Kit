@@ -20,6 +20,7 @@ import com.ipsis.mackit.block.machinesm.IFactorySM;
 import com.ipsis.mackit.block.machinesm.IMachineRecipe;
 import com.ipsis.mackit.block.machinesm.IRecipeManager;
 import com.ipsis.mackit.manager.MKManagers;
+import com.ipsis.mackit.manager.PainterRecipe;
 import com.ipsis.mackit.manager.TankManager;
 import com.ipsis.mackit.reference.Gui;
 import com.ipsis.mackit.util.network.packet.AbstractPacket;
@@ -171,10 +172,22 @@ public class TileMachinePainter extends TileMachine implements IPacketGuiHandler
 	@Override
 	public void consumeInputs(IMachineRecipe recipe) {
 
+		decrStackSize(INPUT_SLOT, 1);
+		// TODO tankMgr.getTank(PURE_TANK).drain(StamperRecipe.RECIPE.getPureDyeAmount(), true);		
+		
 	}
 
 	@Override
 	public void createOutputs(IMachineRecipe recipe) {
+		
+		ItemStack c = getStackInSlot(OUTPUT_SLOT);
+		if (c == null) {
+			PainterRecipe pr = (PainterRecipe)recipe;
+			setInventorySlotContents(OUTPUT_SLOT, pr.getOutput());
+		} else {
+			c.stackSize++;
+			setInventorySlotContents(OUTPUT_SLOT, c);
+		}
 		
 	}
 
@@ -224,7 +237,7 @@ public class TileMachinePainter extends TileMachine implements IPacketGuiHandler
 	@Override
 	public IMachineRecipe getRecipe() {
 
-		return MKManagers.painterMgr.getRecipe(inventory[INPUT_SLOT]);
+		return MKManagers.painterMgr.getRecipe(inventory[INPUT_SLOT], MKManagers.stamperMgr.getOutput(selected));
 	}
 	
 	/*****

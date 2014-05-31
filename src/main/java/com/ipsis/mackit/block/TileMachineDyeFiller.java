@@ -6,26 +6,17 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.Packet;
 import net.minecraft.network.play.server.S35PacketUpdateTileEntity;
-import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTankInfo;
 import net.minecraftforge.fluids.IFluidHandler;
 
-import com.ipsis.mackit.MacKit;
 import com.ipsis.mackit.block.machinesm.FactorySM;
 import com.ipsis.mackit.block.machinesm.IFactorySM;
 import com.ipsis.mackit.block.machinesm.IMachineRecipe;
 import com.ipsis.mackit.block.machinesm.IRecipeManager;
-import com.ipsis.mackit.item.MKItems;
-import com.ipsis.mackit.manager.MKManagers;
-import com.ipsis.mackit.manager.StamperRecipe;
 import com.ipsis.mackit.manager.TankManager;
-import com.ipsis.mackit.reference.Gui;
-import com.ipsis.mackit.util.network.packet.AbstractPacket;
-import com.ipsis.mackit.util.network.packet.IPacketGuiHandler;
-import com.ipsis.mackit.util.network.packet.types.PacketGui;
 
 public class TileMachineDyeFiller extends TileMachine implements IFactorySM, IFacing, IRecipeManager, IFluidHandler, ISidedInventory {
 

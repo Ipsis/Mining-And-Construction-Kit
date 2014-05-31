@@ -1,9 +1,9 @@
-package com.ipsis.mackit.util;
+package com.ipsis.mackit.helper;
 
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.oredict.OreDictionary;
 
-public class DyeHelper {
+public class DyeOreDictHelper {
 
 	/*
 	 * OreDictionary information
@@ -14,7 +14,7 @@ public class DyeHelper {
 			"dyeGray", "dyePink", "dyeLime", "dyeYellow", "dyeLightBlue",
 			"dyeMagenta", "dyeOrange", "dyeWhite" };
 
-	public DyeHelper() {
+	public DyeOreDictHelper() {
 		
 	}
 

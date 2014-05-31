@@ -1,4 +1,4 @@
-package com.ipsis.mackit.waila;
+package com.ipsis.mackit.plugins.waila;
 
 import java.util.List;
 

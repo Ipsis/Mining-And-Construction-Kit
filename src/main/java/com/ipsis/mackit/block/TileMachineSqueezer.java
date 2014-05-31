@@ -17,9 +17,8 @@ import com.ipsis.mackit.block.machinesm.IFactorySM;
 import com.ipsis.mackit.block.machinesm.IMachineRecipe;
 import com.ipsis.mackit.block.machinesm.IRecipeManager;
 import com.ipsis.mackit.fluid.MKFluids;
-import com.ipsis.mackit.manager.DyeRecipe;
 import com.ipsis.mackit.manager.MKManagers;
-import com.ipsis.mackit.manager.SqueezerRecipe;
+import com.ipsis.mackit.manager.SqueezerManager;
 import com.ipsis.mackit.manager.TankManager;
 
 public class TileMachineSqueezer extends TileMachine implements IFactorySM, IFacing, IRecipeManager, ISidedInventory, IFluidHandler {
@@ -92,28 +91,27 @@ public class TileMachineSqueezer extends TileMachine implements IFactorySM, IFac
 	@Override
 	public boolean isOutputValid(IMachineRecipe recipe) {
 
-		SqueezerRecipe r = (SqueezerRecipe)recipe;
-		DyeRecipe d = r.getDyeRecipe();
+		SqueezerManager.SqueezerRecipe r = (SqueezerManager.SqueezerRecipe)recipe;
 		
 		/* Output is valid if at least 1 of the dyes that will be produced will fit into an internal tank.
 		 * Anything else will be lost.
 		 */
 		
 		int amount;
-		amount = d.getRed().amount;
-		if (amount != 0 && tankMgr.getTank(RED_TANK).fill(d.getRed(), false) == amount)
+		amount = r.getRed().amount;
+		if (amount != 0 && tankMgr.getTank(RED_TANK).fill(r.getRed(), false) == amount)
 			return true;
 		
-		amount = d.getYellow().amount;
-		if (amount != 0 && tankMgr.getTank(YELLOW_TANK).fill(d.getYellow(), false) == amount)
+		amount = r.getYellow().amount;
+		if (amount != 0 && tankMgr.getTank(YELLOW_TANK).fill(r.getYellow(), false) == amount)
 			return true;
 		
-		amount = d.getBlue().amount;
-		if (amount != 0 && tankMgr.getTank(BLUE_TANK).fill(d.getBlue(), false) == amount)
+		amount = r.getBlue().amount;
+		if (amount != 0 && tankMgr.getTank(BLUE_TANK).fill(r.getBlue(), false) == amount)
 			return true;
 		
-		amount = d.getWhite().amount;
-		if (amount != 0 && tankMgr.getTank(WHITE_TANK).fill(d.getWhite(), false) == amount)
+		amount = r.getWhite().amount;
+		if (amount != 0 && tankMgr.getTank(WHITE_TANK).fill(r.getWhite(), false) == amount)
 			return true;
 		
 		return false;
@@ -167,13 +165,12 @@ public class TileMachineSqueezer extends TileMachine implements IFactorySM, IFac
 	@Override
 	public void createOutputs(IMachineRecipe recipe) {
 		
-		SqueezerRecipe r = (SqueezerRecipe)recipe;
-		DyeRecipe d = r.getDyeRecipe();
-		
-		tankMgr.getTank(RED_TANK).fill(d.getRed(), true);
-		tankMgr.getTank(YELLOW_TANK).fill(d.getYellow(), true);
-		tankMgr.getTank(BLUE_TANK).fill(d.getBlue(), true);
-		tankMgr.getTank(WHITE_TANK).fill(d.getWhite(), true);
+		SqueezerManager.SqueezerRecipe r = (SqueezerManager.SqueezerRecipe)recipe;
+	
+		tankMgr.getTank(RED_TANK).fill(r.getRed(), true);
+		tankMgr.getTank(YELLOW_TANK).fill(r.getYellow(), true);
+		tankMgr.getTank(BLUE_TANK).fill(r.getBlue(), true);
+		tankMgr.getTank(WHITE_TANK).fill(r.getWhite(), true);
 		
 		tryCreatePure();
 	}

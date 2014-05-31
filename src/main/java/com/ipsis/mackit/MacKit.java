@@ -11,6 +11,7 @@ import com.ipsis.mackit.block.TilePortaChant;
 import com.ipsis.mackit.block.TilePowerBlock;
 import com.ipsis.mackit.block.TileTestFaced;
 import com.ipsis.mackit.fluid.MKFluids;
+import com.ipsis.mackit.helper.DyeHelper;
 import com.ipsis.mackit.item.MKItems;
 import com.ipsis.mackit.manager.MKManagers;
 import com.ipsis.mackit.reference.Reference;
@@ -57,9 +58,11 @@ public class MacKit
     @EventHandler
     public void initialize(FMLInitializationEvent event) {
 
+    	DyeHelper.initialise(); 
+    	
     	MKFluids.initialise();
     	MKItems.initialise();
-    	MKBlocks.initialise();
+    	MKBlocks.initialise();    	   	
     	MKManagers.initialise();
     	
     	GameRegistry.registerTileEntity(TileBeaverBlock.class, "tile.beaverBlock");
@@ -81,10 +84,15 @@ public class MacKit
     @EventHandler
     public void postInit(FMLPostInitializationEvent event) {
     	
+    	DyeHelper.loadItemRecipes(); 
+    	
     	MKFluids.postInit();
     	MKItems.postInit();
     	MKBlocks.postInit();
+    	   	
     	MKManagers.postInit();
+    	
+    	DyeHelper.debugDumpMap();
     	
     	pp.postInitialise();
     }

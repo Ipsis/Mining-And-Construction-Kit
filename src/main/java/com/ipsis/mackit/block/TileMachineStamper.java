@@ -9,7 +9,6 @@ import net.minecraft.network.play.server.S35PacketUpdateTileEntity;
 import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fluids.FluidTank;
 import net.minecraftforge.fluids.FluidTankInfo;
 import net.minecraftforge.fluids.IFluidHandler;
 
@@ -20,7 +19,8 @@ import com.ipsis.mackit.block.machinesm.IMachineRecipe;
 import com.ipsis.mackit.block.machinesm.IRecipeManager;
 import com.ipsis.mackit.item.MKItems;
 import com.ipsis.mackit.manager.MKManagers;
-import com.ipsis.mackit.manager.StamperRecipe;
+import com.ipsis.mackit.manager.StamperManager;
+import com.ipsis.mackit.manager.StamperManager.StamperRecipe;
 import com.ipsis.mackit.manager.TankManager;
 import com.ipsis.mackit.reference.Gui;
 import com.ipsis.mackit.util.network.packet.AbstractPacket;
@@ -165,7 +165,7 @@ public class TileMachineStamper extends TileMachine implements IFactorySM, IFaci
 	public void consumeInputs(IMachineRecipe recipe) {
 
 		decrStackSize(INPUT_SLOT, 1);
-		tankMgr.getTank(PURE_TANK).drain(StamperRecipe.RECIPE.getPureDyeAmount(), true);
+		tankMgr.getTank(PURE_TANK).drain(StamperManager.RECIPE.getPureDyeAmount(), true);
 	}
 
 	@Override
@@ -234,12 +234,12 @@ public class TileMachineStamper extends TileMachine implements IFactorySM, IFaci
 		if (in.getItem() != MKItems.itemDyeBlank)
 			return null;
 		
-		FluidStack t = tankMgr.getTank(PURE_TANK).drain(StamperRecipe.RECIPE.getPureDyeAmount(), false);
-		if (t == null || t.amount != StamperRecipe.RECIPE.getPureDyeAmount())
+		FluidStack t = tankMgr.getTank(PURE_TANK).drain(StamperManager.RECIPE.getPureDyeAmount(), false);
+		if (t == null || t.amount != StamperManager.RECIPE.getPureDyeAmount())
 			return null;
 
 
-		return StamperRecipe.RECIPE;
+		return StamperManager.RECIPE;
 	}
 	
 	/*****

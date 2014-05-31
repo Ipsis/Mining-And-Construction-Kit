@@ -5,13 +5,12 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 
-import net.minecraft.init.Items;
+import net.minecraft.item.ItemFood;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.CraftingManager;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.item.crafting.ShapedRecipes;
 import net.minecraft.item.crafting.ShapelessRecipes;
-import net.minecraft.util.IIcon;
 import net.minecraftforge.oredict.ShapedOreRecipe;
 import net.minecraftforge.oredict.ShapelessOreRecipe;
 
@@ -31,31 +30,56 @@ import com.ipsis.mackit.helper.PainterHelper;
  */
 public class PainterManager {
 	
-	private HashMap<Integer, PainterRecipe> recipes;
+	static class PaintSrc {
+		
+		public ItemStack itemStack;
+		public ItemStack dye;
+		
+		public PaintSrc(ItemStack itemStack, ItemStack dye) {
+			
+			this.itemStack = itemStack;
+			this.dye = dye;
+		}
+	}
+	
+	private HashMap<PaintSrc, PainterRecipe> recipes;
 	
 	public PainterManager() {
 		
-		recipes = new HashMap<Integer, PainterRecipe>();
+		recipes = new HashMap<PaintSrc, PainterRecipe>();
 	}
 	
-	public PainterRecipe getRecipe(ItemStack src) {
+	public PainterRecipe getRecipe(ItemStack srcDye, ItemStack src) {
 		
-		if (src == null)
+		if (src == null || srcDye == null)
 			return null;
 		
-		return recipes.get(ItemHelper.getHashCode(src));
+		return recipes.get(new PaintSrc(src, srcDye));
 	}
 	
 	private void addRecipe(ItemStack srcDye, ItemStack src, int srcCount, ItemStack output) {
 
-		LogHelper.error("PainterManager: addRecipe " + src + ":" + srcCount + "->" + output);
-		recipes.put(ItemHelper.getHashCode(src), new PainterRecipe(srcDye, src, srcCount, output));
-		
+		/* Skip anything that is a food */
+		if (output.getItem() instanceof ItemFood)
+			return;
+
 		/**
-		 * The added recipe takes a dye and an item and produces a dyed item
-		 * This means that the output is also a valid input ....
+		 * We need two lists
+		 * 1. src item + dye = dyed item [srcItemStack + srcDye -> outputItemStack]
+		 * 2. output item - dye = src item [outputItemStack -> srcItemStack]
+		 * 
+		 * The second list is a list of items that can have the dye stripped from them
 		 */
 		
+		LogHelper.error("PainterManager: PAINT " + src + "+" + srcDye + " painted -> " + output); 
+		recipes.put(new PaintSrc(src, srcDye), new PainterRecipe(src, srcDye, srcCount, output));
+		
+		ItemStack one_output = output.copy();
+		one_output.stackSize = 1;
+		ItemStack one_src = src.copy();
+		one_src.stackSize = 1;
+		LogHelper.error("PainterManager: STRIP " + one_output + " stripped -> " + one_src);
+		MKManagers.dyeStripperMgr.addRecipe(one_output, one_src);
 	}
 	
 	private void handleShapelessRecipe(ShapelessRecipes r) {
@@ -65,7 +89,7 @@ public class PainterManager {
 		helper.reset();
 		
 		/* Ignore recipes that produce dyes */
-		if (MKManagers.dyeHelper.isDye(r.getRecipeOutput()) == true)
+		if (MKManagers.dyeOreDictHelper.isDye(r.getRecipeOutput()) == true)
 				return;
 		
 		Iterator iter = r.recipeItems.iterator();
@@ -89,7 +113,7 @@ public class PainterManager {
 		helper.reset();
 		
 		/* Ignore recipes that produce dyes */
-		if (MKManagers.dyeHelper.isDye(r.getRecipeOutput()) == true)
+		if (MKManagers.dyeOreDictHelper.isDye(r.getRecipeOutput()) == true)
 				return;
 		
 		for (ItemStack currIn : r.recipeItems) {
@@ -114,7 +138,7 @@ public class PainterManager {
 		helper.reset();
 		
 		/* Ignore recipes that produce dyes */
-		if (MKManagers.dyeHelper.isDye(r.getRecipeOutput()) == true)
+		if (MKManagers.dyeOreDictHelper.isDye(r.getRecipeOutput()) == true)
 				return;
 		
 		List recipeInput = r.getInput();
@@ -155,7 +179,7 @@ public class PainterManager {
 		helper.reset();		
 		
 		/* Ignore recipes that produce dyes */
-		if (MKManagers.dyeHelper.isDye(r.getRecipeOutput()) == true)
+		if (MKManagers.dyeOreDictHelper.isDye(r.getRecipeOutput()) == true)
 				return;
 		
 		Object[] recipeInput = r.getInput();

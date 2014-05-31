@@ -4,6 +4,14 @@ import com.ipsis.mackit.manager.MKManagers;
 
 import net.minecraft.item.ItemStack;
 
+/**
+ * 
+ * Helper class to identify recipes where we only want
+ * 2 items where
+ * 
+ * 1 dye item
+ * 1 or more items of the same type
+ */
 public class PainterHelper {
 	
 	private int itemCount;
@@ -26,17 +34,17 @@ public class PainterHelper {
 	
 	public boolean verify(ItemStack currItem) {
 		
-		if (MKManagers.dyeHelper.isDye(currItem)) {
+		if (MKManagers.dyeOreDictHelper.isDye(currItem)) {
 			
 			if (inputDye == null) 
-				inputDye = currItem;
+				inputDye = currItem.copy();
 			else
 				valid = false;
 		} else {
 			
 			if (inputItem == null) {
 				
-				inputItem = currItem;
+				inputItem = currItem.copy();
 			} else {
 				
 				if (inputItem.isItemEqual(currItem))				
