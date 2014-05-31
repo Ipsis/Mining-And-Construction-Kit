@@ -16,7 +16,7 @@ import net.minecraftforge.oredict.ShapelessOreRecipe;
 
 import com.ipsis.cofhlib.util.ItemHelper;
 import com.ipsis.mackit.helper.LogHelper;
-import com.ipsis.mackit.helper.PainterHelper;
+import com.ipsis.mackit.helper.PaintingHelper;
 
 /**
  * 
@@ -85,7 +85,7 @@ public class PainterManager {
 	private void handleShapelessRecipe(ShapelessRecipes r) {
 		
 		boolean valid = true;
-		PainterHelper helper = new PainterHelper();
+		PaintingHelper helper = new PaintingHelper();
 		helper.reset();
 		
 		/* Ignore recipes that produce dyes */
@@ -109,7 +109,7 @@ public class PainterManager {
 	private void handleShapedRecipe(ShapedRecipes r) {
 		
 		boolean valid = true;
-		PainterHelper helper = new PainterHelper();
+		PaintingHelper helper = new PaintingHelper();
 		helper.reset();
 		
 		/* Ignore recipes that produce dyes */
@@ -134,7 +134,7 @@ public class PainterManager {
 	private void handleShapelessOreRecipe(ShapelessOreRecipe r) {
 		
 		boolean valid = true;
-		PainterHelper helper = new PainterHelper();
+		PaintingHelper helper = new PaintingHelper();
 		helper.reset();
 		
 		/* Ignore recipes that produce dyes */
@@ -175,7 +175,7 @@ public class PainterManager {
 	private void handleShapedOreRecipe(ShapedOreRecipe r) {
 
 		boolean valid = true;
-		PainterHelper helper = new PainterHelper();
+		PaintingHelper helper = new PaintingHelper();
 		helper.reset();		
 		
 		/* Ignore recipes that produce dyes */

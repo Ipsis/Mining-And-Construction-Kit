@@ -4,22 +4,24 @@ import java.util.HashMap;
 
 import net.minecraft.item.ItemStack;
 
+import com.ipsis.cofhlib.util.inventory.ComparableItemStack;
+
 public class DyeStripperManager {
 
-	private HashMap<ItemStack, ItemStack> recipes;
+	private HashMap<ComparableItemStack, ItemStack> recipes;
 	
 	public DyeStripperManager() {
 		
-		recipes = new HashMap<ItemStack, ItemStack>();
+		recipes = new HashMap<ComparableItemStack, ItemStack>();
 	}
 	
 	public void addRecipe(ItemStack input, ItemStack origin) {
 		
-		recipes.put(input, origin);
+		recipes.put(new ComparableItemStack(input), origin.copy());
 	}
 	
 	public ItemStack getOrigin(ItemStack input) {
 		
-		return recipes.get(input);
+		return recipes.get(new ComparableItemStack(input));
 	}
 }

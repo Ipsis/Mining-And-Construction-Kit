@@ -12,6 +12,7 @@ import com.ipsis.mackit.block.TilePowerBlock;
 import com.ipsis.mackit.block.TileTestFaced;
 import com.ipsis.mackit.fluid.MKFluids;
 import com.ipsis.mackit.helper.DyeHelper;
+import com.ipsis.mackit.helper.DyedOriginHelper;
 import com.ipsis.mackit.item.MKItems;
 import com.ipsis.mackit.manager.MKManagers;
 import com.ipsis.mackit.reference.Reference;
@@ -85,6 +86,7 @@ public class MacKit
     public void postInit(FMLPostInitializationEvent event) {
     	
     	DyeHelper.loadItemRecipes(); 
+    	DyedOriginHelper.load();
     	
     	MKFluids.postInit();
     	MKItems.postInit();
@@ -93,6 +95,7 @@ public class MacKit
     	MKManagers.postInit();
     	
     	DyeHelper.debugDumpMap();
+    	DyedOriginHelper.debugDumpMap();
     	
     	pp.postInitialise();
     }

@@ -12,14 +12,14 @@ import net.minecraft.item.ItemStack;
  * 1 dye item
  * 1 or more items of the same type
  */
-public class PainterHelper {
+public class PaintingHelper {
 	
 	private int itemCount;
 	private boolean valid;
 	private ItemStack inputDye;
 	private ItemStack inputItem;
 	
-	public PainterHelper() {
+	public PaintingHelper() {
 		
 		reset();
 	}
@@ -45,6 +45,7 @@ public class PainterHelper {
 			if (inputItem == null) {
 				
 				inputItem = currItem.copy();
+				itemCount = 1;
 			} else {
 				
 				if (inputItem.isItemEqual(currItem))				
