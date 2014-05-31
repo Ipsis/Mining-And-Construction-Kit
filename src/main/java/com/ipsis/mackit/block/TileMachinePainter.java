@@ -14,7 +14,6 @@ import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTankInfo;
 import net.minecraftforge.fluids.IFluidHandler;
 
-import com.ipsis.mackit.MacKit;
 import com.ipsis.mackit.block.machinesm.FactorySM;
 import com.ipsis.mackit.block.machinesm.IFactorySM;
 import com.ipsis.mackit.block.machinesm.IMachineRecipe;
@@ -22,12 +21,12 @@ import com.ipsis.mackit.block.machinesm.IRecipeManager;
 import com.ipsis.mackit.manager.MKManagers;
 import com.ipsis.mackit.manager.PainterRecipe;
 import com.ipsis.mackit.manager.TankManager;
+import com.ipsis.mackit.network.PacketHandler;
+import com.ipsis.mackit.network.message.IMessageGuiHandler;
+import com.ipsis.mackit.network.message.MessageGui;
 import com.ipsis.mackit.reference.Gui;
-import com.ipsis.mackit.util.network.packet.AbstractPacket;
-import com.ipsis.mackit.util.network.packet.IPacketGuiHandler;
-import com.ipsis.mackit.util.network.packet.types.PacketGui;
 
-public class TileMachinePainter extends TileMachine implements IPacketGuiHandler, IFactorySM, IFacing, IRecipeManager, IFluidHandler, ISidedInventory {
+public class TileMachinePainter extends TileMachine implements IMessageGuiHandler, IFactorySM, IFacing, IRecipeManager, IFluidHandler, ISidedInventory {
 
 	private FactorySM sm;
 	private ForgeDirection facing;
@@ -86,13 +85,12 @@ public class TileMachinePainter extends TileMachine implements IPacketGuiHandler
 			selected = 0;
 		
 		if (worldObj.isRemote) {
-			AbstractPacket p = new PacketGui(
+			PacketHandler.INSTANCE.sendToServer(new MessageGui(
 					xCoord, yCoord, zCoord,
 					(byte)Gui.STAMPER,
 					(byte)Gui.TYPE_BUTTON, 
 					(byte)Gui.PAINTER_SELECTED_UP, 
-					0, 0);
-			MacKit.pp.sendToServer(p);
+					0, 0));
 		}
 	}
 
@@ -103,13 +101,12 @@ public class TileMachinePainter extends TileMachine implements IPacketGuiHandler
 			selected = 15;
 		
 		if (worldObj.isRemote) {
-			AbstractPacket p = new PacketGui(
+			PacketHandler.INSTANCE.sendToServer(new MessageGui(
 					xCoord, yCoord, zCoord,
 					(byte)Gui.STAMPER,
 					(byte)Gui.TYPE_BUTTON, 
 					(byte)Gui.PAINTER_SELECTED_DN, 
-					0, 0);
-			MacKit.pp.sendToServer(p);
+					0, 0));
 		}
 	}
 	
@@ -125,15 +122,15 @@ public class TileMachinePainter extends TileMachine implements IPacketGuiHandler
 	 * IPacketGuiHandler
 	 *******************/
 	@Override
-	public void handlePacketGui(PacketGui packet) {
+	public void handleMessageGui(MessageGui msg) {
 
-		if (packet.guiId != Gui.PAINTER)
+		if (msg.guiId != Gui.PAINTER)
 			return;
 		
-		if (packet.ctrlType == Gui.TYPE_BUTTON) {
-			if (packet.ctrlId == Gui.PAINTER_SELECTED_DN) {
+		if (msg.ctrlType == Gui.TYPE_BUTTON) {
+			if (msg.ctrlId == Gui.PAINTER_SELECTED_DN) {
 				decSelected();				
-			} else if (packet.ctrlId == Gui.PAINTER_SELECTED_UP) {
+			} else if (msg.ctrlId == Gui.PAINTER_SELECTED_UP) {
 				incSelected();
 			}
 		}

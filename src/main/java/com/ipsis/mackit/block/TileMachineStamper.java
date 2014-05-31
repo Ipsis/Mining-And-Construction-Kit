@@ -12,7 +12,6 @@ import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTankInfo;
 import net.minecraftforge.fluids.IFluidHandler;
 
-import com.ipsis.mackit.MacKit;
 import com.ipsis.mackit.block.machinesm.FactorySM;
 import com.ipsis.mackit.block.machinesm.IFactorySM;
 import com.ipsis.mackit.block.machinesm.IMachineRecipe;
@@ -20,14 +19,13 @@ import com.ipsis.mackit.block.machinesm.IRecipeManager;
 import com.ipsis.mackit.item.MKItems;
 import com.ipsis.mackit.manager.MKManagers;
 import com.ipsis.mackit.manager.StamperManager;
-import com.ipsis.mackit.manager.StamperManager.StamperRecipe;
 import com.ipsis.mackit.manager.TankManager;
+import com.ipsis.mackit.network.PacketHandler;
+import com.ipsis.mackit.network.message.IMessageGuiHandler;
+import com.ipsis.mackit.network.message.MessageGui;
 import com.ipsis.mackit.reference.Gui;
-import com.ipsis.mackit.util.network.packet.AbstractPacket;
-import com.ipsis.mackit.util.network.packet.IPacketGuiHandler;
-import com.ipsis.mackit.util.network.packet.types.PacketGui;
 
-public class TileMachineStamper extends TileMachine implements IFactorySM, IFacing, IRecipeManager, IPacketGuiHandler, IFluidHandler, ISidedInventory {
+public class TileMachineStamper extends TileMachine implements IFactorySM, IFacing, IRecipeManager, IMessageGuiHandler, IFluidHandler, ISidedInventory {
 
 	private FactorySM sm;
 	private ForgeDirection facing;
@@ -84,13 +82,12 @@ public class TileMachineStamper extends TileMachine implements IFactorySM, IFaci
 		selected = MKManagers.stamperMgr.getNextIdx(selected);
 		
 		if (worldObj.isRemote) {
-			AbstractPacket p = new PacketGui(
+			PacketHandler.INSTANCE.sendToServer(new MessageGui(
 					xCoord, yCoord, zCoord,
 					(byte)Gui.STAMPER,
 					(byte)Gui.TYPE_BUTTON, 
 					(byte)Gui.STAMPER_SELECTED_UP, 
-					0, 0);
-			MacKit.pp.sendToServer(p);
+					0, 0));
 		}
 	}
 
@@ -99,13 +96,12 @@ public class TileMachineStamper extends TileMachine implements IFactorySM, IFaci
 		selected = MKManagers.stamperMgr.getPrevIdx(selected);
 		
 		if (worldObj.isRemote) {
-			AbstractPacket p = new PacketGui(
+			PacketHandler.INSTANCE.sendToServer(new MessageGui(
 					xCoord, yCoord, zCoord,
 					(byte)Gui.STAMPER,
 					(byte)Gui.TYPE_BUTTON, 
 					(byte)Gui.STAMPER_SELECTED_DN, 
-					0, 0);
-			MacKit.pp.sendToServer(p);
+					0, 0));
 		}
 	}
 	
@@ -113,15 +109,15 @@ public class TileMachineStamper extends TileMachine implements IFactorySM, IFaci
 	 * IPacketGuiHandler
 	 *******************/
 	@Override
-	public void handlePacketGui(PacketGui packet) {
+	public void handleMessageGui(MessageGui msg) {
 
-		if (packet.guiId != Gui.STAMPER)
+		if (msg.guiId != Gui.STAMPER)
 			return;
 		
-		if (packet.ctrlType == Gui.TYPE_BUTTON) {
-			if (packet.ctrlId == Gui.STAMPER_SELECTED_DN) {
+		if (msg.ctrlType == Gui.TYPE_BUTTON) {
+			if (msg.ctrlId == Gui.STAMPER_SELECTED_DN) {
 				decSelected();				
-			} else if (packet.ctrlId == Gui.STAMPER_SELECTED_UP) {
+			} else if (msg.ctrlId == Gui.STAMPER_SELECTED_UP) {
 				incSelected();
 			}
 		}

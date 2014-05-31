@@ -12,16 +12,12 @@ import net.minecraft.network.Packet;
 import net.minecraft.network.play.server.S35PacketUpdateTileEntity;
 import net.minecraftforge.common.util.ForgeDirection;
 
-import com.ipsis.cofhlib.inventory.IInventoryManager;
-import com.ipsis.cofhlib.inventory.InventoryManager;
-import com.ipsis.mackit.MacKit;
-import com.ipsis.mackit.helper.LogHelper;
+import com.ipsis.mackit.network.PacketHandler;
+import com.ipsis.mackit.network.message.IMessageGuiHandler;
+import com.ipsis.mackit.network.message.MessageGui;
 import com.ipsis.mackit.reference.Gui;
-import com.ipsis.mackit.util.network.packet.AbstractPacket;
-import com.ipsis.mackit.util.network.packet.IPacketGuiHandler;
-import com.ipsis.mackit.util.network.packet.types.PacketGui;
 
-public class TilePortaChant extends TileInventory implements IPacketGuiHandler, IFacing, ISidedInventory {
+public class TilePortaChant extends TileInventory implements IMessageGuiHandler, IFacing, ISidedInventory {
 
 	public static final int MAX_ENCHANT = 30;
 	public static final int MIN_ENCHANT = 1;
@@ -75,13 +71,12 @@ public class TilePortaChant extends TileInventory implements IPacketGuiHandler, 
 			enchantLevel = MAX_ENCHANT;
 		
 		if (worldObj.isRemote) {
-			AbstractPacket p = new PacketGui(
+			PacketHandler.INSTANCE.sendToServer(new MessageGui(
 					xCoord, yCoord, zCoord,
 					(byte)Gui.PORTA_CHANT,
 					(byte)Gui.TYPE_BUTTON, 
 					(byte)Gui.PORTA_CHANT_UP, 
-					0, 0);
-			MacKit.pp.sendToServer(p);
+					0, 0));
 		}
 	}
 
@@ -90,15 +85,14 @@ public class TilePortaChant extends TileInventory implements IPacketGuiHandler, 
 		enchantLevel--;
 		if (enchantLevel < MIN_ENCHANT)
 			enchantLevel = MIN_ENCHANT;
-		
+
 		if (worldObj.isRemote) {
-			AbstractPacket p = new PacketGui(
+			PacketHandler.INSTANCE.sendToServer(new MessageGui(
 					xCoord, yCoord, zCoord,
 					(byte)Gui.PORTA_CHANT,
 					(byte)Gui.TYPE_BUTTON, 
 					(byte)Gui.PORTA_CHANT_DN, 
-					0, 0);
-			MacKit.pp.sendToServer(p);
+					0, 0));
 		}
 	}
 
@@ -107,15 +101,15 @@ public class TilePortaChant extends TileInventory implements IPacketGuiHandler, 
 	 *******************/
 	
 	@Override
-	public void handlePacketGui(PacketGui packet) {
-
-		if (packet.guiId != Gui.PORTA_CHANT)
-			return;
+	public void handleMessageGui(MessageGui msg) {
 		
-		if (packet.ctrlType == Gui.TYPE_BUTTON) {
-			if (packet.ctrlId == Gui.PORTA_CHANT_DN) {
+		if (msg.guiId != Gui.PORTA_CHANT)
+			return;
+
+		if (msg.ctrlType == Gui.TYPE_BUTTON) {
+			if (msg.ctrlId == Gui.PORTA_CHANT_DN) {
 				decEnchantLevel();				
-			} else if (packet.ctrlId == Gui.PORTA_CHANT_UP) {
+			} else if (msg.ctrlId == Gui.PORTA_CHANT_UP) {
 				incEnchantLevel();
 			}
 		}

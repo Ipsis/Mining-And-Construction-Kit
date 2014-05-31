@@ -1,4 +1,4 @@
-package com.ipsis.mackit.util.network;
+package com.ipsis.mackit.util.proxy;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;

@@ -15,9 +15,9 @@ import com.ipsis.mackit.helper.DyeHelper;
 import com.ipsis.mackit.helper.DyedOriginHelper;
 import com.ipsis.mackit.item.MKItems;
 import com.ipsis.mackit.manager.MKManagers;
+import com.ipsis.mackit.network.PacketHandler;
 import com.ipsis.mackit.reference.Reference;
-import com.ipsis.mackit.util.network.CommonProxy;
-import com.ipsis.mackit.util.network.packet.PacketPipeline;
+import com.ipsis.mackit.util.proxy.CommonProxy;
 
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.Mod.EventHandler;
@@ -35,12 +35,8 @@ public class MacKit
 {
     public static final String VERSION = "0.1a";
     
-    @SidedProxy(clientSide = "com.ipsis.mackit.util.network.ClientProxy", serverSide = "com.ipsis.mackit.util.network.CommonProxy")
-    public static CommonProxy proxy;
-    
-    /* packet handler */
-    public static final PacketPipeline pp = new PacketPipeline();
-    
+    @SidedProxy(clientSide = "com.ipsis.mackit.util.proxy.ClientProxy", serverSide = "com.ipsis.mackit.util.proxy.CommonProxy")
+    public static CommonProxy proxy;   
     
     @Instance
     public static MacKit instance;
@@ -48,6 +44,8 @@ public class MacKit
     @EventHandler
     public void preInit(FMLPreInitializationEvent event) {
 
+    	PacketHandler.init();
+    	
     	MKFluids.preInit();
     	MKItems.preInit();
     	MKBlocks.preInit();
@@ -77,7 +75,6 @@ public class MacKit
     	
     	GameRegistry.registerTileEntity(TileTestFaced.class, "tile.testFaced");
     	
-    	pp.initalise();
     	NetworkRegistry.INSTANCE.registerGuiHandler(instance, proxy);
     	MinecraftForge.EVENT_BUS.register(proxy);
     }
@@ -96,8 +93,6 @@ public class MacKit
     	
     	DyeHelper.debugDumpMap();
     	DyedOriginHelper.debugDumpMap();
-    	
-    	pp.postInitialise();
     }
     
     

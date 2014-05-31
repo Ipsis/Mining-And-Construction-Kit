@@ -6,6 +6,7 @@ import net.minecraft.util.ResourceLocation;
 import com.ipsis.cofhlib.gui.GuiBase;
 import com.ipsis.cofhlib.gui.element.ElementButton;
 import com.ipsis.mackit.block.TilePortaChant;
+import com.ipsis.mackit.helper.LogHelper;
 import com.ipsis.mackit.reference.Reference;
 
 public class GuiPortaChant extends GuiBase {
