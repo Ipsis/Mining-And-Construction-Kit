@@ -78,6 +78,8 @@ public class MacKit
     	
     	GameRegistry.registerTileEntity(TileTestFaced.class, "tile.testFaced");
     	
+    	proxy.initRenderingAndTexture();
+    	
     	NetworkRegistry.INSTANCE.registerGuiHandler(instance, proxy);
     	MinecraftForge.EVENT_BUS.register(proxy);
     }

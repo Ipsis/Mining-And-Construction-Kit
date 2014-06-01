@@ -36,8 +36,6 @@ public class TileDyeLeech extends TileEntity {
 				color = c;
 		}
 		
-		LogHelper.error("rgbToDye: " + Integer.toHexString(rgb) + "->" + Integer.toHexString(color));
-		
 		return color;
 	}
 	
@@ -51,13 +49,9 @@ public class TileDyeLeech extends TileEntity {
 		if (worldObj.isRemote)
 			return;
 		
-		/* store biome on placement */
+		/* store biome on placement and store color */
 		BiomeGenBase g = worldObj.getBiomeGenForCoords(xCoord, zCoord);
-		LogHelper.error("updateEntity " + g.biomeName + " " + Integer.toHexString(g.color));
 		/* convert the rgb biome colour to a dye colour ???? */
 		rgbToDye(g.color & 0xFFFFFF);
-		
-				
-		
 	}
 }

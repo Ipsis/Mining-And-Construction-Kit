@@ -8,6 +8,8 @@ import net.minecraftforge.client.event.TextureStitchEvent;
 import net.minecraftforge.fluids.Fluid;
 
 import com.ipsis.mackit.block.MKBlocks;
+import com.ipsis.mackit.block.TileDyeLeech;
+import com.ipsis.mackit.block.TileDyeLeechRenderer;
 import com.ipsis.mackit.block.TileMachineDyeFiller;
 import com.ipsis.mackit.block.TileMachinePainter;
 import com.ipsis.mackit.block.TileMachineSqueezer;
@@ -20,10 +22,16 @@ import com.ipsis.mackit.container.GuiMachineStamper;
 import com.ipsis.mackit.container.GuiPortaChant;
 import com.ipsis.mackit.fluid.MKFluids;
 
+import cpw.mods.fml.client.registry.ClientRegistry;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 
 public class ClientProxy extends CommonProxy {
 
+	
+	public void initRenderingAndTexture() {
+		
+		ClientRegistry.bindTileEntitySpecialRenderer(TileDyeLeech.class, new TileDyeLeechRenderer());		
+	}
 	
 	@Override
 	public Object getClientGuiElement(int ID, EntityPlayer player, World world,	int x, int y, int z) {
