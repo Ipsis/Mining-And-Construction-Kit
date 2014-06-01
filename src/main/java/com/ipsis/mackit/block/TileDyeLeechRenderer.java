@@ -50,17 +50,14 @@ public class TileDyeLeechRenderer extends TileEntitySpecialRenderer {
 
 		if (tileEntity instanceof TileDyeLeech) {
 					
-			TileDyeLeech te = (TileDyeLeech)tileEntity;
-            
-			TextureUtils.bindAtlas(0);
+			TileDyeLeech te = (TileDyeLeech)tileEntity;			
+			ItemStack item = new ItemStack(Items.dye, 1, 4);
+
 			
             GL11.glEnable(GL12.GL_RESCALE_NORMAL);
             GL11.glPushMatrix();
             {
-            	GL11.glTranslated(x+0.5, y+0.5, z+0.5);
-            	Transformation orient = Rotation.quarterRotations[3];
-            	ItemStack item = new ItemStack(Items.blaze_powder);
-            	           	
+            	GL11.glTranslated(x+0.5, y+0.5, z+0.5);            	           	
             	GL11.glPushMatrix();
             	{            
             		GL11.glTranslated(0, 0.6 + 0.02 * Math.sin(ClientUtils.getRenderTime() / 10), 0);

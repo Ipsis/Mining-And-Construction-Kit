@@ -20,4 +20,10 @@ public class BlockDyeLeech extends BlockFaced {
 
 		return new TileDyeLeech();
 	}
+	
+	@Override
+	public boolean isOpaqueCube() {
+
+		return false;
+	}
 }
