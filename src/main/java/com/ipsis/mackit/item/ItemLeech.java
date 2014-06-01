@@ -7,6 +7,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 
 import com.ipsis.mackit.helper.DyedOriginHelper;
+import com.ipsis.mackit.helper.LogHelper;
 
 /**
  * Reverts blocks to their un-dyed state. eg. dyed wool to plain wool

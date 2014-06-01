@@ -142,7 +142,7 @@ public class DyeHelper {
 			
 			Map.Entry pairs = (Map.Entry)iter.next();		
 			ComparableItemStack t = (ComparableItemStack)pairs.getKey();
-			LogHelper.debug("[DyeHelper] dyeRecipeMap: " + t.toItemStack() + " -> " + pairs.getValue());		
+			LogHelper.info("[DyeHelper] dyeRecipeMap: " + t.toItemStack() + " -> " + pairs.getValue());		
 		}
 		
 		iter = dyeSourceMap.entrySet().iterator();
@@ -150,7 +150,7 @@ public class DyeHelper {
 			
 			Map.Entry pairs = (Map.Entry)iter.next();
 			ComparableItemStack t = (ComparableItemStack)pairs.getKey();
-			LogHelper.debug("[DyeHelper] dyeSourceMap: " + t.toItemStack() + " -> " + (ItemStack)pairs.getValue());		
+			LogHelper.info("[DyeHelper] dyeSourceMap: " + t.toItemStack() + " -> " + (ItemStack)pairs.getValue());		
 		}
 		
 	}

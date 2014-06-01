@@ -3,6 +3,7 @@ import net.minecraftforge.common.MinecraftForge;
 
 import com.ipsis.mackit.block.MKBlocks;
 import com.ipsis.mackit.block.TileBeaverBlock;
+import com.ipsis.mackit.block.TileDyeLeech;
 import com.ipsis.mackit.block.TileMachineDyeFiller;
 import com.ipsis.mackit.block.TileMachinePainter;
 import com.ipsis.mackit.block.TileMachineSqueezer;
@@ -71,6 +72,7 @@ public class MacKit
     	GameRegistry.registerTileEntity(TileMachineStamper.class, "tile.machineStamper");
     	GameRegistry.registerTileEntity(TileMachinePainter.class, "tile.machinePainter");
     	GameRegistry.registerTileEntity(TileMachineDyeFiller.class, "tile.machineDyeFiller");
+    	GameRegistry.registerTileEntity(TileDyeLeech.class, "tile.dyeLeech");
     	    	
     	GameRegistry.registerTileEntity(TilePowerBlock.class, "tile.powerBlock");
     	
@@ -92,6 +94,7 @@ public class MacKit
     	   	
     	MKManagers.postInit();
     	
+    	/* TODO turn these off */
     	DyeHelper.debugDumpMap();
     	DyedOriginHelper.debugDumpMap();
     	PainterManager.debugDumpMap();

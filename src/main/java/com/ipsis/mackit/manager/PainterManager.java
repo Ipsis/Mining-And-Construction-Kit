@@ -52,7 +52,7 @@ public class PainterManager {
 		while (iter.hasNext()) {
 			
 			Map.Entry pairs = (Map.Entry)iter.next();	
-			LogHelper.info("[PainterManager2] recipeMap: " + pairs.getKey() + " -> " + pairs.getValue());		
+			LogHelper.debug("[PainterManager] recipeMap: " + pairs.getKey() + " -> " + pairs.getValue());		
 		}		
 	}
 	

@@ -33,7 +33,7 @@ public class PaintingHelper {
 	}
 	
 	public boolean verify(ItemStack currItem) {
-		
+	
 		if (MKManagers.dyeOreDictHelper.isDye(currItem)) {
 			
 			if (inputDye == null) 

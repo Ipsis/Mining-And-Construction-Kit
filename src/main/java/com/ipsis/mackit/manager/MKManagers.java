@@ -8,7 +8,6 @@ public class MKManagers {
 	public static SqueezerManager squeezerMgr = new SqueezerManager();
 	public static PainterManager painterMgr = new PainterManager();
 	public static StamperManager stamperMgr = new StamperManager();
-	public static DyeStripperManager dyeStripperMgr = new DyeStripperManager();
 	
 	public static DyeOreDictHelper dyeOreDictHelper = new DyeOreDictHelper();
 

@@ -20,6 +20,7 @@ public class MKBlocks {
 		machineStamper = new BlockMachineStamper("machineStamper");
 		machinePainter = new BlockMachinePainter("machinePainter");
 		machineDyeFiller = new BlockMachineDyeFiller("machineDyeFiller");
+		dyeLeech = new BlockDyeLeech("dyeLeech");
 		
 		powerBlock = new BlockPowerBlock("powerBlock");
 		
@@ -40,6 +41,7 @@ public class MKBlocks {
 		GameRegistry.registerBlock(machineStamper, "block.machineStamper");
 		GameRegistry.registerBlock(machinePainter, "block.machinePainter");
 		GameRegistry.registerBlock(machineDyeFiller, "block.machineDyeFiller");
+		GameRegistry.registerBlock(dyeLeech, "block.dyeLeech");
 		
 		GameRegistry.registerBlock(blockFluidDyeRed, "block.redDye");
 		GameRegistry.registerBlock(blockFluidDyeYellow, "block.yellowDye");
@@ -69,6 +71,7 @@ public class MKBlocks {
 	public static Block machineStamper;
 	public static Block machinePainter;
 	public static Block machineDyeFiller;
+	public static Block dyeLeech;
 	public static Block powerBlock;
 	
 	public static BlockFluidDye blockFluidDyeRed;

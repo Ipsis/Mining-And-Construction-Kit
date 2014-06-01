@@ -18,8 +18,10 @@ import com.ipsis.mackit.block.machinesm.FactorySM;
 import com.ipsis.mackit.block.machinesm.IFactorySM;
 import com.ipsis.mackit.block.machinesm.IMachineRecipe;
 import com.ipsis.mackit.block.machinesm.IRecipeManager;
+import com.ipsis.mackit.helper.DyedOriginHelper;
 import com.ipsis.mackit.helper.LogHelper;
 import com.ipsis.mackit.manager.MKManagers;
+import com.ipsis.mackit.manager.StamperManager;
 import com.ipsis.mackit.manager.PainterManager.PainterRecipe;
 import com.ipsis.mackit.manager.TankManager;
 import com.ipsis.mackit.network.PacketHandler;
@@ -88,7 +90,7 @@ public class TileMachinePainter extends TileMachine implements IMessageGuiHandle
 		if (worldObj.isRemote) {
 			PacketHandler.INSTANCE.sendToServer(new MessageGui(
 					xCoord, yCoord, zCoord,
-					(byte)Gui.STAMPER,
+					(byte)Gui.PAINTER,
 					(byte)Gui.TYPE_BUTTON, 
 					(byte)Gui.PAINTER_SELECTED_UP, 
 					0, 0));
@@ -104,7 +106,7 @@ public class TileMachinePainter extends TileMachine implements IMessageGuiHandle
 		if (worldObj.isRemote) {
 			PacketHandler.INSTANCE.sendToServer(new MessageGui(
 					xCoord, yCoord, zCoord,
-					(byte)Gui.STAMPER,
+					(byte)Gui.PAINTER,
 					(byte)Gui.TYPE_BUTTON, 
 					(byte)Gui.PAINTER_SELECTED_DN, 
 					0, 0));
@@ -137,7 +139,6 @@ public class TileMachinePainter extends TileMachine implements IMessageGuiHandle
 		}
 	}
 	
-	
 	@Override
 	public void updateEntity() {
 
@@ -158,7 +159,12 @@ public class TileMachinePainter extends TileMachine implements IMessageGuiHandle
 	@Override
 	public boolean isOutputValid(IMachineRecipe recipe) {
 		
-		return false;
+		ItemStack out = getStackInSlot(OUTPUT_SLOT);
+		if (out == null)
+			return true;
+		
+		PainterRecipe r = (PainterRecipe)recipe;
+		return out.isItemEqual(r.getOutput());
 	}
 
 	@Override
@@ -171,7 +177,7 @@ public class TileMachinePainter extends TileMachine implements IMessageGuiHandle
 	public void consumeInputs(IMachineRecipe recipe) {
 
 		decrStackSize(INPUT_SLOT, 1);
-		// TODO tankMgr.getTank(PURE_TANK).drain(StamperRecipe.RECIPE.getPureDyeAmount(), true);		
+		tankMgr.getTank(PURE_TANK).drain(((PainterRecipe)recipe).pureAmount, true);		
 		
 	}
 
@@ -185,8 +191,7 @@ public class TileMachinePainter extends TileMachine implements IMessageGuiHandle
 		} else {
 			c.stackSize++;
 			setInventorySlotContents(OUTPUT_SLOT, c);
-		}
-		
+		}		
 	}
 
 	@Override
@@ -234,8 +239,26 @@ public class TileMachinePainter extends TileMachine implements IMessageGuiHandle
 	 ****************/	
 	@Override
 	public IMachineRecipe getRecipe() {
-
-		return MKManagers.painterMgr.getRecipe(inventory[INPUT_SLOT], MKManagers.stamperMgr.getOutput(selected));
+		
+		if (inventory[INPUT_SLOT] == null)
+			return null;
+		
+		ItemStack origin = DyedOriginHelper.getOrigin(inventory[INPUT_SLOT]);
+		if (origin == null)
+			return null;
+		
+		PainterRecipe r = MKManagers.painterMgr.getRecipe(origin, MKManagers.stamperMgr.getOutput(selected));
+		if (r == null)
+			return null;
+		
+		if (inventory[INPUT_SLOT].isItemEqual(r.getOutput()))
+			return null;
+				
+		FluidStack t = tankMgr.getTank(PURE_TANK).drain(r.pureAmount, false);
+		if (t == null || t.amount != r.pureAmount)
+			return null;
+		
+		return r;
 	}
 	
 	/*****

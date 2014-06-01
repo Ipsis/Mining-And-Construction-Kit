@@ -54,12 +54,16 @@ public class DyedOriginHelper {
 	
 	public static ItemStack getOrigin(ItemStack itemStack) {
 		
-		return originMap.get(new ComparableItemStack(itemStack));
+		ComparableItemStack s = new ComparableItemStack(itemStack);
+		s.stackSize = 1;
+		return originMap.get(s);
 	}
 	
 	public static boolean hasOrigin(ItemStack itemStack) {
 		
-		return originMap.containsKey(new ComparableItemStack(itemStack));
+		ComparableItemStack s = new ComparableItemStack(itemStack);
+		s.stackSize = 1;
+		return originMap.containsKey(s);
 	}
 	
 	public static ItemStack[] getDyeOrigins() {
@@ -104,7 +108,7 @@ public class DyedOriginHelper {
 				continue;
 			
 			valid = helper.verify(currIn);						
-		}
+		}			
 		
 		if (valid && helper.getInputDye() != null && helper.getInputItem() != null && helper.getItemCount() > 0)
 			addRecipe(helper.getInputDye(), helper.getInputItem(), helper.getItemCount(), recipe.getRecipeOutput());		
