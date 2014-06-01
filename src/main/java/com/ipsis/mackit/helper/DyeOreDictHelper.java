@@ -1,5 +1,6 @@
 package com.ipsis.mackit.helper;
 
+import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.oredict.OreDictionary;
 
@@ -9,10 +10,25 @@ public class DyeOreDictHelper {
 	 * OreDictionary information
 	 */
 	private int[] dyeOreIds;
-	private static String[] dyeOreNames = { "dyeBlack", "dyeRed", "dyeGreen",
-			"dyeBrown", "dyeBlue", "dyePurple", "dyeCyan", "dyeLightGray",
-			"dyeGray", "dyePink", "dyeLime", "dyeYellow", "dyeLightBlue",
-			"dyeMagenta", "dyeOrange", "dyeWhite" };
+	private static String[] dyeOreNames = { 
+        "dyeBlack",
+        "dyeRed",
+        "dyeGreen",
+        "dyeBrown",
+        "dyeBlue",
+        "dyePurple",
+        "dyeCyan",
+        "dyeLightGray",
+        "dyeGray",
+        "dyePink",
+        "dyeLime",
+        "dyeYellow",
+        "dyeLightBlue",
+        "dyeMagenta",
+        "dyeOrange",
+        "dyeWhite",
+        "dustLapis"
+        };
 
 	public DyeOreDictHelper() {
 		
@@ -34,18 +50,28 @@ public class DyeOreDictHelper {
 	
 	/* Is the itemstack a dye */
 	public boolean isDye(ItemStack input) {
+			
+		boolean dye = false;
 		
-		if (input == null)
-			return false;
+		boolean t = false;
+		if (input.getItem() == Items.dye)
+			t = true;
+		
+		if (input != null) {
+			
+			int id = OreDictionary.getOreID(input);
+			if (id != -1) {	
+				for (int i = 0; i < dyeOreIds.length && dye == false; i++) {
 
-		int id = OreDictionary.getOreID(input);
-		if (id == -1)
-			return false;
-
-		for (int i : dyeOreIds)
-			if (i == id)
-				return true;
-
-		return false;
+					if (dyeOreIds[i] == id)
+						dye = true;
+				}
+			}
+		}
+		
+		if (t != dye)
+			LogHelper.info("isDye: " + input + " not dye but is Items.dye");
+		
+		return dye;
 	}
 }
