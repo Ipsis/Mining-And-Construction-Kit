@@ -18,8 +18,9 @@ import com.ipsis.mackit.block.machinesm.FactorySM;
 import com.ipsis.mackit.block.machinesm.IFactorySM;
 import com.ipsis.mackit.block.machinesm.IMachineRecipe;
 import com.ipsis.mackit.block.machinesm.IRecipeManager;
+import com.ipsis.mackit.helper.LogHelper;
 import com.ipsis.mackit.manager.MKManagers;
-import com.ipsis.mackit.manager.PainterRecipe;
+import com.ipsis.mackit.manager.PainterManager.PainterRecipe;
 import com.ipsis.mackit.manager.TankManager;
 import com.ipsis.mackit.network.PacketHandler;
 import com.ipsis.mackit.network.message.IMessageGuiHandler;
@@ -180,7 +181,7 @@ public class TileMachinePainter extends TileMachine implements IMessageGuiHandle
 		ItemStack c = getStackInSlot(OUTPUT_SLOT);
 		if (c == null) {
 			PainterRecipe pr = (PainterRecipe)recipe;
-			setInventorySlotContents(OUTPUT_SLOT, pr.getOutput());
+			setInventorySlotContents(OUTPUT_SLOT, pr.getOutput().copy());
 		} else {
 			c.stackSize++;
 			setInventorySlotContents(OUTPUT_SLOT, c);

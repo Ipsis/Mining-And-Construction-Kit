@@ -15,6 +15,7 @@ import com.ipsis.mackit.helper.DyeHelper;
 import com.ipsis.mackit.helper.DyedOriginHelper;
 import com.ipsis.mackit.item.MKItems;
 import com.ipsis.mackit.manager.MKManagers;
+import com.ipsis.mackit.manager.PainterManager;
 import com.ipsis.mackit.network.PacketHandler;
 import com.ipsis.mackit.reference.Reference;
 import com.ipsis.mackit.util.proxy.CommonProxy;
@@ -93,6 +94,7 @@ public class MacKit
     	
     	DyeHelper.debugDumpMap();
     	DyedOriginHelper.debugDumpMap();
+    	PainterManager.debugDumpMap();
     }
     
     

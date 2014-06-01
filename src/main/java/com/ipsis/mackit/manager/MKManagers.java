@@ -25,7 +25,6 @@ public class MKManagers {
 	public static void postInit() {
 		
 		beaverBlockMgr.loadBlocks();
-		//painterMgr.loadRecipes();
 		squeezerMgr.addRecipes();
 	}
 }

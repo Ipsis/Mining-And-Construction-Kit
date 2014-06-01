@@ -17,6 +17,7 @@ import net.minecraftforge.oredict.ShapelessOreRecipe;
 
 import com.ipsis.cofhlib.util.inventory.ComparableItemStack;
 import com.ipsis.mackit.manager.MKManagers;
+import com.ipsis.mackit.manager.PainterManager;
 
 /**
  * Maps dyed items to their un-dyed equivalent
@@ -61,6 +62,11 @@ public class DyedOriginHelper {
 		return originMap.containsKey(new ComparableItemStack(itemStack));
 	}
 	
+	public static ItemStack[] getDyeOrigins() {
+		
+		return originMap.values().toArray(new ItemStack[0]);
+	}
+	
 	private static void addRecipe(ItemStack srcDye, ItemStack src, int srcCount, ItemStack output) {
 
 		/* Skip anything that is a food */
@@ -71,6 +77,13 @@ public class DyedOriginHelper {
 		ComparableItemStack key = new ComparableItemStack(output);
 		key.stackSize = 1;
 		originMap.put(key, src.copy());
+		
+		/* Also add the painter recipe */
+		ItemStack out = output.copy();
+		out.stackSize = 1;
+		
+		/* TODO work out how much dye is needed */
+		PainterManager.addRecipe(src.copy(), srcDye.copy(), out, 100 / srcCount);
 	}
 	
 	private static void handleShapelessRecipe(ShapelessRecipes recipe) {
@@ -211,8 +224,7 @@ public class DyedOriginHelper {
 			
 			Map.Entry pairs = (Map.Entry)iter.next();		
 			ComparableItemStack t = (ComparableItemStack)pairs.getKey();
-			LogHelper.error("originMap: " + t.toItemStack() + " -> " + pairs.getValue());		
-		}
-		
+			LogHelper.debug("[DyedOriginHelper] : originMap: " + t.toItemStack() + " -> " + pairs.getValue());		
+		}		
 	}
 }

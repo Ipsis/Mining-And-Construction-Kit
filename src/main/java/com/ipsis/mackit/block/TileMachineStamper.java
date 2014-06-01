@@ -169,7 +169,7 @@ public class TileMachineStamper extends TileMachine implements IFactorySM, IFaci
 
 		ItemStack c = getStackInSlot(OUTPUT_SLOT);
 		if (c == null) {
-			setInventorySlotContents(OUTPUT_SLOT, MKManagers.stamperMgr.getOutput(selected));
+			setInventorySlotContents(OUTPUT_SLOT, MKManagers.stamperMgr.getOutput(selected).copy());
 		} else {
 			c.stackSize++;
 			setInventorySlotContents(OUTPUT_SLOT, c);
