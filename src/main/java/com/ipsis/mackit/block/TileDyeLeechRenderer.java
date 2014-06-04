@@ -50,24 +50,27 @@ public class TileDyeLeechRenderer extends TileEntitySpecialRenderer {
 
 		if (tileEntity instanceof TileDyeLeech) {
 					
-			TileDyeLeech te = (TileDyeLeech)tileEntity;			
-			ItemStack item = new ItemStack(Items.dye, 1, 4);
+			TileDyeLeech te = (TileDyeLeech)tileEntity;	
+			ItemStack item = te.getDye();
+			if (item != null) {
+				//ItemStack item = new ItemStack(Items.dye, 1, 4);
 
 			
-            GL11.glEnable(GL12.GL_RESCALE_NORMAL);
-            GL11.glPushMatrix();
-            {
-            	GL11.glTranslated(x+0.5, y+0.5, z+0.5);            	           	
-            	GL11.glPushMatrix();
-            	{            
-            		GL11.glTranslated(0, 0.6 + 0.02 * Math.sin(ClientUtils.getRenderTime() / 10), 0);
-            		GL11.glScaled(0.8, 0.8, 0.8);
-            		RenderUtils.renderItemUniform(item, ClientUtils.getRenderTime());
-            	}
-            	GL11.glPopMatrix();
-            }
-            GL11.glPopMatrix();
-            GL11.glDisable(GL12.GL_RESCALE_NORMAL); 
+	            GL11.glEnable(GL12.GL_RESCALE_NORMAL);
+	            GL11.glPushMatrix();
+	            {
+	            	GL11.glTranslated(x+0.5, y+0.5, z+0.5);            	           	
+	            	GL11.glPushMatrix();
+	            	{            
+	            		GL11.glTranslated(0, 0.6 + 0.02 * Math.sin(ClientUtils.getRenderTime() / 10), 0);
+	            		GL11.glScaled(0.8, 0.8, 0.8);
+	            		RenderUtils.renderItemUniform(item, ClientUtils.getRenderTime());
+	            	}
+	            	GL11.glPopMatrix();
+	            }
+	            GL11.glPopMatrix();
+	            GL11.glDisable(GL12.GL_RESCALE_NORMAL); 
+			}
 		}
 	}
 }

@@ -10,6 +10,7 @@ import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.IIcon;
+import net.minecraft.util.MathHelper;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
@@ -17,6 +18,7 @@ import net.minecraftforge.common.util.ForgeDirection;
 import com.ipsis.cofhlib.util.BlockHelper;
 import com.ipsis.cofhlib.util.EntityHelper;
 import com.ipsis.mackit.creativetab.CreativeTab;
+import com.ipsis.mackit.helper.LogHelper;
 import com.ipsis.mackit.reference.Reference;
 
 import cpw.mods.fml.relauncher.Side;
