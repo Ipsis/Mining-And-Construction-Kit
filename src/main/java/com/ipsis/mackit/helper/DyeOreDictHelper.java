@@ -59,12 +59,17 @@ public class DyeOreDictHelper {
 		
 		if (input != null) {
 			
-			int id = OreDictionary.getOreID(input);
-			if (id != -1) {	
-				for (int i = 0; i < dyeOreIds.length && dye == false; i++) {
+			int[] ids = OreDictionary.getOreIDs(input);
+			if (ids.length != 0) {
+				for (int id : ids) {
+					for (int i = 0; i < dyeOreIds.length && dye == false; i++) {
 
-					if (dyeOreIds[i] == id)
-						dye = true;
+						if (dyeOreIds[i] == id)
+							dye = true;
+					}
+					
+					if (dye == true)
+						break;
 				}
 			}
 		}
