@@ -17,19 +17,23 @@ public class FactorySM {
 	
 	private void resetSM() {
 		
-		//System.out.println("resetSM");
 		this.runningRecipe = null;
 		this.recipeEnergy = 0;
 		machine.resetConsumedEnergy();
 		setRunning(false);
 	}
 	
-	private void setRunning(boolean running) {
+	public void setRunning(boolean running) {
 		
 		if (this.running != running) {
 			this.running = running;
-			/* update the client */
+			this.machine.updateRunning(this.running);
 		}
+	}
+	
+	public boolean getRunning() {
+		
+		return this.running;
 	}
 	
 	public boolean isFinished() {

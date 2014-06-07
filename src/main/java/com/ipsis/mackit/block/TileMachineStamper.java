@@ -25,7 +25,7 @@ import com.ipsis.mackit.network.message.IMessageGuiHandler;
 import com.ipsis.mackit.network.message.MessageGui;
 import com.ipsis.mackit.reference.Gui;
 
-public class TileMachineStamper extends TileMachine implements IFactorySM, IFacing, IRecipeManager, IMessageGuiHandler, IFluidHandler, ISidedInventory {
+public class TileMachineStamper extends TileMachine implements IFactorySM, IFacingMachine, IRecipeManager, IMessageGuiHandler, IFluidHandler, ISidedInventory {
 
 	private FactorySM sm;
 	private ForgeDirection facing;
@@ -65,6 +65,11 @@ public class TileMachineStamper extends TileMachine implements IFactorySM, IFaci
 	public ForgeDirection getFacing() {
 		
 		return facing;
+	}
+	
+	public boolean getRunning() {
+		
+		return sm.getRunning();
 	}
 	
 	public int getSelected() {

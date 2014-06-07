@@ -8,11 +8,11 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 
-public class BlockMachinePainter extends BlockFaced {
+public class BlockMachinePainter extends BlockFacedMachine {
 
 	public BlockMachinePainter(String name) {
 		
-		super(Material.iron, name, new String[]{ "machine_bottom", "machine_top", "_front", "machine_side", "machine_side", "machine_side" } );
+		super(Material.iron, name);
 	}
 	
 	@Override

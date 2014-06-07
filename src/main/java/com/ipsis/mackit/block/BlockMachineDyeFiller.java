@@ -1,18 +1,27 @@
 package com.ipsis.mackit.block;
 
-import com.ipsis.mackit.MacKit;
-import com.ipsis.mackit.reference.Gui;
-
 import net.minecraft.block.material.Material;
+import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.IIcon;
+import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+import net.minecraftforge.common.util.ForgeDirection;
 
-public class BlockMachineDyeFiller extends BlockFaced {
+import com.ipsis.cofhlib.render.IconRegistry;
+import com.ipsis.mackit.MacKit;
+import com.ipsis.mackit.reference.Gui;
+import com.ipsis.mackit.reference.Reference;
+
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+
+public class BlockMachineDyeFiller extends BlockFacedMachine {
 	
 	public BlockMachineDyeFiller(String name) {
 		
-		super(Material.iron, name, new String[]{ "machine_bottom", "machine_top", "_front", "machine_side", "machine_side", "machine_side" } );
+		super(Material.iron, name);
 	}
 	
 	@Override

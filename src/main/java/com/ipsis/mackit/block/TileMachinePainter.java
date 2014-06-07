@@ -29,7 +29,7 @@ import com.ipsis.mackit.network.message.IMessageGuiHandler;
 import com.ipsis.mackit.network.message.MessageGui;
 import com.ipsis.mackit.reference.Gui;
 
-public class TileMachinePainter extends TileMachine implements IMessageGuiHandler, IFactorySM, IFacing, IRecipeManager, IFluidHandler, ISidedInventory {
+public class TileMachinePainter extends TileMachine implements IMessageGuiHandler, IFactorySM, IFacingMachine, IRecipeManager, IFluidHandler, ISidedInventory {
 
 	private FactorySM sm;
 	private ForgeDirection facing;
@@ -69,6 +69,11 @@ public class TileMachinePainter extends TileMachine implements IMessageGuiHandle
 	public ForgeDirection getFacing() {
 		
 		return facing;
+	}
+	
+	public boolean getRunning() {
+		
+		return sm.getRunning();
 	}
 	
 	public int getSelected() {

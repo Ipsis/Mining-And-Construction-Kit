@@ -21,6 +21,11 @@ public class TileMachine extends TileInventory implements IEnergyHandler, IEnerg
 		return energyStorage;
 	}
 	
+	public void updateRunning(boolean running) {
+		
+		worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
+	}
+	
 	@Override
 	public void readFromNBT(NBTTagCompound nbt) {
 

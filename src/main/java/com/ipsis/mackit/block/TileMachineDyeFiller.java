@@ -16,9 +16,10 @@ import com.ipsis.mackit.block.machinesm.FactorySM;
 import com.ipsis.mackit.block.machinesm.IFactorySM;
 import com.ipsis.mackit.block.machinesm.IMachineRecipe;
 import com.ipsis.mackit.block.machinesm.IRecipeManager;
+import com.ipsis.mackit.helper.LogHelper;
 import com.ipsis.mackit.manager.TankManager;
 
-public class TileMachineDyeFiller extends TileMachine implements IFactorySM, IFacing, IRecipeManager, IFluidHandler, ISidedInventory {
+public class TileMachineDyeFiller extends TileMachine implements IFactorySM, IFacingMachine, IRecipeManager, IFluidHandler, ISidedInventory {
 
 	private FactorySM sm;
 	private ForgeDirection facing;
@@ -44,6 +45,11 @@ public class TileMachineDyeFiller extends TileMachine implements IFactorySM, IFa
 		
 		tankMgr = new TankManager();
 		tankMgr.addTank(PURE_TANK, TANK_SIZE);
+	}
+	
+	public boolean getRunning() {
+		
+		return sm.getRunning();
 	}
 	
 	@Override
@@ -156,6 +162,7 @@ public class TileMachineDyeFiller extends TileMachine implements IFactorySM, IFa
 
 		super.writeToNBT(nbttagcompound);
 		nbttagcompound.setByte("Facing", (byte)facing.ordinal());
+		nbttagcompound.setBoolean("Running", sm.getRunning());
 		nbttagcompound.setInteger("ConsumedEnergy", consumedEnergy);
 		tankMgr.writeToNBT(nbttagcompound);
 	}
@@ -165,6 +172,7 @@ public class TileMachineDyeFiller extends TileMachine implements IFactorySM, IFa
 
 		super.readFromNBT(nbttagcompound);
 		facing = ForgeDirection.getOrientation((int)nbttagcompound.getByte("Facing"));
+		sm.setRunning(nbttagcompound.getBoolean("Running"));
 		consumedEnergy = nbttagcompound.getInteger("ConsumedEnergy");
 		tankMgr.readFromNBT(nbttagcompound);
 	}
@@ -177,6 +185,7 @@ public class TileMachineDyeFiller extends TileMachine implements IFactorySM, IFa
 
 		NBTTagCompound nbttagcompound = new NBTTagCompound();
 		nbttagcompound.setByte("Facing", (byte)facing.ordinal());
+		nbttagcompound.setBoolean("Running", sm.getRunning());
 		return new S35PacketUpdateTileEntity(xCoord, yCoord, zCoord, 1, nbttagcompound);
 	}
 	
@@ -184,6 +193,7 @@ public class TileMachineDyeFiller extends TileMachine implements IFactorySM, IFa
 	public void onDataPacket(NetworkManager net, S35PacketUpdateTileEntity pkt) {
 	
 		facing = ForgeDirection.getOrientation((int)pkt.func_148857_g().getByte("Facing"));
+		sm.setRunning(pkt.func_148857_g().getBoolean("Running"));
 		worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
 	}
 	

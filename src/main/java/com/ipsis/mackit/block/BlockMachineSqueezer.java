@@ -10,11 +10,11 @@ import net.minecraft.world.World;
 import com.ipsis.mackit.MacKit;
 import com.ipsis.mackit.reference.Gui;
 
-public class BlockMachineSqueezer extends BlockFaced {
+public class BlockMachineSqueezer extends BlockFacedMachine {
 	
 	public BlockMachineSqueezer(String name) {
 		
-		super(Material.iron, name, new String[]{ "machine_bottom", "machine_top", "_front", "machine_side", "machine_side", "machine_side" } );
+		super(Material.iron, name);
 	}
 	
 	@Override

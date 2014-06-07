@@ -21,7 +21,7 @@ import com.ipsis.mackit.manager.MKManagers;
 import com.ipsis.mackit.manager.SqueezerManager;
 import com.ipsis.mackit.manager.TankManager;
 
-public class TileMachineSqueezer extends TileMachine implements IFactorySM, IFacing, IRecipeManager, ISidedInventory, IFluidHandler {
+public class TileMachineSqueezer extends TileMachine implements IFactorySM, IFacingMachine, IRecipeManager, ISidedInventory, IFluidHandler {
 	
 	private FactorySM sm;
 	private ForgeDirection facing;
@@ -69,6 +69,11 @@ public class TileMachineSqueezer extends TileMachine implements IFactorySM, IFac
 	public ForgeDirection getFacing() {
 		
 		return facing;
+	}
+	
+	public boolean getRunning() {
+		
+		return sm.getRunning();
 	}
 	
 	@Override

@@ -15,4 +15,6 @@ public interface IFactorySM {
 	public int getEnergyTick();
 	
 	public IMachineRecipe getRecipe();
+	
+	public void updateRunning(boolean running);
 }
