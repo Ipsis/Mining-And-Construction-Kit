@@ -89,7 +89,7 @@ public class ItemFixerFoamGun extends ItemMK {
 	private void applyFoam(EntityPlayer entityPlayer, World world, int x, int y, int z) {
 		
 		ForgeDirection d = EntityHelper.getEntityFacingForgeDirection(entityPlayer);
-		d = d.getOpposite(); /* TODO Not sure why!!! */
+		d = d.getOpposite();
 		
 		/**
 		 * Modify a 3x3x3 area in the direction the player is facing
