@@ -16,6 +16,7 @@ import net.minecraft.util.IIcon;
 import com.ipsis.cofhlib.render.IconRegistry;
 import com.ipsis.cofhlib.util.ItemHelper;
 import com.ipsis.cofhlib.util.StringHelper;
+import com.ipsis.mackit.reference.Reference;
 
 import cpw.mods.fml.common.registry.GameRegistry;
 
@@ -50,7 +51,7 @@ public class ItemBase extends Item {
 	public ArrayList<Integer> itemList = new ArrayList<Integer>();
 
 	public boolean hasTextures = true;
-	public String modName = "cofh";
+	public String modName = Reference.MOD_ID;
 
 	public ItemBase() {
 

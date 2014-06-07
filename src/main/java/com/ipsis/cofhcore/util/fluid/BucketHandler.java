@@ -27,10 +27,12 @@ public class BucketHandler {
 
 	public static void initialize() {
 
+		/*
 		registerBucket(Blocks.water, 0, new ItemStack(Items.water_bucket));
 		registerBucket(Blocks.flowing_water, 0, new ItemStack(Items.water_bucket));
 		registerBucket(Blocks.lava, 0, new ItemStack(Items.lava_bucket));
 		registerBucket(Blocks.flowing_lava, 0, new ItemStack(Items.lava_bucket));
+		*/
 	}
 
 	private static TMap<Integer, ItemWrapper> bucketFill = new THashMap<Integer, ItemWrapper>();
