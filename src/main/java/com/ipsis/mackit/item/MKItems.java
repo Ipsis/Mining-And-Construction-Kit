@@ -10,6 +10,7 @@ import net.minecraftforge.fluids.FluidContainerRegistry;
 import com.ipsis.mackit.block.MKBlocks;
 import com.ipsis.mackit.creativetab.CreativeTab;
 import com.ipsis.mackit.fluid.MKFluids;
+import com.ipsis.mackit.helper.DyeHelper;
 
 import cpw.mods.fml.common.registry.GameRegistry;
 
@@ -31,12 +32,26 @@ public class MKItems {
 		itemDyeGun = new ItemDyeGun().setUnlocalizedName("dyeGun");
 		itemLeech = new ItemLeech().setUnlocalizedName("leech");
 		
+		int i = 0;
+		for (DyeHelper.DyeColor c : DyeHelper.DyeColor.VALID_COLORS) {
+			
+			dyes[i] = new ItemDyeSponge().setUnlocalizedName("dyeSponge" + c.getName());
+			i++;			
+		}
+		
 		GameRegistry.registerItem(itemFixerFoamGun, "item.fixerFoamGun");
 		GameRegistry.registerItem(itemFixerFoamRefill, "item.fixerFoamPellet");
 		GameRegistry.registerItem(itemMews, "item.mews");
 		GameRegistry.registerItem(itemDyeBlank,  "item.dyeBlank");
 		GameRegistry.registerItem(itemDyeGun, "item.dyeGun");
 		GameRegistry.registerItem(itemLeech, "item.leech");
+		
+		i = 0;
+		for (DyeHelper.DyeColor c : DyeHelper.DyeColor.VALID_COLORS) {
+			
+			GameRegistry.registerItem(dyes[i], "item.dyeSpong" + c.getName());
+			i++;			
+		}
 	}
 	
 	public static void initialise() {
@@ -64,6 +79,10 @@ public class MKItems {
 	public static Item itemDyeBlank;
 	public static Item itemDyeGun;
 	public static Item itemLeech;
+	
+
+	/* Sponges */
+	public static Item[] dyes = new Item[DyeHelper.DyeColor.VALID_COLORS.length];
 	
 	/* buckets */
 	public static ItemBucket itemBucket;
