@@ -161,6 +161,13 @@ public class TileBeaverBlock extends TileEntity {
 		int c = BLOCKS_PER_UPDATE;
 		while (iter.hasNext() && c != 0) {
 			
+			if (c == BLOCKS_PER_UPDATE) {
+				worldObj.playSoundEffect(
+						(double)((float)xCoord + 0.5F), (double)((float)yCoord + 0.5F), (double)((float)zCoord + 0.5F),
+						Block.soundTypeGrass.getBreakSound(), 
+						1.0F, worldObj.rand.nextFloat() * 0.1F + 0.9F);
+			}
+						
 			BlockCoord p = iter.next();
 			iter.remove();
 			worldObj.setBlock(p.x, p.y, p.z, Blocks.dirt);;
