@@ -2,6 +2,8 @@ package com.ipsis.mackit.block;
 
 import java.util.Arrays;
 
+import net.minecraft.entity.item.EntityItem;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -12,7 +14,6 @@ import net.minecraft.network.play.server.S35PacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.biome.BiomeGenBase;
 import net.minecraftforge.common.util.Constants;
-import net.minecraftforge.common.util.ForgeDirection;
 
 import org.apache.commons.lang3.ArrayUtils;
 
@@ -28,10 +29,9 @@ import com.ipsis.mackit.helper.LogHelper;
  *
  */
 public class TileDyeLeech extends TileEntity {
-
-
+	
 	private static final int UPDATE_FREQ = 20;
-	private static final int PRODUCE_LIFETIME = 100;
+	private static final int PRODUCE_LIFETIME = 60;
 	private int currTicks;
 	private ItemStack selectedDye;
 	private int lifetime;
@@ -45,9 +45,9 @@ public class TileDyeLeech extends TileEntity {
 	
 	public TileDyeLeech() {
 	
-		currTicks = 0;
+		currTicks = UPDATE_FREQ;
 		selectedDye = null;
-		lifetime = 0;
+		lifetime = PRODUCE_LIFETIME;
 	}
 	
 	public ItemStack getDye() {
@@ -62,14 +62,16 @@ public class TileDyeLeech extends TileEntity {
 		worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
 	}
 	
-	public void tryProduce() {
+	public ItemStack getOutput() {
 		
-		LogHelper.error("tryProduce: " + selectedDye + " " + lifetime + "/" + PRODUCE_LIFETIME);
-		if (selectedDye != null && lifetime >= PRODUCE_LIFETIME) {
-			/* throw the dye item on the ground */
+		ItemStack out = null;
+		if (selectedDye != null && selectedDye.stackSize > 0) {
+			out = selectedDye.copy();
 			selectedDye.stackSize = 0;
-			lifetime = 0;
+			lifetime = PRODUCE_LIFETIME;
 		}
+		
+		return out;
 	}
 	
 	private ItemStack biomeColorToDye(BiomeGenBase biome) {
@@ -79,12 +81,19 @@ public class TileDyeLeech extends TileEntity {
 		if (biome != null) {
 			int color = DYE_COLORS_SORTED[0];
 			
+			int last = -1;
 			for (int c : DYE_COLORS_SORTED) {
 	
-				if (c < biome.color)
+				LogHelper.error("biomeColorToDye: curr " + c + " ? " + biome.color);
+				if (c < biome.color) {
+					if (last != -1) {
+						c = last;
+					}
 					break;
-				else
+				} else {
 					color = c;
+				}
+				last = c;
 			}
 			
 	
@@ -105,16 +114,21 @@ public class TileDyeLeech extends TileEntity {
 	@Override
 	public void updateEntity() {
 
-		currTicks++;
-		if (currTicks % UPDATE_FREQ != 0)
+		/* TODO this needs fixed */
+		
+		currTicks--;
+		if (currTicks != 0)
 			return;
+		
+		currTicks = UPDATE_FREQ;
 		
 		if (worldObj.isRemote)
 			return;
 		
 		/* if time to update life */
-		lifetime++;
-		if (selectedDye != null && lifetime >= PRODUCE_LIFETIME) {
+		lifetime--;
+		if (selectedDye != null && lifetime <= 0) {
+			lifetime = PRODUCE_LIFETIME;
 			selectedDye.stackSize++;
 			if (selectedDye.stackSize > selectedDye.getMaxStackSize())
 				selectedDye.stackSize = selectedDye.getMaxStackSize();
@@ -130,12 +144,8 @@ public class TileDyeLeech extends TileEntity {
 		super.writeToNBT(nbttagcompound);
 		nbttagcompound.setInteger("Lifetime", lifetime);
 		NBTTagList nbttaglist = new NBTTagList();
-		if (selectedDye != null) {
-			NBTTagCompound nbttagcompound1 = new NBTTagCompound();
-			selectedDye.writeToNBT(nbttagcompound1);
-			nbttaglist.appendTag(nbttagcompound1);
-		}
-		nbttagcompound.setTag("SelectedDye", nbttaglist);
+		if (selectedDye != null)
+			nbttagcompound.setTag("storedStack", selectedDye.writeToNBT(new NBTTagCompound()));
 	}
 	
 	@Override
@@ -143,11 +153,9 @@ public class TileDyeLeech extends TileEntity {
 
 		super.readFromNBT(nbttagcompound);
 		lifetime = nbttagcompound.getInteger("Lifetime");
-		NBTTagList nbttaglist = nbttagcompound.getTagList("SelectedDye", Constants.NBT.TAG_COMPOUND);
-		if (nbttaglist.tagCount() == 1) {
-			NBTTagCompound nbttagcompound1 = nbttaglist.getCompoundTagAt(0);
-			selectedDye = ItemStack.loadItemStackFromNBT(nbttagcompound1);
-		}
+		
+		if (nbttagcompound.hasKey("storedStack"))
+			selectedDye = ItemStack.loadItemStackFromNBT((NBTTagCompound)nbttagcompound.getTag("storedStack"));
 	}
 	
 	/************

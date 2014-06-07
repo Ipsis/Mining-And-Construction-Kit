@@ -4,6 +4,7 @@ import com.ipsis.cofhlib.util.EntityHelper;
 
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
@@ -54,7 +55,26 @@ public class BlockDyeLeech extends BlockFaced {
 			
 			TileEntity te = world.getTileEntity(x, y, z);
 			if (te != null && te instanceof TileDyeLeech) {
-				((TileDyeLeech) te).tryProduce();
+				
+				TileDyeLeech dyeLeech = (TileDyeLeech)te;
+				ItemStack out = dyeLeech.getOutput();
+				if (out != null) {
+					
+					/* TODO Throw it at the player */
+					float spawnX = x + world.rand.nextFloat();
+					float spawnY = y + world.rand.nextFloat();
+					float spawnZ = z + world.rand.nextFloat();
+					
+					EntityItem droppedItem = new EntityItem(world, spawnX, spawnY, spawnZ, out);
+					
+					float mult = 0.05F;
+					
+					droppedItem.motionX = (-0.5F + world.rand.nextFloat()) * mult;
+					droppedItem.motionY = (4 + world.rand.nextFloat()) * mult;
+					droppedItem.motionZ = (-0.5F + world.rand.nextFloat()) * mult;
+					
+					world.spawnEntityInWorld(droppedItem);
+				}
 			}
 		}
 		
