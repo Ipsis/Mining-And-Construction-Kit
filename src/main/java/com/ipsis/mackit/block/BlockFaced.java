@@ -139,7 +139,8 @@ public class BlockFaced extends BlockContainer {
 			return getIconFromSide(f, side);
 		}
 		
-		return null;
+		/* Assume everything else is the same icon */
+		return icons[2];
 	}
 	
 	@Override
