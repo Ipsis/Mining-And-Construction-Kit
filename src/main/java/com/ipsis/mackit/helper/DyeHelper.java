@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 
 import net.minecraft.init.Items;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.CraftingManager;
 import net.minecraft.item.crafting.FurnaceRecipes;
@@ -15,6 +16,7 @@ import net.minecraftforge.fluids.FluidStack;
 
 import com.ipsis.cofhlib.util.inventory.ComparableItemStack;
 import com.ipsis.mackit.fluid.MKFluids;
+import com.ipsis.mackit.item.MKItems;
 import com.ipsis.mackit.manager.MKManagers;
 
 public class DyeHelper {
@@ -23,6 +25,57 @@ public class DyeHelper {
 	public static final String DYE_YELLOW = "Yellow";
 	public static final String DYE_BLUE = "Blue";
 	public static final String DYE_WHITE = "White";
+	
+	public static enum DyeColor { 
+		
+		BLACK(0, "Black"),
+        RED(1, "Red"),
+        GREEN(2, "Green"),
+        BROWN(3, "Brown"),
+        BLUE(4, "Blue"),
+        PURPLE(5, "Purple"),
+        CYAN(6, "Cyan"),
+        LIGHTGRAY(7, "LightGray"),
+        GRAY(8, "Gray"),
+        PINK(9, "Pink"),
+        LIME(10, "Lime"),
+        YELLOW(11, "Yellow"),
+        LIGHTBLUE(12, "LightBlue"),
+        MAGENTA(13, "Magenta"),
+        ORANGE(14, "Orange"),
+        WHITE(15, "White");
+		
+		public static final DyeColor[] VALID_COLORS = {BLACK, RED, GREEN, BROWN, BLUE, PURPLE, CYAN, LIGHTGRAY, 
+														GRAY, PINK, LIME, YELLOW, LIGHTBLUE, MAGENTA, ORANGE, WHITE};
+        
+        private int dmg;
+		private String name;
+		
+		private DyeColor(int dmg, String name) {
+			
+			this.dmg = dmg;
+			this.name = name;
+		}
+		
+		public int getDmg() {
+			
+			return dmg;
+		}
+		
+		public String getName() {
+			
+			return name;
+		}
+		
+		private static DyeColor getFromDmg(int dmg) {
+			
+			if (dmg < 0 || dmg > 15)
+				return WHITE;
+			
+			/* cheaty - ordinal is actually the damage */
+			return VALID_COLORS[dmg];
+		}
+	};
 	
 	private static HashMap<ComparableItemStack, DyeRecipe> dyeRecipeMap = new HashMap<ComparableItemStack, DyeRecipe>();
 	private static HashMap<ComparableItemStack, ItemStack> dyeSourceMap = new HashMap<ComparableItemStack, ItemStack>();	
@@ -55,6 +108,10 @@ public class DyeHelper {
 		/* Add the default dyes as sources */
 		for (int i = 0; i < 16; i++)
 			dyeSourceMap.put(new ComparableItemStack(new ItemStack(Items.dye, 1, i)), new ItemStack(Items.dye, 1, i));
+		
+		/* Add the sponge recipes */
+		for (int i = 0; i < MKItems.dyes.length; i++)
+			dyeSourceMap.put(new ComparableItemStack(new ItemStack(MKItems.dyes[i])), new ItemStack(Items.dye, 1, i));
 	}
 	
 	private static void addItemRecipe(ItemStack in, ItemStack out) {
