@@ -5,6 +5,7 @@ tile.MacKit:fixedGravel.name=Fixed Gravel
 
 tile.MacKit:beaverBlock.name=Beaver Block
 tile.MacKit:portaChant.name=Porta-chant
+tile.MacKit:dyeLeech.name=Dye Leech Block
 
 tile.MacKit:machineSqueezer.name=Squeezer
 tile.MacKit:machinePainter.name=Painter
@@ -22,3 +23,28 @@ item.MacKit:fixerFoamRefill.name=Fixer Foam Refill
 item.MacKit:mews.name=M.E.W.S
 item.MacKit:dyeBlank.name=Dye Blank
 item.MacKit:dyeGun.name=Dye Gun
+item.MacKit:leech.name=Leech
+
+item.MacKit.bucket.bucketDyeRed.name=Red Dye Bucket
+item.MacKit.bucket.bucketDyeYellow.name=Yellow Dye Bucket
+item.MacKit.bucket.bucketDyeBlue.name=Blue Dye Bucket
+item.MacKit.bucket.bucketDyeWhite.name=White Dye Bucket
+item.MacKit.bucket.bucketDyePure.name=Pure Dye Bucket
+
+item.MacKit:dyeSpongePurple.name=Purple Sponge
+item.MacKit:dyeSpongeBlue.name=Blue Sponge
+item.MacKit:dyeSpongeGray.name=Gray Sponge
+item.MacKit:dyeSpongeWhite.name=White Sponge
+item.MacKit:dyeSpongeGreen.name=Green Sponge
+item.MacKit:dyeSpongePink.name=Pink Sponge
+item.MacKit:dyeSpongeCyan.name=Cyan Sponge
+item.MacKit:dyeSpongeMagenta.name=Magenta Sponge
+item.MacKit:dyeSpongeLime.name=Lime Sponge
+item.MacKit:dyeSpongeLightBlue.name=Light Blue Sponge
+item.MacKit:dyeSpongeOrange.name=Orange Sponge
+item.MacKit:dyeSpongeBlack.name=Black Sponge
+item.MacKit:dyeSpongeLightGray.name=Light Gray Sponge
+item.MacKit:dyeSpongeYellow.name=Yellow Sponge
+item.MacKit:dyeSpongeBrown.name=Brown Sponge
+item.MacKit:dyeSpongeRed.name=Red Sponge
+
