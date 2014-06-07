@@ -54,7 +54,7 @@ public class MKItems {
 		i = 0;
 		for (DyeHelper.DyeColor c : DyeHelper.DyeColor.VALID_COLORS) {
 			
-			GameRegistry.registerItem(dyes[i], "item.dyeSpong" + c.getName());
+			GameRegistry.registerItem(dyes[i], "item.dyeSponge" + c.getName());
 			i++;			
 		}
 	}
