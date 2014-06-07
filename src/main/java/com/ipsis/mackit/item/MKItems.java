@@ -3,14 +3,16 @@ package com.ipsis.mackit.item;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
-import net.minecraft.item.ItemBucket;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.FluidContainerRegistry;
 
+import com.ipsis.cofhcore.item.ItemBucket;
+import com.ipsis.cofhcore.util.fluid.BucketHandler;
 import com.ipsis.mackit.block.MKBlocks;
 import com.ipsis.mackit.creativetab.CreativeTab;
 import com.ipsis.mackit.fluid.MKFluids;
 import com.ipsis.mackit.helper.DyeHelper;
+import com.ipsis.mackit.reference.Reference;
 
 import cpw.mods.fml.common.registry.GameRegistry;
 
@@ -20,10 +22,13 @@ public class MKItems {
 	public static void preInit() {
 		
 		/* buckets */
-		//itemBucket = (ItemBucket) new ItemBucket("thermalfoundation").setUnlocalizedName("bucket").setCreativeTab(CreativeTab.MK_TAB);
+		itemBucket = (ItemBucket) new ItemBucket(Reference.MOD_ID).setUnlocalizedName("bucket").setCreativeTab(CreativeTab.MK_TAB);
+		bucketDyeRed = itemBucket.addItem(0, "bucketDyeRed", 1);
+		bucketDyeYellow = itemBucket.addItem(1, "bucketDyeYellow", 1);
+		bucketDyeBlue = itemBucket.addItem(2, "bucketDyeBlue", 1);
+		bucketDyeWhite = itemBucket.addItem(3, "bucketDyeWhite", 1);
+		bucketDyePure = itemBucket.addItem(4, "bucketDyePure", 1);
 
-		//bucketDyeRed = itemBucket.addItem(0, "bucketDyeRed", 1);
-		
 		
 		itemFixerFoamGun = new ItemFixerFoamGun().setUnlocalizedName("fixerFoamGun");
 		itemFixerFoamRefill = new ItemFixerFoamRefill().setUnlocalizedName("fixerFoamRefill");
@@ -56,9 +61,17 @@ public class MKItems {
 	
 	public static void initialise() {
 		
-		//BucketHandler.registerBucket(MKBlocks.blockFluidDyeRed, 0, bucketDyeRed);
+		BucketHandler.registerBucket(MKBlocks.blockFluidDyeRed, 0, bucketDyeRed);
+		BucketHandler.registerBucket(MKBlocks.blockFluidDyeYellow, 0, bucketDyeYellow);
+		BucketHandler.registerBucket(MKBlocks.blockFluidDyeBlue, 0, bucketDyeBlue);
+		BucketHandler.registerBucket(MKBlocks.blockFluidDyeWhite, 0, bucketDyeWhite);
+		BucketHandler.registerBucket(MKBlocks.blockFluidDyePure, 0, bucketDyePure);
 		
-		//FluidContainerRegistry.registerFluidContainer(MKFluids.fluidDyeRed, bucketDyeRed, FluidContainerRegistry.EMPTY_BUCKET);
+		FluidContainerRegistry.registerFluidContainer(MKFluids.fluidDyeRed, bucketDyeRed, FluidContainerRegistry.EMPTY_BUCKET);
+		FluidContainerRegistry.registerFluidContainer(MKFluids.fluidDyeYellow, bucketDyeYellow, FluidContainerRegistry.EMPTY_BUCKET);
+		FluidContainerRegistry.registerFluidContainer(MKFluids.fluidDyeBlue, bucketDyeBlue, FluidContainerRegistry.EMPTY_BUCKET);
+		FluidContainerRegistry.registerFluidContainer(MKFluids.fluidDyeWhite, bucketDyeWhite, FluidContainerRegistry.EMPTY_BUCKET);
+		FluidContainerRegistry.registerFluidContainer(MKFluids.fluidDyePure, bucketDyePure, FluidContainerRegistry.EMPTY_BUCKET);
 	}
 	
 	
@@ -87,4 +100,8 @@ public class MKItems {
 	/* buckets */
 	public static ItemBucket itemBucket;
 	public static ItemStack bucketDyeRed;
+	public static ItemStack bucketDyeYellow;
+	public static ItemStack bucketDyeBlue;
+	public static ItemStack bucketDyeWhite;
+	public static ItemStack bucketDyePure;
 }

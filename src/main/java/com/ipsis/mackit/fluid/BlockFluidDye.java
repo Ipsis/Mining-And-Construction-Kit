@@ -19,7 +19,7 @@ public class BlockFluidDye extends BlockFluidClassic {
 	
 	public BlockFluidDye(Fluid f, String name) {
 		
-		super(f, Material.lava);
+		super(f, Material.water);
 		setBlockName(name);
 		this.setCreativeTab(CreativeTab.MK_TAB);
 	}
