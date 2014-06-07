@@ -1,5 +1,7 @@
 package com.ipsis.mackit.item;
 
+import java.util.List;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.entity.player.EntityPlayer;
@@ -8,6 +10,9 @@ import net.minecraft.world.World;
 
 import com.ipsis.mackit.helper.DyedOriginHelper;
 import com.ipsis.mackit.helper.LogHelper;
+
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 /**
  * Reverts blocks to their un-dyed state. eg. dyed wool to plain wool
@@ -18,7 +23,7 @@ public class ItemLeech extends ItemMK {
 
 	public ItemLeech() {
 		
-		super();
+		super("Replace dyed blocks with the un-dyed version");
 		this.setMaxStackSize(1);
 		this.setMaxDamage(0);
 	}
@@ -72,5 +77,4 @@ public class ItemLeech extends ItemMK {
 			
 			return false;
 	}
-
 }

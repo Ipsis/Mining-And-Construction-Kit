@@ -18,7 +18,6 @@ public class ItemBeaverBlock extends ItemBlock {
 	public ItemBeaverBlock(Block id){
 		super(id);
 		setHasSubtypes(false);
-		LogHelper.error("ItemBEAVERBLOCK");
 	}
 	
 	@Override

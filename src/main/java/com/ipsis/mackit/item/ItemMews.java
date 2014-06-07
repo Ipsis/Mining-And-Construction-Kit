@@ -12,7 +12,7 @@ public class ItemMews extends ItemMK {
 
 	public ItemMews() {
 		
-		super();
+		super("Mob Early Warning System (Purr)");
 		this.setMaxStackSize(1);
 		this.setMaxDamage(FREQUENCY);
 	}

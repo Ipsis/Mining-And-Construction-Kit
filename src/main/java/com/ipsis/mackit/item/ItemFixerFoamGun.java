@@ -69,7 +69,7 @@ public class ItemFixerFoamGun extends ItemMK {
 	@Override
 	@SideOnly(Side.CLIENT)
 	public void addInformation(ItemStack itemStack,	EntityPlayer entityPlayer, List info, boolean useExtraInformation) {
-
+		
 		info.add("Charges Left " + (itemStack.getMaxDamage() - itemStack.getItemDamage()));
 	}
 	

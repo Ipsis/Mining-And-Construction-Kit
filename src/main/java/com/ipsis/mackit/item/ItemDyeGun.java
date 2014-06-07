@@ -23,7 +23,7 @@ public class ItemDyeGun extends ItemMK {
 	
 	public ItemDyeGun() {
 		
-		super();
+		super("Replace blocks with a colored version");
 		this.setMaxStackSize(1);
 		this.setMaxDamage(TANK_CAPACITY);
 	}
