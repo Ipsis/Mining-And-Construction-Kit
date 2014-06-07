@@ -25,7 +25,7 @@ public class ItemMK extends Item {
 	
 	public ItemMK() {
 		
-		this.info = null;
+		this(null);
 	}
 	
 	public ItemMK(String info) {
