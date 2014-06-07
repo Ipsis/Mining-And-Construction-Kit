@@ -75,6 +75,7 @@ public class BlockFaced extends BlockContainer {
 	@SideOnly(Side.CLIENT)
 	private IIcon icons[];
 	
+	@SideOnly(Side.CLIENT)
 	@Override
 	public void registerBlockIcons(IIconRegister iconRegister) {
 
@@ -88,6 +89,7 @@ public class BlockFaced extends BlockContainer {
 		}	
 	}
 	
+	@SideOnly(Side.CLIENT)
 	private IIcon getIconFromSide(ForgeDirection f, int side) {
 		
 		ForgeDirection c = ForgeDirection.getOrientation(side);
@@ -106,6 +108,7 @@ public class BlockFaced extends BlockContainer {
 		return null;
 	}
 	
+	@SideOnly(Side.CLIENT)
 	@Override
 	public IIcon getIcon(int side, int metadata) {
 		
@@ -121,6 +124,7 @@ public class BlockFaced extends BlockContainer {
 		return getIconFromSide(f, side);
 	}
 	
+	@SideOnly(Side.CLIENT)
 	@Override
 	public IIcon getIcon(IBlockAccess iblockaccess, int x, int y, int z, int side) {
 
@@ -130,6 +134,7 @@ public class BlockFaced extends BlockContainer {
 		
 		TileEntity te = iblockaccess.getTileEntity(x, y, z);
 		if (te != null && te instanceof IFacing) {
+
 			ForgeDirection f = ((IFacing)te).getFacing();			
 			return getIconFromSide(f, side);
 		}
