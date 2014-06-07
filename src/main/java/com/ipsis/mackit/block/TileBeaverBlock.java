@@ -97,7 +97,7 @@ public class TileBeaverBlock extends TileEntity {
 					/* Translate the block position in both x and z */
 					BlockCoord np = p.copy();
 					np.x += (tx * (l == 0 ? -1 : 1));
-					np.y += 0;
+					np.y += -1; /* block sits above the water */
 					np.z += tz;
 
 					if (!np.equals(p))
@@ -123,7 +123,7 @@ public class TileBeaverBlock extends TileEntity {
 		for (int xOffset = -3; xOffset <= 3; xOffset++) {
 			for (int zOffset = -3; zOffset <= 3; zOffset++) {
 				
-				BlockCoord np = new BlockCoord(p.x + xOffset, p.y - currLevel, p.z + zOffset);
+				BlockCoord np = new BlockCoord(p.x + xOffset, p.y - currLevel - 1, p.z + zOffset);
 				if (!np.equals(p))
 					tryAddBlock(np);
 			}
@@ -144,7 +144,7 @@ public class TileBeaverBlock extends TileEntity {
 		for (int xOffset = -1; xOffset <= 1; xOffset++) {
 			for (int zOffset = -1; zOffset <= 1; zOffset++) {
 				
-				BlockCoord np = new BlockCoord(p.x + xOffset, p.y - currLevel, p.z + zOffset);
+				BlockCoord np = new BlockCoord(p.x + xOffset, p.y - currLevel - 1, p.z + zOffset);
 				if (!np.equals(p))
 					tryAddBlock(np);
 			}

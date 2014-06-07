@@ -5,6 +5,7 @@ import net.minecraft.block.material.Material;
 
 import com.ipsis.mackit.fluid.BlockFluidDye;
 import com.ipsis.mackit.fluid.MKFluids;
+import com.ipsis.mackit.item.ItemBeaverBlock;
 
 import cpw.mods.fml.common.registry.GameRegistry;
 
@@ -35,7 +36,7 @@ public class MKBlocks {
 		
 		GameRegistry.registerBlock(fixedSand, "block.fixedSand");
 		GameRegistry.registerBlock(fixedGravel, "block.fixedGravel");
-		GameRegistry.registerBlock(beaverBlock, "block.beaverBlock");
+		GameRegistry.registerBlock(beaverBlock, ItemBeaverBlock.class, "block.beaverBlock");
 		GameRegistry.registerBlock(portaChant, "block.portaChant");
 		GameRegistry.registerBlock(machineSqueezer, "block.machineSqueezer");
 		GameRegistry.registerBlock(machineStamper, "block.machineStamper");
