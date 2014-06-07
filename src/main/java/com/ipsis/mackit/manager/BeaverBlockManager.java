@@ -22,7 +22,6 @@ public class BeaverBlockManager {
 	
 	public boolean isValid(Block b) {
 		
-		return true;
-		//return validBlocks.contains(b);
+		return validBlocks.contains(b);
 	}
 }
