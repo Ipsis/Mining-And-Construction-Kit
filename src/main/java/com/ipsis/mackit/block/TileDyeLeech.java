@@ -2,8 +2,6 @@ package com.ipsis.mackit.block;
 
 import java.util.Arrays;
 
-import net.minecraft.entity.item.EntityItem;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -13,12 +11,12 @@ import net.minecraft.network.Packet;
 import net.minecraft.network.play.server.S35PacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.biome.BiomeGenBase;
-import net.minecraftforge.common.util.Constants;
 
 import org.apache.commons.lang3.ArrayUtils;
 
 import com.ipsis.cofhlib.util.ColorHelper;
 import com.ipsis.mackit.helper.LogHelper;
+import com.ipsis.mackit.item.MKItems;
 
 /**
  * 
@@ -31,7 +29,7 @@ import com.ipsis.mackit.helper.LogHelper;
 public class TileDyeLeech extends TileEntity {
 	
 	private static final int UPDATE_FREQ = 20;
-	private static final int PRODUCE_LIFETIME = 60;
+	private static final int PRODUCE_LIFETIME = 10; /* TODO set how often the dyeleech produces dye */
 	private int currTicks;
 	private ItemStack selectedDye;
 	private int lifetime;
@@ -74,6 +72,14 @@ public class TileDyeLeech extends TileEntity {
 		return out;
 	}
 	
+	private ItemStack createDyeSponge(int dmg) {
+		
+		if (dmg < 0 || dmg > 15)
+			return new ItemStack(MKItems.dyes[0]);
+		
+		return new ItemStack(MKItems.dyes[dmg]);
+	}
+	
 	private ItemStack biomeColorToDye(BiomeGenBase biome) {
 		
 		ItemStack dye = null;
@@ -84,7 +90,6 @@ public class TileDyeLeech extends TileEntity {
 			int last = -1;
 			for (int c : DYE_COLORS_SORTED) {
 	
-				LogHelper.error("biomeColorToDye: curr " + c + " ? " + biome.color);
 				if (c < biome.color) {
 					if (last != -1) {
 						c = last;
@@ -99,14 +104,14 @@ public class TileDyeLeech extends TileEntity {
 	
 			for (int x = 0; x < ColorHelper.DYE_COLORS.length; x++) {
 				if (ColorHelper.DYE_COLORS[x] == color) {
-					dye = new ItemStack(Items.dye, 0, x);
+					dye = createDyeSponge(x);
 					break;
 				}				
 			}
 		}
 		
 		if (dye == null)
-			dye = new ItemStack(Items.dye, 0, 1);	/* red */
+			dye = createDyeSponge(-1);
 		
 		return dye;
 	}
@@ -114,8 +119,6 @@ public class TileDyeLeech extends TileEntity {
 	@Override
 	public void updateEntity() {
 
-		/* TODO this needs fixed */
-		
 		currTicks--;
 		if (currTicks != 0)
 			return;
