@@ -1,9 +1,13 @@
 package com.ipsis.mackit.item;
 
+import java.util.List;
+
 import com.ipsis.mackit.helper.ColoredBlockSwapper;
 import com.ipsis.mackit.helper.DyeHelper;
 import com.ipsis.mackit.helper.LogHelper;
 
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.entity.player.EntityPlayer;
@@ -12,16 +16,12 @@ import net.minecraft.world.World;
 
 public class ItemDyeGun extends ItemMK {
 
-	private static final int TANK_CAPACITY = 1000; // mB
+	private static final int TANK_CAPACITY = DyeHelper.DYE_BASE_AMOUNT * 20;
 	
 	private static final int MASK_FLUID = 0x0000FFFF; /* max 65535 */
 	private static final int MASK_COLOR = 0xFFFF0000;
 	private static final int SHIFT_FLUID = 0;
 	private static final int SHIFT_COLOR = 16;
-	
-	/* TODO
-	 * Needs to store the tank capacity AND the current color being used
-	 */
 	
 	public ItemDyeGun() {
 		
@@ -41,6 +41,20 @@ public class ItemDyeGun extends ItemMK {
 		itemStack.setItemDamage(dmg);
 	}
 	
+	private void useDye(ItemStack itemStack) {
+		
+		int dmg = itemStack.getItemDamage();
+		int fluid = (itemStack.getItemDamage() & MASK_FLUID) >> SHIFT_FLUID;
+		fluid -= DyeHelper.DYE_BASE_AMOUNT;
+		if (fluid < 0)
+			fluid = 0;
+		
+		dmg &= ~MASK_FLUID;
+		dmg |= (fluid  << SHIFT_FLUID);
+		
+		itemStack.setItemDamage(dmg);
+	}
+	
 	/* TODO need to ensure that display damage hides the color field */
 	
 	@Override
@@ -51,7 +65,7 @@ public class ItemDyeGun extends ItemMK {
 		if (world.isRemote)
 			return false;
 		
-		int capacity = (itemStack.getItemDamage() & MASK_FLUID) >> SHIFT_FLUID;
+		int fluid = (itemStack.getItemDamage() & MASK_FLUID) >> SHIFT_FLUID;
 		int color = (itemStack.getItemDamage() & MASK_COLOR) >> SHIFT_COLOR;
 		
 		if (entityPlayer.isSneaking()) {
@@ -60,10 +74,27 @@ public class ItemDyeGun extends ItemMK {
 			nextColor(itemStack);
 		} else {
 			
+			/* check for creative mode and enough dye available */
+			
 			/* change block */
-			return ColoredBlockSwapper.swap(entityPlayer, world, x, y, z, DyeHelper.DyeColor.getFromDmg(color), false);
+			if (ColoredBlockSwapper.swap(entityPlayer, world, x, y, z, DyeHelper.DyeColor.getFromDmg(color), false) == true) {
+				
+				if (!entityPlayer.capabilities.isCreativeMode)
+					useDye(itemStack);
+			}
 		}
 		
 		return true;
+	}
+	
+	@Override
+	@SideOnly(Side.CLIENT)
+	public void addInformation(ItemStack itemStack,	EntityPlayer entityPlayer, List info, boolean useExtraInformation) {
+		
+		int fluid = (itemStack.getItemDamage() & MASK_FLUID) >> SHIFT_FLUID;
+		int color = (itemStack.getItemDamage() & MASK_COLOR) >> SHIFT_COLOR;
+		
+		info.add(DyeHelper.DyeColor.getFromDmg(color).getName());
+		info.add(fluid + "/" + TANK_CAPACITY);
 	}
 }
