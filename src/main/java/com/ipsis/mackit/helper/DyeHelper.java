@@ -80,30 +80,42 @@ public class DyeHelper {
 	private static HashMap<ComparableItemStack, DyeRecipe> dyeRecipeMap = new HashMap<ComparableItemStack, DyeRecipe>();
 	private static HashMap<ComparableItemStack, ItemStack> dyeSourceMap = new HashMap<ComparableItemStack, ItemStack>();	
 	
-	private static final int[][] amounts = new int[][]{
-		{  33,  33,  33,   0 },		/* black */
-		{ 100,	 0,	  0,   0 },		/* red */
-		{   0,  50,  50,   0 },		/* green */
-		{  33,  33,  33,   0 },		/* brown */
-		{   0,   0, 100,   0 },		/* blue */
-		{  50,   0,  50,   0 },		/* purple */
-		{   0,   0,   0,   0 }, 	/* TODO cyan */
-		{  20,  20,  20,  40 },		/* light gray */
-		{   0,   0,   0,   0 },		/* TODO gray */
-		{  50,   0,   0,  50 },		/* TODO pink */
-		{   0,  33,  33,  33 },		/* TODO lime */
-		{   0, 100,   0,   0 },		/* yellow */
-		{   0,   0,  50,  50 },		/* light blue */
-		{   0,   0,   0,   0 },		/* TODO magenta */
-		{  50,  50,   0,   0 },		/* orange */
-		{   0,   0,   0, 100 }		/* white */
+	/**
+	 * The proportion of RYBW that is produced for each dye type
+	 * Stored in 72ths (LCM of 2,3,4,6,8,9!)
+	 */
+	private static final int LCM = 72;
+	private static final int[][] DYE_PROPS = new int[][] {
+		/*     Red,     Yellow,      Blue,     White */
+		
+		{     LCM/3,     LCM/3,     LCM/3,         0 },		/* Black */
+		{       LCM,	     0,         0,         0 },		/* Red */
+		{         0,      LCM/2,    LCM/2,         0 },		/* Green */
+		{ 3*(LCM/4),      LCM/8,    LCM/8,         0 },		/* Brown */
+		{         0,          0,      LCM,         0 },		/* Blue */
+		{     LCM/2,          0,    LCM/2,         0 },		/* Purple */
+		{         0,          0,    LCM/4, 3*(LCM/4) }, 	/* Cyan */
+		{     LCM/9,      LCM/9,    LCM/9, 2*(LCM/3) },		/* Light Gray */
+		{     LCM/6,      LCM/6,    LCM/6,     LCM/2 },		/* Gray */
+		{     LCM/2,          0,        0,     LCM/2 },		/* Pink */
+		{         0,      LCM/4,    LCM/4,     LCM/2 },		/* Lime */
+		{         0,        LCM,        0,         0 },		/* Yellow */
+		{         0,          0,    LCM/2,     LCM/2 },		/* Light Blue */
+		{     LCM/2,          0,    LCM/4,     LCM/4 },		/* Magenta */
+		{     LCM/2,      LCM/2,        0,         0 },		/* Orange */
+		{         0,          0,        0,       LCM }		/* White */
 	};
 
 	public static void initialise() {
 		
+		for (int i = 0; i < 16; i++) {
+			if (DYE_PROPS[i][0] + DYE_PROPS[i][1] + DYE_PROPS[i][2] + DYE_PROPS[i][3] != LCM)
+				LogHelper.error("DyeHelper: init - dye proportions broken");
+		}
+		
 		for (int i = 0; i < 16; i++)
 			dyeRecipeMap.put(new ComparableItemStack(new ItemStack(Items.dye, 1, i)),
-					new DyeRecipe(new ItemStack(Items.dye, 1, i), amounts[i][0], amounts[i][1], amounts[i][2], amounts[i][3]));
+					new DyeRecipe(new ItemStack(Items.dye, 1, i), DYE_PROPS[i][0], DYE_PROPS[i][1], DYE_PROPS[i][2], DYE_PROPS[i][3]));
 
 		/* Add the default dyes as sources */
 		for (int i = 0; i < 16; i++)
