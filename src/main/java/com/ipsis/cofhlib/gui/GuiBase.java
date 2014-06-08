@@ -80,15 +80,14 @@ public abstract class GuiBase extends GuiContainer {
 
 	@Override
 	protected void drawGuiContainerForegroundLayer(int x, int y) {
-
+		
 		fontRendererObj.drawString(StringHelper.localize(name), getCenteredOffset(StringHelper.localize(name)), 6, 0x404040);
 		if (drawInventory) {
 			fontRendererObj.drawString(StatCollector.translateToLocal("container.inventory"), 8, ySize - 96 + 3, 0x404040);
 		}
-		if (!Loader.isModLoaded("NotEnoughItems") && mc.thePlayer.inventory.getItemStack() == null) {
-			addTooltips(tooltip);
-			drawTooltip(tooltip);
-		}
+
+		addTooltips(tooltip);
+		drawTooltip(tooltip);
 	}
 
 	@Override
@@ -212,7 +211,7 @@ public abstract class GuiBase extends GuiContainer {
 	// @Override
 	public List<String> handleTooltip(int mousex, int mousey, List<String> tooltip) {
 
-		if (GuiProxy.shouldShowTooltip(this)) {
+		if (mc.thePlayer.inventory.getItemStack() == null) {
 			addTooltips(tooltip);
 		}
 		return tooltip;
