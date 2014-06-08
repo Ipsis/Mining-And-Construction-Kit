@@ -21,8 +21,6 @@ import com.ipsis.mackit.manager.PainterManager;
 
 /**
  * Maps dyed items to their un-dyed equivalent
- * 
- * TODO add the origin blocks as their own origin!
  *
  */
 public class DyedOriginHelper {
@@ -83,6 +81,11 @@ public class DyedOriginHelper {
 		ComparableItemStack key = new ComparableItemStack(output);
 		key.stackSize = 1;
 		originMap.put(key, src.copy());
+		
+		/* Origin must also be the origin of itself, so you can dye the origin items */
+		ComparableItemStack key2 = new ComparableItemStack(src);
+		key2.stackSize = 1;
+		originMap.put(key2, src.copy());
 		
 		/* Also add the painter recipe */
 		ItemStack out = output.copy();
