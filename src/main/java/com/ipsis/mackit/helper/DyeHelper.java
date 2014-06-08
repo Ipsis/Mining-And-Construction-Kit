@@ -6,12 +6,12 @@ import java.util.List;
 import java.util.Map;
 
 import net.minecraft.init.Items;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.CraftingManager;
 import net.minecraft.item.crafting.FurnaceRecipes;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.item.crafting.ShapelessRecipes;
+import net.minecraft.util.IIcon;
 import net.minecraftforge.fluids.FluidStack;
 
 import com.ipsis.cofhlib.util.inventory.ComparableItemStack;
@@ -67,6 +67,16 @@ public class DyeHelper {
 			return name;
 		}
 		
+		public ItemStack getItemStack() {
+			
+			return new ItemStack(Items.dye, 1, dmg);
+		}
+		
+		public IIcon getIcon() {
+			
+			return Items.dye.getIconFromDamage(dmg);
+		}
+		
 		private static DyeColor getFromDmg(int dmg) {
 			
 			if (dmg < 0 || dmg > 15)
@@ -74,7 +84,7 @@ public class DyeHelper {
 			
 			/* cheaty - ordinal is actually the damage */
 			return VALID_COLORS[dmg];
-		}
+		}		
 	};
 	
 	private static HashMap<ComparableItemStack, DyeRecipe> dyeRecipeMap = new HashMap<ComparableItemStack, DyeRecipe>();
@@ -85,6 +95,7 @@ public class DyeHelper {
 	 * Stored in 72ths (LCM of 2,3,4,6,8,9!)
 	 */
 	private static final int LCM = 72;
+	public static final int DYE_BASE_AMOUNT = LCM;
 	private static final int[][] DYE_PROPS = new int[][] {
 		/*     Red,     Yellow,      Blue,     White */
 		
@@ -94,7 +105,7 @@ public class DyeHelper {
 		{ 3*(LCM/4),      LCM/8,    LCM/8,         0 },		/* Brown */
 		{         0,          0,      LCM,         0 },		/* Blue */
 		{     LCM/2,          0,    LCM/2,         0 },		/* Purple */
-		{         0,          0,    LCM/4, 3*(LCM/4) }, 	/* Cyan */
+		{         0,          0,    LCM/4, 3*(LCM/4) },		/* Cyan */
 		{     LCM/9,      LCM/9,    LCM/9, 2*(LCM/3) },		/* Light Gray */
 		{     LCM/6,      LCM/6,    LCM/6,     LCM/2 },		/* Gray */
 		{     LCM/2,          0,        0,     LCM/2 },		/* Pink */
