@@ -18,6 +18,13 @@ tile.MacKit:blueDye.name=Blue Liquid Dye
 tile.MacKit:whiteDye.name=White Liquid Dye
 tile.MacKit:pureDye.name=Pure Liquid Dye
 
+# Forge fluid registration
+fluid.dyeRed=Red Liquid Dye
+fluid.dyeYellow=Yellow Liquid Dye
+fluid.dyeBlue=Blue Liquid Dye
+fluid.dyeWhite=White Liquid Dye
+fluid.dyePure=Pure Liquid Dye
+
 item.MacKit:fixerFoamGun.name=Fixer Foam Gun
 item.MacKit:fixerFoamRefill.name=Fixer Foam Refill
 item.MacKit:mews.name=M.E.W.S
