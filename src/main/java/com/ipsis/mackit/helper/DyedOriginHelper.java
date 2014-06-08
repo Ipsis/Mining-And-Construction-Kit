@@ -21,6 +21,8 @@ import com.ipsis.mackit.manager.PainterManager;
 
 /**
  * Maps dyed items to their un-dyed equivalent
+ * 
+ * TODO add the origin blocks as their own origin!
  *
  */
 public class DyedOriginHelper {
@@ -86,8 +88,7 @@ public class DyedOriginHelper {
 		ItemStack out = output.copy();
 		out.stackSize = 1;
 		
-		/* TODO work out how much dye is needed */
-		PainterManager.addRecipe(src.copy(), srcDye.copy(), out, 100 / srcCount);
+		PainterManager.addRecipe(src.copy(), srcDye.copy(), out, DyeHelper.DYE_BASE_AMOUNT / srcCount);
 	}
 	
 	private static void handleShapelessRecipe(ShapelessRecipes recipe) {

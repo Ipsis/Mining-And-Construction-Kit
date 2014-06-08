@@ -77,7 +77,7 @@ public class DyeHelper {
 			return Items.dye.getIconFromDamage(dmg);
 		}
 		
-		private static DyeColor getFromDmg(int dmg) {
+		public static DyeColor getFromDmg(int dmg) {
 			
 			if (dmg < 0 || dmg > 15)
 				return WHITE;

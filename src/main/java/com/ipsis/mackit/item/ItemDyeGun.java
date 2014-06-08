@@ -1,5 +1,7 @@
 package com.ipsis.mackit.item;
 
+import com.ipsis.mackit.helper.ColoredBlockSwapper;
+import com.ipsis.mackit.helper.DyeHelper;
 import com.ipsis.mackit.helper.LogHelper;
 
 import net.minecraft.block.Block;
@@ -59,6 +61,7 @@ public class ItemDyeGun extends ItemMK {
 		} else {
 			
 			/* change block */
+			return ColoredBlockSwapper.swap(entityPlayer, world, x, y, z, DyeHelper.DyeColor.getFromDmg(color), false);
 		}
 		
 		return true;

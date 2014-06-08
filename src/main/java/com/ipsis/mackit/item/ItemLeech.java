@@ -8,6 +8,8 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 
+import com.ipsis.mackit.helper.ColoredBlockSwapper;
+import com.ipsis.mackit.helper.DyeHelper;
 import com.ipsis.mackit.helper.DyedOriginHelper;
 import com.ipsis.mackit.helper.LogHelper;
 
@@ -36,45 +38,6 @@ public class ItemLeech extends ItemMK {
 			if (world.isRemote)
 				return false;
 			
-			Block b = world.getBlock(x, y, z);
-			if (b == null || b instanceof BlockContainer)
-				return false;
-			
-			int metadata = world.getBlockMetadata(x, y, z);
-			
-			ItemStack stack = new ItemStack(b, 1, metadata);
-			if (DyedOriginHelper.hasOrigin(stack)) {
-							
-				ItemStack replace = DyedOriginHelper.getOrigin(new ItemStack(b));
-				if (replace != null) {
-
-					/**
-					 * TODO Not too sure about this
-					 */
-					
-					Block nb = Block.getBlockFromItem(replace.getItem());
-					int nmeta = replace.getItemDamage();
-					
-					/* Remove the old block */
-					world.setBlockToAir(x, y, z);
-					
-					/**
-					 * This tries to replicate the ItemBlock placeBlockAt code
-					 */
-					
-					if (!world.setBlock(x, y, z, nb, nmeta, 3))
-					{
-						return false;
-					}
-
-					if (world.getBlock(x, y, z) == nb)
-					{
-						nb.onBlockPlacedBy(world, x, y, z, entityPlayer, stack);
-						nb.onPostBlockPlaced(world, x, y, z, metadata);
-					}
-				}				
-			}
-			
-			return false;
+			return ColoredBlockSwapper.swap(entityPlayer, world, x, y, z, DyeHelper.DyeColor.GREEN, true);
 	}
 }
