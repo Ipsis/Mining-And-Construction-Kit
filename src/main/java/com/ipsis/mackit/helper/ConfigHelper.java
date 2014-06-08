@@ -1,10 +1,9 @@
-package com.ipsis.mackit.util;
+package com.ipsis.mackit.helper;
 
 import java.io.File;
 
 import net.minecraftforge.common.config.Configuration;
 
-import com.ipsis.mackit.helper.LogHelper;
 import com.ipsis.mackit.reference.Reference;
 
 public class ConfigHelper {

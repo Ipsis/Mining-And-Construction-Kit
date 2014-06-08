@@ -1,4 +1,4 @@
-package com.ipsis.mackit.util;
+package com.ipsis.mackit.helper;
 
 import net.minecraft.entity.player.EntityPlayer;
 
