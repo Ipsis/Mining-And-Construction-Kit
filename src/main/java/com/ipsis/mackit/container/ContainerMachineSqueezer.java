@@ -11,7 +11,7 @@ import net.minecraftforge.fluids.FluidStack;
 import com.ipsis.cofhlib.util.FluidHelper;
 import com.ipsis.mackit.block.TileMachineSqueezer;
 import com.ipsis.mackit.fluid.MKFluids;
-import com.ipsis.mackit.util.PlayerHelper;
+import com.ipsis.mackit.helper.PlayerHelper;
 
 public class ContainerMachineSqueezer extends Container {
 

@@ -12,7 +12,7 @@ import com.ipsis.cofhlib.gui.slot.SlotOutput;
 import com.ipsis.mackit.block.TileMachineStamper;
 import com.ipsis.mackit.fluid.MKFluids;
 import com.ipsis.mackit.gui.SlotDyeBlank;
-import com.ipsis.mackit.util.PlayerHelper;
+import com.ipsis.mackit.helper.PlayerHelper;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;

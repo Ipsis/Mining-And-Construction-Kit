@@ -13,6 +13,7 @@ import com.ipsis.mackit.block.TilePortaChant;
 import com.ipsis.mackit.block.TilePowerBlock;
 import com.ipsis.mackit.block.TileTestFaced;
 import com.ipsis.mackit.fluid.MKFluids;
+import com.ipsis.mackit.helper.ConfigHelper;
 import com.ipsis.mackit.helper.DyeHelper;
 import com.ipsis.mackit.helper.DyedOriginHelper;
 import com.ipsis.mackit.item.MKItems;
@@ -20,7 +21,6 @@ import com.ipsis.mackit.manager.MKManagers;
 import com.ipsis.mackit.manager.PainterManager;
 import com.ipsis.mackit.network.PacketHandler;
 import com.ipsis.mackit.reference.Reference;
-import com.ipsis.mackit.util.ConfigHelper;
 import com.ipsis.mackit.util.proxy.CommonProxy;
 
 import cpw.mods.fml.common.Mod;

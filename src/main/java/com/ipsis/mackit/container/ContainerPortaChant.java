@@ -10,7 +10,7 @@ import net.minecraft.item.ItemStack;
 import com.ipsis.cofhlib.gui.slot.SlotOutput;
 import com.ipsis.mackit.block.TilePortaChant;
 import com.ipsis.mackit.gui.SlotEnchantable;
-import com.ipsis.mackit.util.PlayerHelper;
+import com.ipsis.mackit.helper.PlayerHelper;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;

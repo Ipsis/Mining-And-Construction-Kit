@@ -11,9 +11,9 @@ import net.minecraftforge.fluids.FluidStack;
 
 import com.ipsis.mackit.block.machinesm.IMachineRecipe;
 import com.ipsis.mackit.fluid.MKFluids;
+import com.ipsis.mackit.helper.ConfigHelper;
 import com.ipsis.mackit.helper.DyeHelper;
 import com.ipsis.mackit.helper.DyeHelper.DyeColor;
-import com.ipsis.mackit.util.ConfigHelper;
 
 public class StamperManager {
 	

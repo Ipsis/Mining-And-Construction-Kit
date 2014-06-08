@@ -10,7 +10,7 @@ import net.minecraftforge.fluids.FluidStack;
 
 import com.ipsis.mackit.block.TileMachineDyeFiller;
 import com.ipsis.mackit.fluid.MKFluids;
-import com.ipsis.mackit.util.PlayerHelper;
+import com.ipsis.mackit.helper.PlayerHelper;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
