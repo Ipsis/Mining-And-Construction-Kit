@@ -18,6 +18,7 @@ import com.ipsis.mackit.block.machinesm.FactorySM;
 import com.ipsis.mackit.block.machinesm.IFactorySM;
 import com.ipsis.mackit.block.machinesm.IMachineRecipe;
 import com.ipsis.mackit.block.machinesm.IRecipeManager;
+import com.ipsis.mackit.helper.DyeHelper;
 import com.ipsis.mackit.helper.DyedOriginHelper;
 import com.ipsis.mackit.helper.LogHelper;
 import com.ipsis.mackit.manager.MKManagers;
@@ -37,7 +38,7 @@ public class TileMachinePainter extends TileMachine implements IMessageGuiHandle
 	public TankManager tankMgr;
 	private int selected;
 	
-	private static final int TANK_SIZE = 5000;
+	private static final int TANK_SIZE = DyeHelper.DYE_BASE_AMOUNT * 100;
 	private static final int ENERGY_STORAGE_SIZE = 32000;
 		
 	public static final int INPUT_SLOT = 0;

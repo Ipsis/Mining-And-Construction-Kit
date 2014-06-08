@@ -17,6 +17,7 @@ import com.ipsis.mackit.block.machinesm.IFactorySM;
 import com.ipsis.mackit.block.machinesm.IMachineRecipe;
 import com.ipsis.mackit.block.machinesm.IRecipeManager;
 import com.ipsis.mackit.fluid.MKFluids;
+import com.ipsis.mackit.helper.DyeHelper;
 import com.ipsis.mackit.manager.MKManagers;
 import com.ipsis.mackit.manager.SqueezerManager;
 import com.ipsis.mackit.manager.TankManager;
@@ -28,8 +29,8 @@ public class TileMachineSqueezer extends TileMachine implements IFactorySM, IFac
 	private int consumedEnergy;
 	public TankManager tankMgr;
 	
-	private static final int TANK_SIZE = 5000;
-	private static final int PURE_FLUID_AMOUNT = 100;
+	private static final int TANK_SIZE = DyeHelper.DYE_BASE_AMOUNT * 100;
+	private static final int PURE_FLUID_AMOUNT = DyeHelper.DYE_BASE_AMOUNT;
 	private static final int ENERGY_STORAGE_SIZE = 32000;
 	
 	public static final int INPUT_SLOT = 0;
@@ -136,7 +137,8 @@ public class TileMachineSqueezer extends TileMachine implements IFactorySM, IFac
 	
 	private boolean checkAmountForPure() {
 		
-		int level = 30;
+		/* Need equal amounts of each dye */
+		int level = DyeHelper.DYE_BASE_AMOUNT / 4;
 		
 		if (tankMgr.getTank(RED_TANK).getFluidAmount() < level)
 			return false;
@@ -155,13 +157,14 @@ public class TileMachineSqueezer extends TileMachine implements IFactorySM, IFac
 		
 		while (checkAmountForPure()) {
 		
-			if (tankMgr.getTank(PURE_TANK).fill(PURE, false) != 100)
+			if (tankMgr.getTank(PURE_TANK).fill(PURE, false) != DyeHelper.DYE_BASE_AMOUNT)
 				return;
 							
-			tankMgr.getTank(RED_TANK).drain(30, true);
-			tankMgr.getTank(YELLOW_TANK).drain(30, true);
-			tankMgr.getTank(BLUE_TANK).drain(30, true);
-			tankMgr.getTank(WHITE_TANK).drain(30, true);
+			int amount = DyeHelper.DYE_BASE_AMOUNT / 4;
+			tankMgr.getTank(RED_TANK).drain(amount, true);
+			tankMgr.getTank(YELLOW_TANK).drain(amount, true);
+			tankMgr.getTank(BLUE_TANK).drain(amount, true);
+			tankMgr.getTank(WHITE_TANK).drain(amount, true);
 			tankMgr.getTank(PURE_TANK).fill(PURE, true);
 		}
 		

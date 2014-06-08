@@ -1,5 +1,6 @@
 package com.ipsis.mackit;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.common.config.Configuration;
 
 import com.ipsis.mackit.block.MKBlocks;
 import com.ipsis.mackit.block.TileBeaverBlock;
@@ -19,6 +20,7 @@ import com.ipsis.mackit.manager.MKManagers;
 import com.ipsis.mackit.manager.PainterManager;
 import com.ipsis.mackit.network.PacketHandler;
 import com.ipsis.mackit.reference.Reference;
+import com.ipsis.mackit.util.ConfigHelper;
 import com.ipsis.mackit.util.proxy.CommonProxy;
 
 import cpw.mods.fml.common.Mod;
@@ -47,6 +49,8 @@ public class MacKit
     public void preInit(FMLPreInitializationEvent event) {
 
     	PacketHandler.init();
+    	
+    	ConfigHelper.init(event.getSuggestedConfigurationFile());
     	
     	MKFluids.preInit();
     	MKItems.preInit();

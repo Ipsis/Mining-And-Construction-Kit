@@ -1,65 +1,66 @@
 package com.ipsis.mackit.manager;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
-
-import com.ipsis.mackit.block.machinesm.IMachineRecipe;
-import com.ipsis.mackit.fluid.MKFluids;
 
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.IIcon;
 import net.minecraftforge.fluids.FluidStack;
 
+import com.ipsis.mackit.block.machinesm.IMachineRecipe;
+import com.ipsis.mackit.fluid.MKFluids;
+import com.ipsis.mackit.helper.DyeHelper;
+import com.ipsis.mackit.helper.DyeHelper.DyeColor;
+import com.ipsis.mackit.util.ConfigHelper;
+
 public class StamperManager {
 	
-	private static List<ItemStack> outputs;
+	private static List<DyeHelper.DyeColor> outputList;
 	public static StamperRecipe RECIPE = new StamperRecipe();
 	
 	public StamperManager() {
-				
-		outputs = new ArrayList<ItemStack>();
 		
-		/**
-		 * TODO disables the dyes we dont want eg. Lapis
-		 */
-		outputs.add(new ItemStack(Items.dye, 1, 0));	// black
-		outputs.add(new ItemStack(Items.dye, 1, 1));	// red
-		outputs.add(new ItemStack(Items.dye, 1, 2));	// green
-		outputs.add(new ItemStack(Items.dye, 1, 3));	// brown
-		outputs.add(new ItemStack(Items.dye, 1, 4));	// blue
-		outputs.add(new ItemStack(Items.dye, 1, 5));	// purple
-		outputs.add(new ItemStack(Items.dye, 1, 6));	// cyan
-		outputs.add(new ItemStack(Items.dye, 1, 7));	// silver
-		outputs.add(new ItemStack(Items.dye, 1, 8));	// gray
-		outputs.add(new ItemStack(Items.dye, 1, 9));	// pink
-		outputs.add(new ItemStack(Items.dye, 1, 10));	// lime
-		outputs.add(new ItemStack(Items.dye, 1, 11));	// yellow
-		outputs.add(new ItemStack(Items.dye, 1, 12));	// lightBlue
-		outputs.add(new ItemStack(Items.dye, 1, 13));	// magenta
-		outputs.add(new ItemStack(Items.dye, 1, 14));	// orange
-		outputs.add(new ItemStack(Items.dye, 1, 15));	// white
+		outputList = new LinkedList<DyeHelper.DyeColor>();
+		
+		if (ConfigHelper.disableStamperInkSac == false) outputList.add(DyeColor.BLACK);
+		outputList.add(DyeColor.RED);
+		outputList.add(DyeColor.GREEN);
+		if (ConfigHelper.disableStamperCocoaBeans == false) outputList.add(DyeColor.BROWN);		
+		if (ConfigHelper.disableStamperLapis == false) outputList.add(DyeColor.BLUE);
+		outputList.add(DyeColor.PURPLE);
+		outputList.add(DyeColor.CYAN);
+		outputList.add(DyeColor.LIGHTGRAY);
+		outputList.add(DyeColor.GRAY);
+		outputList.add(DyeColor.PINK);
+		outputList.add(DyeColor.LIME);
+		outputList.add(DyeColor.YELLOW);
+		outputList.add(DyeColor.LIGHTBLUE);
+		outputList.add(DyeColor.MAGENTA);
+		outputList.add(DyeColor.ORANGE);
+		if (ConfigHelper.disableStamperBonemeal == false) outputList.add(DyeColor.WHITE);
 	}
 	
 	public ItemStack getOutput(int idx) {
 		
-		if (idx < 0 || idx >= outputs.size())
+		if (idx < 0 || idx >= outputList.size())
 			return null;
 		
-		return outputs.get(idx).copy();
+		return outputList.get(idx).getItemStack();
 	}
 	
 	public IIcon getIcon(int idx) {
 	
-		if (idx < 0 || idx >= outputs.size())
+		if (idx < 0 || idx >= outputList.size())
 			return null;
 		
-		return Items.dye.getIconFromDamage(idx);
+		return outputList.get(idx).getIcon();
 	}
 	
 	public int getFirstIdx() {
 		
-		if (outputs.isEmpty())
+		if (outputList.isEmpty())
 			return -1;
 		
 		return 0;
@@ -67,19 +68,19 @@ public class StamperManager {
 	
 	public int getLastIdx() {
 		
-		if (outputs.isEmpty())
+		if (outputList.isEmpty())
 			return -1;
 		
-		return outputs.size() - 1;
+		return outputList.size() - 1;
 	}
 	
 	public int getNextIdx(int idx) {
 		
-		if (outputs.isEmpty())
+		if (outputList.isEmpty())
 			return -1;
 		
 		int next = idx + 1;
-		if (next > outputs.size() - 1)
+		if (next > outputList.size() - 1)
 			return getFirstIdx();
 
 		return next;
@@ -87,19 +88,19 @@ public class StamperManager {
 	
 	public int getPrevIdx(int idx) {
 		
-		if (outputs.isEmpty())
+		if (outputList.isEmpty())
 			return -1;
 		
 		int prev = idx - 1;
 		if (prev < 0)
-			return outputs.size() - 1;
+			return outputList.size() - 1;
 		
 		return prev;		
 	}
 	
 	public static class StamperRecipe implements IMachineRecipe {
 
-		private static final int PURE_FLUID_AMOUNT = 100;
+		private static final int PURE_FLUID_AMOUNT = DyeHelper.DYE_BASE_AMOUNT;
 		private static final int RECIPE_ENERGY = 40;
 		
 		private FluidStack pureDye;

@@ -16,6 +16,7 @@ import com.ipsis.mackit.block.machinesm.FactorySM;
 import com.ipsis.mackit.block.machinesm.IFactorySM;
 import com.ipsis.mackit.block.machinesm.IMachineRecipe;
 import com.ipsis.mackit.block.machinesm.IRecipeManager;
+import com.ipsis.mackit.helper.DyeHelper;
 import com.ipsis.mackit.helper.LogHelper;
 import com.ipsis.mackit.manager.TankManager;
 
@@ -27,7 +28,7 @@ public class TileMachineDyeFiller extends TileMachine implements IFactorySM, IFa
 	public TankManager tankMgr;
 	private int selected;
 	
-	private static final int TANK_SIZE = 5000;
+	private static final int TANK_SIZE = DyeHelper.DYE_BASE_AMOUNT * 100;
 	private static final int ENERGY_STORAGE_SIZE = 32000;
 		
 	public static final int CHARGE_SLOT = 0;
