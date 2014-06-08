@@ -162,8 +162,8 @@ public class TileMachineDyeFiller extends TileMachine implements IFactorySM, IFa
 
 		super.writeToNBT(nbttagcompound);
 		nbttagcompound.setByte("Facing", (byte)facing.ordinal());
-		nbttagcompound.setBoolean("Running", sm.getRunning());
 		nbttagcompound.setInteger("ConsumedEnergy", consumedEnergy);
+		sm.writeToNBT(nbttagcompound);
 		tankMgr.writeToNBT(nbttagcompound);
 	}
 	
@@ -172,8 +172,8 @@ public class TileMachineDyeFiller extends TileMachine implements IFactorySM, IFa
 
 		super.readFromNBT(nbttagcompound);
 		facing = ForgeDirection.getOrientation((int)nbttagcompound.getByte("Facing"));
-		sm.setRunning(nbttagcompound.getBoolean("Running"));
 		consumedEnergy = nbttagcompound.getInteger("ConsumedEnergy");
+		sm.readFromNBT(nbttagcompound);
 		tankMgr.readFromNBT(nbttagcompound);
 	}
 	
@@ -185,15 +185,16 @@ public class TileMachineDyeFiller extends TileMachine implements IFactorySM, IFa
 
 		NBTTagCompound nbttagcompound = new NBTTagCompound();
 		nbttagcompound.setByte("Facing", (byte)facing.ordinal());
-		nbttagcompound.setBoolean("Running", sm.getRunning());
+		sm.writeToNBT(nbttagcompound);
 		return new S35PacketUpdateTileEntity(xCoord, yCoord, zCoord, 1, nbttagcompound);
 	}
 	
 	@Override
 	public void onDataPacket(NetworkManager net, S35PacketUpdateTileEntity pkt) {
 	
-		facing = ForgeDirection.getOrientation((int)pkt.func_148857_g().getByte("Facing"));
-		sm.setRunning(pkt.func_148857_g().getBoolean("Running"));
+		NBTTagCompound nbttagcompound = pkt.func_148857_g();
+		facing = ForgeDirection.getOrientation((int)nbttagcompound.getByte("Facing"));
+		sm.readFromNBT(nbttagcompound);
 		worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
 	}
 	

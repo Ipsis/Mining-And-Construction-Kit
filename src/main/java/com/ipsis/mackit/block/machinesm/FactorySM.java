@@ -1,6 +1,6 @@
 package com.ipsis.mackit.block.machinesm;
 
-import com.ipsis.mackit.helper.LogHelper;
+import net.minecraft.nbt.NBTTagCompound;
 
 public class FactorySM {
 
@@ -23,7 +23,7 @@ public class FactorySM {
 		setRunning(false);
 	}
 	
-	public void setRunning(boolean running) {
+	private void setRunning(boolean running) {
 		
 		if (this.running != running) {
 			this.running = running;
@@ -119,5 +119,18 @@ public class FactorySM {
 			return 0;
 		
 		return (int)(scale * ((float)machine.getConsumedEnergy() / recipeEnergy));
+	}
+	
+	/*****
+	 * NBT
+	 *****/
+	public void writeToNBT(NBTTagCompound nbttagcompound) {
+
+		nbttagcompound.setBoolean("SMRunning", running);
+	}
+	
+	public void readFromNBT(NBTTagCompound nbttagcompound) {
+
+		running = nbttagcompound.getBoolean("SMRunning");
 	}
 }
