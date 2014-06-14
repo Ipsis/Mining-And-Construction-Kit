@@ -13,8 +13,8 @@ public class MKBlocks {
 
 	public static void preInit() {
 		
-		fixedSand = new BlockFixedEarth(Material.ground, "fixedSand");
-		fixedGravel = new BlockFixedEarth(Material.ground, "fixedGravel");
+		fixedSand = new BlockFixedEarth(Material.sand, "fixedSand");
+		fixedGravel = new BlockFixedEarth(Material.sand, "fixedGravel");
 		beaverBlock = new BlockBeaverBlock("beaverBlock");
 		portaChant = new BlockPortaChant("portaChant");
 		machineSqueezer = new BlockMachineSqueezer("machineSqueezer");
@@ -22,6 +22,7 @@ public class MKBlocks {
 		machinePainter = new BlockMachinePainter("machinePainter");
 		machineDyeFiller = new BlockMachineDyeFiller("machineDyeFiller");
 		dyeLeech = new BlockDyeLeech("dyeLeech");
+		vegasBlock = new BlockVegas("vegasBlock");
 		
 		powerBlock = new BlockPowerBlock("powerBlock");
 		
@@ -43,6 +44,7 @@ public class MKBlocks {
 		GameRegistry.registerBlock(machinePainter, "block.machinePainter");
 		GameRegistry.registerBlock(machineDyeFiller, "block.machineDyeFiller");
 		GameRegistry.registerBlock(dyeLeech, "block.dyeLeech");
+		GameRegistry.registerBlock(vegasBlock, "block.vegasBlock");
 		
 		GameRegistry.registerBlock(blockFluidDyeRed, "block.redDye");
 		GameRegistry.registerBlock(blockFluidDyeYellow, "block.yellowDye");
@@ -74,6 +76,7 @@ public class MKBlocks {
 	public static Block machineDyeFiller;
 	public static Block dyeLeech;
 	public static Block powerBlock;
+	public static Block vegasBlock;
 	
 	public static BlockFluidDye blockFluidDyeRed;
 	public static BlockFluidDye blockFluidDyeYellow;
