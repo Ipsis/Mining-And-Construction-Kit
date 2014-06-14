@@ -20,7 +20,10 @@ import com.ipsis.mackit.container.GuiMachinePainter;
 import com.ipsis.mackit.container.GuiMachineSqueezer;
 import com.ipsis.mackit.container.GuiMachineStamper;
 import com.ipsis.mackit.container.GuiPortaChant;
+import com.ipsis.mackit.container.GuiTorchPouch;
+import com.ipsis.mackit.container.InventoryTorchPouch;
 import com.ipsis.mackit.fluid.MKFluids;
+import com.ipsis.mackit.reference.Gui;
 
 import cpw.mods.fml.client.registry.ClientRegistry;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
@@ -36,25 +39,29 @@ public class ClientProxy extends CommonProxy {
 	@Override
 	public Object getClientGuiElement(int ID, EntityPlayer player, World world,	int x, int y, int z) {
 
-		TileEntity te = world.getTileEntity(x, y, z);
-		if (te != null) {
-		
-			if (te instanceof TilePortaChant) {
-				return new GuiPortaChant(player.inventory, (TilePortaChant)te);
-			} else if (te instanceof TileMachineSqueezer) {				
-				return new GuiMachineSqueezer(player.inventory, (TileMachineSqueezer)te);				
-			} else if (te instanceof TileMachineStamper) {				
-				return new GuiMachineStamper(player.inventory, (TileMachineStamper)te);		
-			} else if (te instanceof TileMachinePainter) {				
-				return new GuiMachinePainter(player.inventory, (TileMachinePainter)te);	
-			} else if (te instanceof TileMachineDyeFiller) {				
-				return new GuiMachineDyeFiller(player.inventory, (TileMachineDyeFiller)te);	
-			} else {
-				return null;
-			}
+		if (ID == Gui.TORCH_POUCH) {
+			
+			return new GuiTorchPouch(player, new InventoryTorchPouch(player.getHeldItem()));
 		} else {
-			return null;
+		
+			TileEntity te = world.getTileEntity(x, y, z);
+			if (te != null) {
+			
+				if (te instanceof TilePortaChant) {
+					return new GuiPortaChant(player.inventory, (TilePortaChant)te);
+				} else if (te instanceof TileMachineSqueezer) {				
+					return new GuiMachineSqueezer(player.inventory, (TileMachineSqueezer)te);				
+				} else if (te instanceof TileMachineStamper) {				
+					return new GuiMachineStamper(player.inventory, (TileMachineStamper)te);		
+				} else if (te instanceof TileMachinePainter) {				
+					return new GuiMachinePainter(player.inventory, (TileMachinePainter)te);	
+				} else if (te instanceof TileMachineDyeFiller) {				
+					return new GuiMachineDyeFiller(player.inventory, (TileMachineDyeFiller)te);	
+				}
+			}
 		}
+			
+		return null;
 	}
 	
 	@Override

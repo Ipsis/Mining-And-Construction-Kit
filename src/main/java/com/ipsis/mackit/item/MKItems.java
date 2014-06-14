@@ -18,6 +18,11 @@ import cpw.mods.fml.common.registry.GameRegistry;
 
 public class MKItems {
 	
+	/**
+	 * TODO
+	 * I do not like using CoFHCOre bucket handler.
+	 * I think I'm going to conflict with CoFHCore which is BAD!
+	 */
 
 	public static void preInit() {
 		
@@ -36,6 +41,7 @@ public class MKItems {
 		itemDyeBlank = new ItemDyeBlank().setUnlocalizedName("dyeBlank");
 		itemDyeGun = new ItemDyeGun().setUnlocalizedName("dyeGun");
 		itemLeech = new ItemLeech().setUnlocalizedName("leech");
+		itemTorchPouch = new ItemTorchPouch().setUnlocalizedName("torchPouch");
 		
 		int i = 0;
 		for (DyeHelper.DyeColor c : DyeHelper.DyeColor.VALID_COLORS) {
@@ -50,6 +56,7 @@ public class MKItems {
 		GameRegistry.registerItem(itemDyeBlank,  "item.dyeBlank");
 		GameRegistry.registerItem(itemDyeGun, "item.dyeGun");
 		GameRegistry.registerItem(itemLeech, "item.leech");
+		GameRegistry.registerItem(itemTorchPouch, "item.torchPouch");
 		
 		i = 0;
 		for (DyeHelper.DyeColor c : DyeHelper.DyeColor.VALID_COLORS) {
@@ -92,6 +99,7 @@ public class MKItems {
 	public static Item itemDyeBlank;
 	public static Item itemDyeGun;
 	public static Item itemLeech;
+	public static Item itemTorchPouch;
 	
 
 	/* Sponges */

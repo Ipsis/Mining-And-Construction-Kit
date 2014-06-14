@@ -7,6 +7,7 @@ public class Gui {
 	public static final int STAMPER = 2;
 	public static final int PAINTER = 3;
 	public static final int DYE_FILLER = 4;
+	public static final int TORCH_POUCH = 5;
 	
 	public static final int TYPE_BUTTON = 0;
 	public static final int TYPE_SLIDER = 1;
