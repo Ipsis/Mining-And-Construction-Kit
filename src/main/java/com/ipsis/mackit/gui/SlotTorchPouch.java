@@ -9,6 +9,8 @@ import net.minecraft.item.ItemStack;
 
 import com.ipsis.mackit.container.ContainerTorchPouch;
 
+import cpw.mods.fml.common.Loader;
+
 /**
  * Based off Pahimar's SlotAlchemicalBag.java
  *
@@ -41,8 +43,6 @@ public class SlotTorchPouch extends Slot {
 		if (itemStack.getItem() == Item.getItemFromBlock(Blocks.torch))
 			return true;
 		
-		//itemStack.getItem().
-		/* TODO only accept torches */
 		return false;
 	}
 }
