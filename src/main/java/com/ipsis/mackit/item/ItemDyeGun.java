@@ -2,61 +2,97 @@ package com.ipsis.mackit.item;
 
 import java.util.List;
 
+import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.world.World;
+
+import com.ipsis.cofhlib.util.ColorHelper;
 import com.ipsis.mackit.helper.ColoredBlockSwapper;
 import com.ipsis.mackit.helper.DyeHelper;
 import com.ipsis.mackit.helper.LogHelper;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockContainer;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.ItemStack;
-import net.minecraft.world.World;
 
 public class ItemDyeGun extends ItemMK {
 
 	private static final int TANK_CAPACITY = DyeHelper.DYE_BASE_AMOUNT * 20;
 	
-	private static final int MASK_FLUID = 0x0000FFFF; /* max 65535 */
-	private static final int MASK_COLOR = 0xFFFF0000;
-	private static final int SHIFT_FLUID = 0;
-	private static final int SHIFT_COLOR = 16;
-	
 	public ItemDyeGun() {
 		
 		super("Replace blocks with a colored version");
 		this.setMaxStackSize(1);
-		this.setMaxDamage(TANK_CAPACITY);
+		this.canRepair = false;
+	}
+	
+	@SideOnly(Side.CLIENT)
+	@Override
+	public void getSubItems(Item item, CreativeTabs creativeTab, List list) {
+	 
+		 ItemStack itemStack = new ItemStack(MKItems.itemDyeGun);
+		 	 
+		 setDefaultTags(itemStack);
+		 setFluidAmount(itemStack, TANK_CAPACITY);
+		 list.add(itemStack);	 
+	}
+	
+	@Override
+	public void onCreated(ItemStack itemStack, World world,	EntityPlayer entityPlayer) {
+
+		setDefaultTags(itemStack);
+	}
+	
+	public void setColor(ItemStack itemStack, DyeHelper.DyeColor color) {
+		
+		 if (itemStack.stackTagCompound == null)
+			 setDefaultTags(itemStack);
+		 
+		 itemStack.stackTagCompound.setInteger("CurrColor", color.getDmg());
+	}
+	
+	public void setFluidAmount(ItemStack itemStack, int amount) {
+		
+		 if (itemStack.stackTagCompound == null)
+			 setDefaultTags(itemStack);
+		
+		itemStack.stackTagCompound.setInteger("FluidAmount", TANK_CAPACITY);
+	}
+	
+	public void setDefaultTags(ItemStack itemStack) {
+		
+		if (itemStack.stackTagCompound == null)
+			itemStack.stackTagCompound = new NBTTagCompound();
+		
+		itemStack.stackTagCompound.setInteger("CurrColor", DyeHelper.DyeColor.WHITE.getDmg());
+		itemStack.stackTagCompound.setInteger("FluidAmount", 0);
 	}
 	
 	private void nextColor(ItemStack itemStack) {
 		
-		int dmg = itemStack.getItemDamage();
-		int color = (dmg & MASK_COLOR) >> SHIFT_COLOR;		
+		if (itemStack.stackTagCompound == null)
+			setDefaultTags(itemStack);
+		
+		int color = itemStack.stackTagCompound.getInteger("CurrColor");
 		color = (color + 1) % 16;
-		dmg &= ~MASK_COLOR;
-		dmg |= (color << SHIFT_COLOR); 
-
-		itemStack.setItemDamage(dmg);
+		setColor(itemStack, DyeHelper.DyeColor.getFromDmg(color));
 	}
 	
 	private void useDye(ItemStack itemStack) {
 		
-		int dmg = itemStack.getItemDamage();
-		int fluid = (itemStack.getItemDamage() & MASK_FLUID) >> SHIFT_FLUID;
+		if (itemStack.stackTagCompound == null)
+			setDefaultTags(itemStack);
+		
+		int fluid = itemStack.stackTagCompound.getInteger("FluidAmount");
 		fluid -= DyeHelper.DYE_BASE_AMOUNT;
 		if (fluid < 0)
 			fluid = 0;
 		
-		dmg &= ~MASK_FLUID;
-		dmg |= (fluid  << SHIFT_FLUID);
-		
-		itemStack.setItemDamage(dmg);
+		setFluidAmount(itemStack, fluid);
 	}
-	
-	/* TODO need to ensure that display damage hides the color field */
-	
+		
 	@Override
 	public boolean onItemUseFirst(ItemStack itemStack, EntityPlayer entityPlayer,
 			World world, int x, int y, int z, int side, float hitX, float hitY,
@@ -65,22 +101,23 @@ public class ItemDyeGun extends ItemMK {
 		if (world.isRemote)
 			return false;
 		
-		int fluid = (itemStack.getItemDamage() & MASK_FLUID) >> SHIFT_FLUID;
-		int color = (itemStack.getItemDamage() & MASK_COLOR) >> SHIFT_COLOR;
-		
 		if (entityPlayer.isSneaking()) {
 			
-			/* next color */
 			nextColor(itemStack);
 		} else {
 			
-			/* check for creative mode and enough dye available */
-			
-			/* change block */
-			if (ColoredBlockSwapper.swap(entityPlayer, world, x, y, z, DyeHelper.DyeColor.getFromDmg(color), false) == true) {
+			if (itemStack.stackTagCompound != null && itemStack.stackTagCompound.hasKey("FluidAmount") && itemStack.stackTagCompound.hasKey("CurrColor")) {
 				
-				if (!entityPlayer.capabilities.isCreativeMode)
-					useDye(itemStack);
+				/* check for creative mode and enough dye available */
+				int fluid = itemStack.stackTagCompound.getInteger("FluidAmount");
+				DyeHelper.DyeColor color = DyeHelper.DyeColor.getFromDmg(itemStack.stackTagCompound.getInteger("CurrColor"));
+				
+				/* change block */
+				if (ColoredBlockSwapper.swap(entityPlayer, world, x, y, z, color, false) == true) {
+					
+					if (!entityPlayer.capabilities.isCreativeMode)
+						useDye(itemStack);
+				}
 			}
 		}
 		
@@ -91,10 +128,12 @@ public class ItemDyeGun extends ItemMK {
 	@SideOnly(Side.CLIENT)
 	public void addInformation(ItemStack itemStack,	EntityPlayer entityPlayer, List info, boolean useExtraInformation) {
 		
-		int fluid = (itemStack.getItemDamage() & MASK_FLUID) >> SHIFT_FLUID;
-		int color = (itemStack.getItemDamage() & MASK_COLOR) >> SHIFT_COLOR;
+		int fluid = itemStack.getItemDamage();
 		
-		info.add(DyeHelper.DyeColor.getFromDmg(color).getName());
-		info.add(fluid + "/" + TANK_CAPACITY);
+		if (itemStack.stackTagCompound != null)
+			setDefaultTags(itemStack);
+		
+		info.add(DyeHelper.DyeColor.getFromDmg(itemStack.stackTagCompound.getInteger("CurrColor")).getName());
+		info.add(itemStack.stackTagCompound.getInteger("FluidAmount") + "/" + TANK_CAPACITY);
 	}
 }
