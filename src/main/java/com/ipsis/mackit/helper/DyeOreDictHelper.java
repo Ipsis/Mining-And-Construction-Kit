@@ -30,7 +30,7 @@ public class DyeOreDictHelper {
         "dyeMagenta",
         "dyeOrange",
         "dyeWhite",
-        "dustLapis"
+        "gemLapis"
         };
 
 
