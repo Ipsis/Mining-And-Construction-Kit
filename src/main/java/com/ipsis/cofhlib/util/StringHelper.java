@@ -4,6 +4,7 @@ import java.util.List;
 
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.item.EnumRarity;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.StatCollector;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
@@ -24,24 +25,20 @@ public final class StringHelper {
 
 	public static boolean isAltKeyDown() {
 
-		return Keyboard.isKeyDown(Keyboard.KEY_LMENU)
-				|| Keyboard.isKeyDown(Keyboard.KEY_RMENU);
+		return Keyboard.isKeyDown(Keyboard.KEY_LMENU) || Keyboard.isKeyDown(Keyboard.KEY_RMENU);
 	}
 
 	public static boolean isControlKeyDown() {
 
-		return Keyboard.isKeyDown(Keyboard.KEY_LCONTROL)
-				|| Keyboard.isKeyDown(Keyboard.KEY_RCONTROL);
+		return Keyboard.isKeyDown(Keyboard.KEY_LCONTROL) || Keyboard.isKeyDown(Keyboard.KEY_RCONTROL);
 	}
 
 	public static boolean isShiftKeyDown() {
 
-		return Keyboard.isKeyDown(Keyboard.KEY_LSHIFT)
-				|| Keyboard.isKeyDown(Keyboard.KEY_RSHIFT);
+		return Keyboard.isKeyDown(Keyboard.KEY_LSHIFT) || Keyboard.isKeyDown(Keyboard.KEY_RSHIFT);
 	}
 
-	public static int getSplitStringHeight(FontRenderer fontRenderer,
-			String input, int width) {
+	public static int getSplitStringHeight(FontRenderer fontRenderer, String input, int width) {
 
 		@SuppressWarnings("rawtypes")
 		List stringRows = fontRenderer.listFormattedStringToWidth(input, width);
@@ -70,17 +67,32 @@ public final class StringHelper {
 
 	public static String getFluidName(Fluid fluid) {
 
-		String fluidName = "";
+		String name = "" + END;
 		if (fluid.getRarity() == EnumRarity.uncommon) {
-			fluidName += YELLOW;
+			name += YELLOW;
 		} else if (fluid.getRarity() == EnumRarity.rare) {
-			fluidName += BRIGHT_BLUE;
+			name += BRIGHT_BLUE;
 		} else if (fluid.getRarity() == EnumRarity.epic) {
-			fluidName += PINK;
+			name += PINK;
 		}
-		fluidName += fluid.getLocalizedName() + END;
+		name += fluid.getLocalizedName() + END;
 
-		return fluidName;
+		return name;
+	}
+
+	public static String getItemName(ItemStack item) {
+
+		String name = "" + END;
+		if (item.getRarity() == EnumRarity.uncommon) {
+			name += YELLOW;
+		} else if (item.getRarity() == EnumRarity.rare) {
+			name += BRIGHT_BLUE;
+		} else if (item.getRarity() == EnumRarity.epic) {
+			name += PINK;
+		}
+		name += item.getDisplayName() + END;
+
+		return name;
 	}
 
 	public static String getScaledNumber(int number) {
@@ -104,11 +116,6 @@ public final class StringHelper {
 		return numString;
 	}
 
-	public static String getShiftText() {
-
-		return shiftForInfo;
-	}
-
 	public static String getActivationText(String key) {
 
 		return BRIGHT_BLUE + ITALIC + localize(key) + END;
@@ -127,6 +134,12 @@ public final class StringHelper {
 	public static String getFlavorText(String key) {
 
 		return WHITE + ITALIC + localize(key) + END;
+	}
+
+	public static String shiftForInfo() {
+
+		return LIGHT_GRAY + localize("message.cofh.holdShift1") + " " + YELLOW + ITALIC + localize("message.cofh.holdShift2") + " " + END + LIGHT_GRAY
+				+ localize("message.cofh.holdShift3") + END;
 	}
 
 	/** When formatting a string, always apply color before font modification. */
@@ -156,10 +169,5 @@ public final class StringHelper {
 
 	public static boolean displayShiftForDetail = true;
 	public static boolean displayStackCount = false;
-
-	public static String shiftForInfo = LIGHT_GRAY
-			+ localize("message.cofh.holdShift1") + " " + YELLOW + ITALIC
-			+ localize("message.cofh.holdShift2") + " " + END + LIGHT_GRAY
-			+ localize("message.cofh.holdShift3") + END;
 
 }
