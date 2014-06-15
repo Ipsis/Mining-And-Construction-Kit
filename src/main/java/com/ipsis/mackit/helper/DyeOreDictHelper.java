@@ -45,7 +45,7 @@ public class DyeOreDictHelper {
 	}	
 	
 	/* Is the itemstack a dye */
-	public boolean isDye(ItemStack input) {
+	public static boolean isDye(ItemStack input) {
 				
 		boolean dye = false;
 		

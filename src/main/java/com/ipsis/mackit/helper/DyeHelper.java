@@ -140,7 +140,7 @@ public class DyeHelper {
 	private static void addItemRecipe(ItemStack in, ItemStack out) {
 		
 		/* output must be a valid dye */
-		if (!MKManagers.dyeOreDictHelper.isDye(out))
+		if (!DyeOreDictHelper.isDye(out))
 			return;
 		
 		/* output must be a dye that we are handling */

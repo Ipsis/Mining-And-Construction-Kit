@@ -101,7 +101,7 @@ public class DyedOriginHelper {
 		helper.reset();
 		
 		/* Ignore recipes that produce dyes */
-		if (MKManagers.dyeOreDictHelper.isDye(recipe.getRecipeOutput()) == true)
+		if (DyeOreDictHelper.isDye(recipe.getRecipeOutput()) == true)
 				return;
 		
 		Iterator iter = recipe.recipeItems.iterator();
@@ -125,7 +125,7 @@ public class DyedOriginHelper {
 		helper.reset();
 		
 		/* Ignore recipes that produce dyes */
-		if (MKManagers.dyeOreDictHelper.isDye(recipe.getRecipeOutput()) == true)
+		if (DyeOreDictHelper.isDye(recipe.getRecipeOutput()) == true)
 				return;
 		
 		for (ItemStack currIn : recipe.recipeItems) {
@@ -150,7 +150,7 @@ public class DyedOriginHelper {
 		helper.reset();		
 		
 		/* Ignore recipes that produce dyes */
-		if (MKManagers.dyeOreDictHelper.isDye(recipe.getRecipeOutput()) == true)
+		if (DyeOreDictHelper.isDye(recipe.getRecipeOutput()) == true)
 				return;
 		
 		Object[] recipeInput = recipe.getInput();
@@ -191,7 +191,7 @@ public class DyedOriginHelper {
 		helper.reset();
 		
 		/* Ignore recipes that produce dyes */
-		if (MKManagers.dyeOreDictHelper.isDye(recipe.getRecipeOutput()) == true)
+		if (DyeOreDictHelper.isDye(recipe.getRecipeOutput()) == true)
 				return;
 		
 		List recipeInput = recipe.getInput();

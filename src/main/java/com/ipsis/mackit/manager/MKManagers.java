@@ -1,6 +1,7 @@
 package com.ipsis.mackit.manager;
 
 import com.ipsis.mackit.helper.DyeOreDictHelper;
+import com.ipsis.mackit.helper.OreDictHelper;
 
 public class MKManagers {
 	
@@ -9,7 +10,6 @@ public class MKManagers {
 	public static PainterManager painterMgr = new PainterManager();
 	public static StamperManager stamperMgr = new StamperManager();
 	
-	public static DyeOreDictHelper dyeOreDictHelper = new DyeOreDictHelper();
 
 	public static void preInit() {
 	
@@ -18,11 +18,12 @@ public class MKManagers {
 	
 	public static void initialise() {
 		
-		dyeOreDictHelper.loadDyes();
+		DyeOreDictHelper.loadDyes();
 	}
 	
 	public static void postInit() {
 		
+		OreDictHelper.loadOres();
 		beaverBlockMgr.loadBlocks();
 		squeezerMgr.addRecipes();
 	}
