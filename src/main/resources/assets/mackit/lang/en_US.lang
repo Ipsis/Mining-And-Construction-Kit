@@ -6,6 +6,7 @@ tile.MacKit:fixedGravel.name=Fixed Gravel
 tile.MacKit:beaverBlock.name=Beaver Block
 tile.MacKit:portaChant.name=Porta-chant
 tile.MacKit:dyeLeech.name=Dye Leech Block
+tile.MacKit:vegasBlock.name=Vegas
 
 tile.MacKit:machineSqueezer.name=Squeezer
 tile.MacKit:machinePainter.name=Painter
