@@ -119,7 +119,7 @@ public class ComparableItemStack {
 	@Override
 	public int hashCode() {
 
-		return oreID != -1 ? oreID : metadata | Item.getIdFromItem(item) << 16;
+		return metadata | Item.getIdFromItem(item) << 16;
 	}
 
 	@Override
