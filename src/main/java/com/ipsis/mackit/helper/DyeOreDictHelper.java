@@ -8,60 +8,22 @@ import net.minecraft.item.ItemStack;
 import net.minecraftforge.oredict.OreDictionary;
 
 public class DyeOreDictHelper {
-
-	/*
-	 * OreDictionary information
-	 */
-	private static HashMap<Integer, Object> dyeMap = new HashMap<Integer, Object>();
-	private static final String[] dyeOreNames = { 
-        "dyeBlack",
-        "dyeRed",
-        "dyeGreen",
-        "dyeBrown",
-        "dyeBlue",
-        "dyePurple",
-        "dyeCyan",
-        "dyeLightGray",
-        "dyeGray",
-        "dyePink",
-        "dyeLime",
-        "dyeYellow",
-        "dyeLightBlue",
-        "dyeMagenta",
-        "dyeOrange",
-        "dyeWhite",
-        "gemLapis"
-        };
-
-
-	public static void loadDyes() {
-
-		for (String s : dyeOreNames) {
-			
-			int id = OreDictionary.getOreID(s);
-			if (id != -1)
-				dyeMap.put(id,  null);
-		}
-	}	
 	
-	/* Is the itemstack a dye */
 	public static boolean isDye(ItemStack input) {
-				
-		boolean dye = false;
 		
 		if (input != null) {
-			
+	
+			int id = OreDictionary.getOreID("dye");
 			int[] ids = OreDictionary.getOreIDs(input);
+			
 			if (ids.length != 0) {
-				for (int id : ids) {
-					if (dyeMap.containsKey(id)) {
-						dye = true;
-						break;
-					}
+				for (int curr : ids) {
+					if (curr == id)
+						return true;
 				}
 			}
 		}
 		
-		return dye;
+		return false;
 	}
 }
