@@ -9,6 +9,7 @@ import net.minecraft.network.play.server.S35PacketUpdateTileEntity;
 import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fluids.FluidTank;
 import net.minecraftforge.fluids.FluidTankInfo;
 import net.minecraftforge.fluids.IFluidHandler;
 
@@ -18,6 +19,8 @@ import com.ipsis.mackit.block.machinesm.IMachineRecipe;
 import com.ipsis.mackit.block.machinesm.IRecipeManager;
 import com.ipsis.mackit.helper.DyeHelper;
 import com.ipsis.mackit.helper.LogHelper;
+import com.ipsis.mackit.item.ItemDyeGun;
+import com.ipsis.mackit.item.MKItems;
 import com.ipsis.mackit.manager.TankManager;
 
 public class TileMachineDyeFiller extends TileMachine implements IFactorySM, IFacingMachine, IRecipeManager, IFluidHandler, ISidedInventory {
@@ -86,7 +89,7 @@ public class TileMachineDyeFiller extends TileMachine implements IFactorySM, IFa
 	@Override
 	public boolean isOutputValid(IMachineRecipe recipe) {
 
-		return false;
+		return true;
 	}
 
 	@Override
@@ -103,6 +106,14 @@ public class TileMachineDyeFiller extends TileMachine implements IFactorySM, IFa
 	@Override
 	public void createOutputs(IMachineRecipe recipe) {
 
+		if (getStackInSlot(CHARGE_SLOT) == null)
+			return;
+		
+		tankMgr.getTank(PURE_TANK).drain(DyeHelper.DYE_BASE_AMOUNT, true);
+		int curr = ItemDyeGun.getFluidAmount(getStackInSlot(CHARGE_SLOT));
+		curr += DyeHelper.DYE_BASE_AMOUNT;
+		ItemDyeGun.setFluidAmount(getStackInSlot(CHARGE_SLOT), curr);
+		LogHelper.error("createOutputs : " + ItemDyeGun.getFluidAmount(getStackInSlot(CHARGE_SLOT)));
 	}
 
 	@Override
@@ -152,7 +163,33 @@ public class TileMachineDyeFiller extends TileMachine implements IFactorySM, IFa
 	@Override
 	public IMachineRecipe getRecipe() {
 
-		return null;
+		if (getStackInSlot(CHARGE_SLOT) == null)
+			return null;
+		
+		if (getStackInSlot(CHARGE_SLOT).getItem() != MKItems.itemDyeGun)
+			return null;
+		
+		FluidTank tank = tankMgr.getTank(PURE_TANK);
+		FluidStack fluid = tank.drain(DyeHelper.DYE_BASE_AMOUNT, false);
+		
+		if (fluid == null)
+			return null;
+		
+		if (fluid.amount != DyeHelper.DYE_BASE_AMOUNT)
+			return null;
+		
+		return RECIPE;
+	}
+	
+	public static FillerRecipe RECIPE = new FillerRecipe();
+	public static class FillerRecipe implements IMachineRecipe {
+		
+		private static final int RECIPE_ENERGY = 40;
+			
+		public int getEnergy() {
+			
+			return RECIPE_ENERGY;			
+		}
 	}
 	
 	/*****

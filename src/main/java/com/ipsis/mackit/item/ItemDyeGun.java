@@ -53,15 +53,26 @@ public class ItemDyeGun extends ItemMK {
 		 itemStack.stackTagCompound.setInteger("CurrColor", color.getDmg());
 	}
 	
-	public void setFluidAmount(ItemStack itemStack, int amount) {
+	public static void setFluidAmount(ItemStack itemStack, int amount) {
 		
 		 if (itemStack.stackTagCompound == null)
 			 setDefaultTags(itemStack);
 		
-		itemStack.stackTagCompound.setInteger("FluidAmount", TANK_CAPACITY);
+		if (amount > TANK_CAPACITY)
+			amount = TANK_CAPACITY;
+		
+		itemStack.stackTagCompound.setInteger("FluidAmount", amount);
 	}
 	
-	public void setDefaultTags(ItemStack itemStack) {
+	public static int getFluidAmount(ItemStack itemStack) {
+		
+		 if (itemStack.stackTagCompound == null)
+			 setDefaultTags(itemStack);
+		
+		 return itemStack.stackTagCompound.getInteger("FluidAmount");
+	}
+	
+	public static void setDefaultTags(ItemStack itemStack) {
 		
 		if (itemStack.stackTagCompound == null)
 			itemStack.stackTagCompound = new NBTTagCompound();
@@ -92,6 +103,12 @@ public class ItemDyeGun extends ItemMK {
 		
 		setFluidAmount(itemStack, fluid);
 	}
+	
+	@Override
+	public boolean getShareTag() {
+
+		return true;
+	}
 		
 	@Override
 	public boolean onItemUseFirst(ItemStack itemStack, EntityPlayer entityPlayer,
@@ -108,8 +125,10 @@ public class ItemDyeGun extends ItemMK {
 			
 			if (itemStack.stackTagCompound != null && itemStack.stackTagCompound.hasKey("FluidAmount") && itemStack.stackTagCompound.hasKey("CurrColor")) {
 				
-				/* check for creative mode and enough dye available */
-				int fluid = itemStack.stackTagCompound.getInteger("FluidAmount");
+				int fluid = getFluidAmount(itemStack);
+				if (!entityPlayer.capabilities.isCreativeMode && fluid < DyeHelper.DYE_BASE_AMOUNT)
+					return true;
+				
 				DyeHelper.DyeColor color = DyeHelper.DyeColor.getFromDmg(itemStack.stackTagCompound.getInteger("CurrColor"));
 				
 				/* change block */
