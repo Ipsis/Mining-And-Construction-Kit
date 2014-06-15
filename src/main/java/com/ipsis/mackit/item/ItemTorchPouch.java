@@ -90,7 +90,6 @@ public class ItemTorchPouch extends ItemMK {
 						Item item = s.getItem();
 						if (item.onItemUse(s, entityPlayer, world, x, y, z, side, hitX, hitY, hitZ) == true) {
 
-							inv.decrStackSize(slot, 1);
 							inv.onGuiSaved(entityPlayer);
 							break;
 						}
