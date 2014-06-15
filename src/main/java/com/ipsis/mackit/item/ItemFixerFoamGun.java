@@ -39,6 +39,7 @@ public class ItemFixerFoamGun extends ItemMK {
 		super();
 		this.setMaxStackSize(1);
 		this.setMaxDamage(64);
+		this.canRepair = false;
 	}
 	
 	@Override
