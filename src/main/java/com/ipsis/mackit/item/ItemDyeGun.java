@@ -40,6 +40,12 @@ public class ItemDyeGun extends ItemMK {
 	}
 	
 	@Override
+	public boolean getShareTag() {
+
+		return true;
+	}
+	
+	@Override
 	public void onCreated(ItemStack itemStack, World world,	EntityPlayer entityPlayer) {
 
 		setDefaultTags(itemStack);
@@ -103,12 +109,6 @@ public class ItemDyeGun extends ItemMK {
 		
 		setFluidAmount(itemStack, fluid);
 	}
-	
-	@Override
-	public boolean getShareTag() {
-
-		return true;
-	}
 		
 	@Override
 	public boolean onItemUseFirst(ItemStack itemStack, EntityPlayer entityPlayer,
@@ -147,9 +147,7 @@ public class ItemDyeGun extends ItemMK {
 	@SideOnly(Side.CLIENT)
 	public void addInformation(ItemStack itemStack,	EntityPlayer entityPlayer, List info, boolean useExtraInformation) {
 		
-		int fluid = itemStack.getItemDamage();
-		
-		if (itemStack.stackTagCompound != null)
+		if (itemStack.stackTagCompound == null)
 			setDefaultTags(itemStack);
 		
 		info.add(DyeHelper.DyeColor.getFromDmg(itemStack.stackTagCompound.getInteger("CurrColor")).getName());
