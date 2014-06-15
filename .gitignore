@@ -6,3 +6,11 @@
 /.classpath
 /.project
 Thumbs.db
+
+## intellij
+/out
+/.idea
+/*.iml
+/*.ipr
+/*.iws
+/atlassian-ide-plugin.xml
