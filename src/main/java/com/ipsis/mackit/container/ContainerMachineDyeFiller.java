@@ -23,7 +23,7 @@ public class ContainerMachineDyeFiller extends Container {
 		
 		this.te = te;
 		
-		this.addSlotToContainer(new Slot(te, te.CHARGE_SLOT, 119, 35));
+		this.addSlotToContainer(new Slot(te, te.CHARGE_SLOT, 78, 35));
 		
 		/* Player inventory */
 		for (int y = 0; y < 3; y++) {
