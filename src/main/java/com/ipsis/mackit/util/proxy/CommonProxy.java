@@ -12,12 +12,14 @@ import com.ipsis.mackit.block.TileMachinePainter;
 import com.ipsis.mackit.block.TileMachineSqueezer;
 import com.ipsis.mackit.block.TileMachineStamper;
 import com.ipsis.mackit.block.TilePortaChant;
+import com.ipsis.mackit.block.TileVegas;
 import com.ipsis.mackit.container.ContainerMachineDyeFiller;
 import com.ipsis.mackit.container.ContainerMachinePainter;
 import com.ipsis.mackit.container.ContainerMachineSqueezer;
 import com.ipsis.mackit.container.ContainerMachineStamper;
 import com.ipsis.mackit.container.ContainerPortaChant;
 import com.ipsis.mackit.container.ContainerTorchPouch;
+import com.ipsis.mackit.container.ContainerVegas;
 import com.ipsis.mackit.container.InventoryTorchPouch;
 import com.ipsis.mackit.reference.Gui;
 
@@ -62,6 +64,8 @@ public class CommonProxy implements IGuiHandler {
 					return new ContainerMachinePainter(player.inventory, (TileMachinePainter)te);
 				} else if (te instanceof TileMachineDyeFiller) {
 					return new ContainerMachineDyeFiller(player.inventory, (TileMachineDyeFiller)te);
+				} else if (te instanceof TileVegas) {
+					return new ContainerVegas(player.inventory, (TileVegas)te);
 				}			
 			}
 		}

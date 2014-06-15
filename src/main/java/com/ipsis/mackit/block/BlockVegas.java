@@ -2,9 +2,14 @@ package com.ipsis.mackit.block;
 
 import java.util.List;
 
+import com.ipsis.mackit.MacKit;
+import com.ipsis.mackit.reference.Gui;
+
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.world.World;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
@@ -32,5 +37,23 @@ public class BlockVegas extends BlockFaced {
 	public BlockVegas(String name) {
 		
 		super(Material.iron, name, new String[]{ "", "", "", "", "", "" } );
+	}
+	
+	@Override
+	public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer player, int side, float hitX, float hitY, float hitZ) {
+
+		if (player.isSneaking())
+			return false;
+		
+		if (!world.isRemote && world.getTileEntity(x, y, z) instanceof TileVegas)			
+			player.openGui(MacKit.instance, Gui.VEGAS, world, x, y, z);
+		
+		return true;
+	}
+	
+	@Override
+	public TileEntity createNewTileEntity(World var1, int var2) {
+
+		return new TileVegas();
 	}
 }

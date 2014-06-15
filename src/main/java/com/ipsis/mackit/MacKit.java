@@ -1,6 +1,5 @@
 package com.ipsis.mackit;
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.common.config.Configuration;
 
 import com.ipsis.mackit.block.MKBlocks;
 import com.ipsis.mackit.block.TileBeaverBlock;
@@ -12,6 +11,7 @@ import com.ipsis.mackit.block.TileMachineStamper;
 import com.ipsis.mackit.block.TilePortaChant;
 import com.ipsis.mackit.block.TilePowerBlock;
 import com.ipsis.mackit.block.TileTestFaced;
+import com.ipsis.mackit.block.TileVegas;
 import com.ipsis.mackit.fluid.MKFluids;
 import com.ipsis.mackit.helper.ConfigHelper;
 import com.ipsis.mackit.helper.DyeHelper;
@@ -77,6 +77,7 @@ public class MacKit
     	GameRegistry.registerTileEntity(TileMachinePainter.class, "tile.machinePainter");
     	GameRegistry.registerTileEntity(TileMachineDyeFiller.class, "tile.machineDyeFiller");
     	GameRegistry.registerTileEntity(TileDyeLeech.class, "tile.dyeLeech");
+    	GameRegistry.registerTileEntity(TileVegas.class, "tile.vegas");
     	    	
     	GameRegistry.registerTileEntity(TilePowerBlock.class, "tile.powerBlock");
     	
