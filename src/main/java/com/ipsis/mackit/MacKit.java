@@ -62,12 +62,12 @@ public class MacKit
     
     @EventHandler
     public void initialize(FMLInitializationEvent event) {
-
-    	DyeHelper.initialise(); 
     	
     	MKFluids.initialise();
     	MKItems.initialise();
-    	MKBlocks.initialise();    	   	
+    	MKBlocks.initialise();
+    	
+    	DyeHelper.initialise();
     	MKManagers.initialise();
     	
     	GameRegistry.registerTileEntity(TileBeaverBlock.class, "tile.beaverBlock");

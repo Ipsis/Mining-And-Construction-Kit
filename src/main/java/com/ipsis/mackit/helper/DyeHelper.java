@@ -13,6 +13,7 @@ import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.item.crafting.ShapelessRecipes;
 import net.minecraft.util.IIcon;
 import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.oredict.OreDictionary;
 
 import com.ipsis.cofhlib.util.inventory.ComparableItemStack;
 import com.ipsis.mackit.fluid.MKFluids;

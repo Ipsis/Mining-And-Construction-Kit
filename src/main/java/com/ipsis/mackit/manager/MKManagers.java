@@ -18,7 +18,6 @@ public class MKManagers {
 	
 	public static void initialise() {
 		
-		DyeOreDictHelper.loadDyes();
 	}
 	
 	public static void postInit() {
