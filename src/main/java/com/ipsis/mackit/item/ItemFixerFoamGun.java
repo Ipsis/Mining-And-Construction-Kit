@@ -49,7 +49,7 @@ public class ItemFixerFoamGun extends ItemMK {
 		
 			if (world.isRemote)
 				return false;
-			
+
 			if (!entityPlayer.capabilities.isCreativeMode && itemStack.getItemDamage() == 64)
 				return false;					
 						

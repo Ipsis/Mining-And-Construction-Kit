@@ -18,7 +18,6 @@ import cpw.mods.fml.relauncher.SideOnly;
 
 /**
  * Reverts blocks to their un-dyed state. eg. dyed wool to plain wool
- * @author Chris
  *
  */
 public class ItemLeech extends ItemMK {
@@ -35,7 +34,7 @@ public class ItemLeech extends ItemMK {
 			EntityPlayer entityPlayer, World world, int x, int y,
 			int z, int hitSide, float hitX, float hitY, float hitZ) {
 		
-			if (world.isRemote)
+			if (world.isRemote || !entityPlayer.canPlayerEdit(x, y, z, hitSide, itemStack))
 				return false;
 			
 			return ColoredBlockSwapper.swap(entityPlayer, world, x, y, z, DyeHelper.DyeColor.GREEN, true);

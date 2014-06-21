@@ -34,7 +34,7 @@ public class ColoredBlockSwapper {
 	}
 
 	public static boolean swap(EntityPlayer entityPlayer, World world, int x, int y, int z, DyeHelper.DyeColor color, boolean wipeClean) {
-		
+
 		Block b = world.getBlock(x, y, z);
 		if (b == null || b instanceof BlockContainer)
 			return false;
@@ -49,7 +49,6 @@ public class ColoredBlockSwapper {
 		
 		/* origin is an ItemStack of the origin block */
 		ItemStack origin = DyedOriginHelper.getOrigin(stack);
-		LogHelper.error("Origin block is " + origin.getDisplayName());
 		
 		if (wipeClean) {
 			
@@ -73,42 +72,4 @@ public class ColoredBlockSwapper {
 		
 		return false;
 	}
-	
-	
-	
-	
-	
-	
-
-//					
-//		ItemStack replace = DyedOriginHelper.getOrigin(new ItemStack(b));
-//		if (replace != null) {
-//
-//			/**
-//			 * TODO Not too sure about this
-//			 */
-//			
-//			Block nb = Block.getBlockFromItem(replace.getItem());
-//			int nmeta = replace.getItemDamage();
-//			
-//			/* Remove the old block */
-//			world.setBlockToAir(x, y, z);
-//			
-//			/**
-//			 * This tries to replicate the ItemBlock placeBlockAt code
-//			 */
-//			
-//			if (!world.setBlock(x, y, z, nb, nmeta, 3))
-//			{
-//				return false;
-//			}
-//
-//			if (world.getBlock(x, y, z) == nb)
-//			{
-//				nb.onBlockPlacedBy(world, x, y, z, entityPlayer, stack);
-//				nb.onPostBlockPlaced(world, x, y, z, metadata);
-//			}
-//		}				
-//	}
-	
 }

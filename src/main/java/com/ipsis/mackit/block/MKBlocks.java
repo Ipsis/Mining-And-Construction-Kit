@@ -13,8 +13,8 @@ public class MKBlocks {
 
 	public static void preInit() {
 		
-		fixedSand = new BlockFixedEarth(Material.sand, "fixedSand");
-		fixedGravel = new BlockFixedEarth(Material.sand, "fixedGravel");
+		fixedSand = new BlockFixedEarth(Material.clay, "fixedSand");
+		fixedGravel = new BlockFixedEarth(Material.clay, "fixedGravel");
 		beaverBlock = new BlockBeaverBlock("beaverBlock");
 		portaChant = new BlockPortaChant("portaChant");
 		machineSqueezer = new BlockMachineSqueezer("machineSqueezer");

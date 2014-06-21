@@ -28,7 +28,7 @@ public class ItemBeaverBlock extends ItemBlock {
 	@Override
 	public ItemStack onItemRightClick(ItemStack itemStack, World world, EntityPlayer player) {
 
-		/* TODO this is a slightly modified copy of the vanilla LilyPad onItemRightClick code - not sure about using it! */
+		/* this is a slightly modified copy of the vanilla LilyPad onItemRightClick code - not sure about using it! */
 		MovingObjectPosition movingobjectposition = this.getMovingObjectPositionFromPlayer(world, player, true);
 		
 		if (movingobjectposition == null)
