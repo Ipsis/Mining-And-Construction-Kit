@@ -21,12 +21,8 @@ import cpw.mods.fml.relauncher.SideOnly;
 /**
  * 
  * This is all based off Pahimar's ItemAlchemicalBag.java.
- * 
- * 
- * A pouch that holds torches.
- * Right click with the pouch places the torch.
- * Handles standard torches and Tinkers torches (hopefully)
- * Only stores 4(?) stacks
+ *
+ * TODO support TC torches
  * 
  */
 public class ItemTorchPouch extends ItemMK {
@@ -60,16 +56,14 @@ public class ItemTorchPouch extends ItemMK {
 	
 	@Override
 	public ItemStack onItemRightClick(ItemStack itemStack, World world, EntityPlayer entityPlayer) {
-		
-		/* handle right click in the air */
-		
-		if (!world.isRemote && entityPlayer.isSneaking()) {
-			
-			openGui(itemStack, entityPlayer);
-			return itemStack;
-		}
-			
-		return super.onItemRightClick(itemStack, world, entityPlayer);
+
+        if (world.isRemote)
+            return itemStack;
+
+        if (entityPlayer.isSneaking())
+            openGui(itemStack, entityPlayer);
+
+        return itemStack;
 	}
 	
 	@Override
