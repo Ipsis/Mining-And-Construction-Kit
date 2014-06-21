@@ -2,6 +2,8 @@ package com.ipsis.mackit.block;
 
 import java.util.Arrays;
 
+import com.ipsis.mackit.helper.BiomeHelper;
+import com.ipsis.mackit.helper.DyeHelper;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -54,9 +56,8 @@ public class TileDyeLeech extends TileEntity {
 	}
 	
 	public void setBiome() {
-		
-		BiomeGenBase g = worldObj.getBiomeGenForCoords(xCoord, zCoord);		
-		selectedDye = biomeColorToDye(g);
+
+        selectedDye = BiomeHelper.getColor(worldObj.getBiomeGenForCoords(xCoord, zCoord)).getItemStack();
 		worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
 	}
 	
@@ -78,42 +79,6 @@ public class TileDyeLeech extends TileEntity {
 			return new ItemStack(MKItems.dyes[0]);
 		
 		return new ItemStack(MKItems.dyes[dmg]);
-	}
-	
-	private ItemStack biomeColorToDye(BiomeGenBase biome) {
-		
-		ItemStack dye = null;
-		
-		if (biome != null) {
-			int color = DYE_COLORS_SORTED[0];
-			
-			int last = -1;
-			for (int c : DYE_COLORS_SORTED) {
-	
-				if (c < biome.color) {
-					if (last != -1) {
-						c = last;
-					}
-					break;
-				} else {
-					color = c;
-				}
-				last = c;
-			}
-			
-	
-			for (int x = 0; x < ColorHelper.DYE_COLORS.length; x++) {
-				if (ColorHelper.DYE_COLORS[x] == color) {
-					dye = createDyeSponge(x);
-					break;
-				}				
-			}
-		}
-		
-		if (dye == null)
-			dye = createDyeSponge(-1);
-		
-		return dye;
 	}
 	
 	@Override
