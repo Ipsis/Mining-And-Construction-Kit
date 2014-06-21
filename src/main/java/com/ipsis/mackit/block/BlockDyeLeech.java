@@ -2,17 +2,28 @@ package com.ipsis.mackit.block;
 
 import com.ipsis.cofhlib.util.EntityHelper;
 
+import com.ipsis.mackit.helper.LogHelper;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 
 /**
  * Colour out of space
+ *
+ *
+ * This uses code from Professor Mobius Jabba to "throw" the items at the player.
+ * https://bitbucket.org/ProfMobius/jabba
+ *
+ * TileEntityBarrel dropItemInWorld
+ *
+ * It is a vast improvement over my attempt, where the item was thrown anywhere but
+ * towards the player!
  *
  */
 public class BlockDyeLeech extends BlockFaced {
@@ -59,21 +70,52 @@ public class BlockDyeLeech extends BlockFaced {
 				TileDyeLeech dyeLeech = (TileDyeLeech)te;
 				ItemStack out = dyeLeech.getOutput();
 				if (out != null) {
-					
-					/* TODO Throw it at the player */
-					float spawnX = x + world.rand.nextFloat();
-					float spawnY = y + world.rand.nextFloat();
-					float spawnZ = z + world.rand.nextFloat();
-					
-					EntityItem droppedItem = new EntityItem(world, spawnX, spawnY, spawnZ, out);
-					
-					float mult = 0.05F;
-					
-					droppedItem.motionX = (-0.5F + world.rand.nextFloat()) * mult;
-					droppedItem.motionY = (4 + world.rand.nextFloat()) * mult;
-					droppedItem.motionZ = (-0.5F + world.rand.nextFloat()) * mult;
-					
-					world.spawnEntityInWorld(droppedItem);
+
+                    ForgeDirection d = EntityHelper.getEntityFacingForgeDirection(entityPlayer);
+
+                    double speedfactor = 0.4;
+                    double stackCoordX = 0.0D, stackCoordY = 0.0D, stackCoordZ = 0.0D;
+
+                    /* Spawn the item in the players direction */
+                    switch (d) {
+                        case NORTH:
+                            stackCoordX = x + 0.5D;
+                            stackCoordY = y + 0.5D;
+                            stackCoordZ = z - 0.25D;
+                            break;
+                        case EAST:
+                            stackCoordX = x + 1.25D;
+                            stackCoordY = y + 0.5D;
+                            stackCoordZ = z + 0.5D;
+                            break;
+                        case SOUTH:
+                            stackCoordX = x + 0.5D;
+                            stackCoordY = y + 0.5D;
+                            stackCoordZ = z + 1.25D;
+                            break;
+                        case WEST:
+                            stackCoordX = x - 0.25D;
+                            stackCoordY = y + 0.5D;
+                            stackCoordZ = z + 0.5D;
+                            break;
+                    }
+
+                    EntityItem droppedEntity = new EntityItem(world, stackCoordX, stackCoordY, stackCoordZ, out);
+
+                    /* Throw it towards the player */
+                    Vec3 motion = Vec3.createVectorHelper(entityPlayer.posX - stackCoordX, entityPlayer.posY - stackCoordY, entityPlayer.posZ - stackCoordZ);
+                    motion.normalize();
+                    droppedEntity.motionX = motion.xCoord;
+                    droppedEntity.motionY = motion.yCoord;
+                    droppedEntity.motionZ = motion.zCoord;
+                    double offset = 0.25D;
+                    droppedEntity.moveEntity(motion.xCoord * offset, motion.yCoord * offset, motion.zCoord * offset);
+
+                    droppedEntity.motionX *= speedfactor;
+                    droppedEntity.motionY *= speedfactor;
+                    droppedEntity.motionZ *= speedfactor;
+
+                    world.spawnEntityInWorld(droppedEntity);
 				}
 			}
 		}
