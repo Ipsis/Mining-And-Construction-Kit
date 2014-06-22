@@ -57,7 +57,7 @@ public class MacKit
     	MKBlocks.preInit();
     	MKManagers.preInit();    
     	
-    	FMLInterModComms.sendMessage("Waila", "register", "com.ipsis.mackit.waila.MKWailaProvider.callbackRegister");
+    	FMLInterModComms.sendMessage("Waila", "register", "com.ipsis.mackit.plugins.waila.MKWailaProvider.callbackRegister");
 	}
     
     @EventHandler
